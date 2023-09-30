@@ -1,6 +1,6 @@
-﻿using Domain.Model.Template;
+﻿using ei8.Avatar.Installer.Domain.Model.Template;
 
-namespace Services.Template
+namespace ei8.Avatar.Installer.IO.Process.Services.Template
 {
     public class GithubTemplateService : ITemplateService
     {

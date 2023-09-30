@@ -1,4 +1,4 @@
-﻿namespace ei8.Avatar.Installer
+﻿namespace ei8.Avatar.Installer.CLI
 {
     internal class Program
     {

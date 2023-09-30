@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Application.Settings
+﻿namespace ei8.Avatar.Installer.Application.Settings
 {
     public interface ISettingsService
     {
