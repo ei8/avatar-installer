@@ -5,3 +5,4 @@
 /*.7z
 /src/packages
 **/publish
+/src/main/Port.Adapter/CLI/Properties/launchSettings.json

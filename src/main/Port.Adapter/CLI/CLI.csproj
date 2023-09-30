@@ -8,4 +8,8 @@
     <RootNamespace>ei8.Avatar.Installer.CLI</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\IO\Process\Services\Services.csproj" />
+  </ItemGroup>
+
 </Project>

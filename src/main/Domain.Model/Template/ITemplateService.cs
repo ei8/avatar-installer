@@ -2,6 +2,6 @@
 {
     public interface ITemplateService
     {
-        Task RetrieveTemplateAsync();
+        void RetrieveTemplate(string destinationPath);
     }
 }

@@ -1,10 +1,16 @@
-﻿namespace ei8.Avatar.Installer.CLI
+﻿using ei8.Avatar.Installer.IO.Process.Services.Settings;
+using ei8.Avatar.Installer.IO.Process.Services.Template;
+
+namespace ei8.Avatar.Installer.CLI
 {
     internal class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            var settingsService = new SettingsService();
+            var templateService = new GithubTemplateService(settingsService);
+
+            templateService.RetrieveTemplate(@"./template");
         }
     }
 }

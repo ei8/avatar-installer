@@ -2,5 +2,6 @@
 {
     public interface ISettingsService
     {
+        string TemplateDownloadUrl { get; }
     }
 }
