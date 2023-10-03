@@ -2,6 +2,8 @@
 {
     public interface ITemplateService
     {
-        void RetrieveTemplate(string destinationPath);
+        Task RetrieveTemplateAsync(string destinationPath);
+
+        void EnumerateTemplateFiles(string templatePath);
     }
 }
