@@ -1,21 +1,38 @@
-﻿using ei8.Avatar.Installer.Domain.Model;
+﻿using ei8.Avatar.Installer.Application.Settings;
+using ei8.Avatar.Installer.Domain.Model.Template;
 using ei8.Avatar.Installer.IO.Process.Services.Settings;
 using ei8.Avatar.Installer.IO.Process.Services.Template;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace ei8.Avatar.Installer.CLI
 {
     internal class Program
     {
+        // commandline args
+        // --destination = destination path (can be relative or absolute)
         static async Task Main(string[] args)
         {
-            var commandLineOptions = new CommandLineOptions(args);
+            var builder = Host.CreateApplicationBuilder(args);
 
-            var settingsService = new SettingsService();
-            var templateService = new GithubTemplateService(settingsService);
+            builder.Services.AddScoped<ISettingsService, SettingsService>()
+                            .AddScoped<ITemplateService, GithubTemplateService>();
 
-            await templateService.RetrieveTemplateAsync(commandLineOptions.DestinationPath);
+            using (IHost host = builder.Build())
+            {
+                // entry point here
+                var templateService = host.Services.GetRequiredService<ITemplateService>();
+                var destinationPath = builder.Configuration.GetValue<string>("destination");
 
-            templateService.EnumerateTemplateFiles(commandLineOptions.DestinationPath);
+                if (string.IsNullOrEmpty(destinationPath))
+                    destinationPath = ".";
+
+                await templateService.RetrieveTemplateAsync(destinationPath);
+
+                // confirm all files are present
+                templateService.EnumerateTemplateFiles(destinationPath);
+            }
         }
     }
 }
