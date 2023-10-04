@@ -15,21 +15,13 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Template
             _isBusy = false;
         }
 
-        public async Task RetrieveTemplateAsync(string destinationPath)
+        public void RetrieveTemplate(string destinationPath)
         {
-            await Task.Run(() =>
+            Repository.Clone(_settingsService.TemplateDownloadUrl, destinationPath, new CloneOptions()
             {
-                Repository.Clone(_settingsService.TemplateDownloadUrl, destinationPath, new CloneOptions()
-                {
-                    RepositoryOperationStarting = HandleStarting,
-                    RepositoryOperationCompleted = HandleComplete,
-                    OnCheckoutProgress = HandleCheckoutProgress,
-                });
-
-                while (_isBusy)
-                {
-                    Task.Delay(500);
-                }
+                RepositoryOperationStarting = HandleStarting,
+                RepositoryOperationCompleted = HandleComplete,
+                OnCheckoutProgress = HandleCheckoutProgress,
             });
         }
 
@@ -47,6 +39,11 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Template
             {
                 Console.WriteLine(Path.GetFullPath(file));
             }
+        }
+
+        public void GenerateLocalFiles(string destinationPath)
+        {
+            throw new NotImplementedException();
         }
 
         #region git event handlers
