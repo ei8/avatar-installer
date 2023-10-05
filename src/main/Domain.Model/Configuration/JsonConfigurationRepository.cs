@@ -8,7 +8,7 @@ namespace ei8.Avatar.Installer.Domain.Model.Configuration
 {
     public class JsonConfigurationRepository : IConfigurationRepository
     {
-        public Task<IEnumerable<AvatarConfiguration>> ReadAllAsync(string path)
+        public Task<AvatarConfiguration> GetByAsync(string path)
         {
             throw new NotImplementedException();
         }

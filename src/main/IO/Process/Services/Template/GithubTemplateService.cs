@@ -1,4 +1,5 @@
 ﻿using ei8.Avatar.Installer.Application.Settings;
+using ei8.Avatar.Installer.Domain.Model.Configuration;
 using ei8.Avatar.Installer.Domain.Model.Template;
 using LibGit2Sharp;
 
@@ -6,18 +7,16 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Template
 {
     public class GithubTemplateService : ITemplateService
     {
-        private readonly ISettingsService _settingsService;
-        private bool _isBusy;
+        private readonly ISettingsService settingsService;
 
         public GithubTemplateService(ISettingsService settingsService) 
         {
-            _settingsService = settingsService;
-            _isBusy = false;
+            this.settingsService = settingsService;
         }
 
-        public void RetrieveTemplate(string destinationPath)
+        public void DownloadTemplate(string destinationPath)
         {
-            Repository.Clone(_settingsService.TemplateDownloadUrl, destinationPath, new CloneOptions()
+            Repository.Clone(settingsService.TemplateDownloadUrl, destinationPath, new CloneOptions()
             {
                 RepositoryOperationStarting = HandleStarting,
                 RepositoryOperationCompleted = HandleComplete,
@@ -25,25 +24,15 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Template
             });
         }
 
-        public void EnumerateTemplateFiles(string templatePath)
+        public IEnumerable<string> GetTemplateFilenames(string templatePath)
         {
             if (!Directory.Exists(templatePath))
-                return;
+                return null;
 
-            var files = Directory.EnumerateFiles(templatePath, "*.*", new EnumerationOptions()
+            return Directory.EnumerateFiles(templatePath, "*.*", new EnumerationOptions()
             {
                 RecurseSubdirectories = true
             });
-
-            foreach (var file in files)
-            {
-                Console.WriteLine(Path.GetFullPath(file));
-            }
-        }
-
-        public void GenerateLocalFiles(string destinationPath)
-        {
-            throw new NotImplementedException();
         }
 
         #region git event handlers
@@ -61,14 +50,12 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Template
         {
             Console.WriteLine($"Cloning {context.RemoteUrl} to {context.RepositoryPath}...");
 
-            _isBusy = true;
             return true;
         }
 
         private void HandleComplete(RepositoryOperationContext context)
         {
             Console.WriteLine($"Cloned {context.RemoteUrl} to {context.RepositoryPath} successfully.");
-            _isBusy = false;
         }
         #endregion
     }

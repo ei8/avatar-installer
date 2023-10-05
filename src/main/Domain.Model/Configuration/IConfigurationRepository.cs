@@ -7,6 +7,6 @@
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        Task<IEnumerable<AvatarConfiguration>> ReadAllAsync(string path);
+        Task<AvatarConfiguration> GetByAsync(string path);
     }
 }

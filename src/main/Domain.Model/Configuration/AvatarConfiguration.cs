@@ -2,6 +2,12 @@
 {
     public class AvatarConfiguration
     {
+        public List<AvatarConfigurationItem> Avatars { get; set; }
+        public string DestinationPath { get; set; }
+    }
+
+    public class AvatarConfigurationItem
+    {
         public string Name { get; set; }
         public CortexGraphConfiguration? CortexGraph { get; set; }
         public AvatarApiConfiguration? AvatarApi { get; set; }
@@ -12,7 +18,7 @@
         /// <summary>
         /// Initialize with defaults
         /// </summary>
-        public AvatarConfiguration()
+        public AvatarConfigurationItem()
         {
             Name = "sample";
             CortexGraph = new();

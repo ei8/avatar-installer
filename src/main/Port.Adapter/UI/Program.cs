@@ -12,9 +12,8 @@ namespace ei8.Avatar.Installer.CLI
     internal class Program
     {
         // commandline args
-        // --destination = destination path (can be relative or absolute)
-        // --config = config path (can be relative or absolute)
-        static void Main(string[] args)
+        // --config = config path (JSON file, DB, etc, can be relative or absolute)
+        static async Task Main(string[] args)
         {
             var builder = Host.CreateApplicationBuilder(args);
 
@@ -31,21 +30,32 @@ namespace ei8.Avatar.Installer.CLI
                 if (string.IsNullOrEmpty(destinationPath))
                     destinationPath = ".";
 
-                templateService.RetrieveTemplate(destinationPath);
-
-                // TODO US#3
-                // templateService.GenerateLocalFiles(destinationPath);
-
-                // confirm all files are present
-                templateService.EnumerateTemplateFiles(destinationPath);
+                // TODO: Test parsing of JSON config
 
                 var configRepository = host.Services.GetRequiredService<IConfigurationRepository>();
                 var configPath = builder.Configuration.GetValue<string>("config");
 
-                if (string.IsNullOrEmpty(configPath)) 
+                if (string.IsNullOrEmpty(configPath))
                     configPath = ".";
 
-                // configRepository.ReadAllAsync(configPath);
+                var configObject = await configRepository.GetByAsync(configPath);
+
+                foreach (var item in configObject.Avatars)
+                {
+                    // TODO: Implement loop
+                    // foreach avatar - call DownloadTemplate
+                    // destinationPath = root destination path + avatar name
+                    templateService.DownloadTemplate(configObject.DestinationPath);
+
+                    //var avatar = await avatarRepo.GetByAsync(item.Name);
+                    //avatarMapperService.Apply(item, avatar);
+                    //await avatarRepo.SaveAsync(avatar);
+
+                    // confirm all files are present
+                    templateService.GetTemplateFilenames(destinationPath);
+                }
+
+                // TODO: create avatar server here
             }
         }
     }
