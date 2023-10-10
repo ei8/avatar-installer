@@ -25,12 +25,6 @@ namespace ei8.Avatar.Installer.CLI
             {
                 // entry point here
                 var templateService = host.Services.GetRequiredService<ITemplateService>();
-                var destinationPath = builder.Configuration.GetValue<string>("destination");
-
-                if (string.IsNullOrEmpty(destinationPath))
-                    destinationPath = ".";
-
-                // TODO: Test parsing of JSON config
 
                 var configRepository = host.Services.GetRequiredService<IConfigurationRepository>();
                 var configPath = builder.Configuration.GetValue<string>("config");
@@ -45,14 +39,15 @@ namespace ei8.Avatar.Installer.CLI
                     // TODO: Implement loop
                     // foreach avatar - call DownloadTemplate
                     // destinationPath = root destination path + avatar name
-                    templateService.DownloadTemplate(configObject.DestinationPath);
+                    var subdirectory = $"{configObject.Destination}/{item.Name}";
+                    templateService.DownloadTemplate(subdirectory);
 
                     //var avatar = await avatarRepo.GetByAsync(item.Name);
                     //avatarMapperService.Apply(item, avatar);
                     //await avatarRepo.SaveAsync(avatar);
 
                     // confirm all files are present
-                    templateService.GetTemplateFilenames(destinationPath);
+                    //templateService.GetTemplateFilenames(destinationPath);
                 }
 
                 // TODO: create avatar server here

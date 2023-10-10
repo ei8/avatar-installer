@@ -5,8 +5,8 @@
         /// <summary>
         /// Read avatar configuration values from the specified source
         /// </summary>
-        /// <param name="path"></param>
+        /// <param name="id">The identifier for the configuration source</param>
         /// <returns></returns>
-        Task<AvatarConfiguration> GetByAsync(string path);
+        Task<AvatarConfiguration> GetByAsync(string id);
     }
 }

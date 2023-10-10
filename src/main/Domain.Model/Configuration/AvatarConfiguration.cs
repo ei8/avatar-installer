@@ -1,31 +1,30 @@
-﻿namespace ei8.Avatar.Installer.Domain.Model.Configuration
+﻿using System.Text.Json.Serialization;
+
+namespace ei8.Avatar.Installer.Domain.Model.Configuration
 {
     public class AvatarConfiguration
     {
-        public List<AvatarConfigurationItem> Avatars { get; set; }
-        public string DestinationPath { get; set; }
+        public AvatarConfigurationItem[] Avatars { get; set; }
+        public string Destination { get; set; }
     }
 
     public class AvatarConfigurationItem
     {
         public string Name { get; set; }
-        public CortexGraphConfiguration? CortexGraph { get; set; }
-        public AvatarApiConfiguration? AvatarApi { get; set; }
-        public CortexLibraryConfiguration? CortexLibrary { get; set; }
-        public D23Configuration? D23 { get; set; }
-        public NetworkConfiguration? Network { get; set; }
+        public CortexGraphConfiguration? CortexGraph { get; set; } = new();
+        public AvatarApiConfiguration? AvatarApi { get; set; } = new();
+        public CortexLibraryConfiguration? CortexLibrary { get; set; } = new();
+        public D23Configuration? D23 { get; set; } = new();
+        public NetworkConfiguration? Network { get; set; } = new();
 
-        /// <summary>
-        /// Initialize with defaults
-        /// </summary>
-        public AvatarConfigurationItem()
+        [JsonConstructor]
+        public AvatarConfigurationItem(string name)
         {
-            Name = "sample";
-            CortexGraph = new();
-            AvatarApi = new(Name);
-            CortexLibrary = new(Name);
-            D23 = new(Name);
-            Network = new();
+            Name = name;
+            AvatarApi = new(name);
+            CortexLibrary = new(name);
+            D23 = new(name);
+            Network = new(name);
         }
     }
 
@@ -61,6 +60,9 @@
             TokenIssuerUrl = @"https://login.fibona.cc";
             ApiName = $"avatarapi-{avatarName}";
         }
+
+        [JsonConstructor]
+        public AvatarApiConfiguration() : this("sample") { }
     }
 
     public class CortexLibraryConfiguration
@@ -76,6 +78,9 @@
             NeuronsUrl = $@"http://fibona.cc/{avatarName}/cortex/neurons";
             TerminalsUrl = $@"http://fibona.cc/{avatarName}/cortex/terminals";
         }
+
+        [JsonConstructor]
+        public CortexLibraryConfiguration() : this("sample") { }
     }
 
     public class D23Configuration
@@ -93,6 +98,9 @@
             ClientId = $"d23-{avatarName}";
             BasePath = $"/{avatarName}/d23";
         }
+
+        [JsonConstructor]
+        public D23Configuration() : this("sample") { }
     }
 
     public class NetworkConfiguration
@@ -100,18 +108,21 @@
         public string LocalIp { get; set; }
         public int AvatarInPort { get; set; }
         public int D23BlazorPort { get; set; }
-        public SshConfiguration? Ssh { get; set; }
+        public SshConfiguration? Ssh { get; set; } = new();
 
         /// <summary>
         /// Initialize with defaults
         /// </summary>
-        public NetworkConfiguration()
+        public NetworkConfiguration(string avatarName)
         {
-            LocalIp = "192.168.0.110";
+            LocalIp = "192.168.1.110";
             AvatarInPort = 64101;
             D23BlazorPort = 64103;
-            Ssh = new();
+            Ssh = new(avatarName);
         }
+
+        [JsonConstructor]
+        public NetworkConfiguration() : this("sample") { }
     }
 
     public class SshConfiguration
@@ -126,15 +137,18 @@
         /// <summary>
         /// Initialize with defaults
         /// </summary>
-        public SshConfiguration()
+        public SshConfiguration(string avatarName)
         {
             ServerAliveInterval = 60;            // 1 minute
             ServerAliveCountMax = 60 * 24 * 365; // 60 secs * 24 hours * 365 days = 1 year
             Port = 2222;
             HostName = "ei8.host";
-            RemoteForward = "sample:80";
+            RemoteForward = $"{avatarName}:80";
             LocalPort = 9393;
         }
+
+        [JsonConstructor]
+        public SshConfiguration() : this("sample") { }
     }
 
 }
