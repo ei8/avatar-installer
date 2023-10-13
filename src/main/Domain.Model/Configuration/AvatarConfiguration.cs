@@ -2,6 +2,9 @@
 
 namespace ei8.Avatar.Installer.Domain.Model.Configuration
 {
+    /// <summary>
+    /// Defines how an <see cref="Avatars.AvatarItem"/> should be configured
+    /// </summary>
     public class AvatarConfiguration
     {
         public AvatarConfigurationItem[] Avatars { get; set; }
@@ -11,11 +14,11 @@ namespace ei8.Avatar.Installer.Domain.Model.Configuration
     public class AvatarConfigurationItem
     {
         public string Name { get; set; }
-        public CortexGraphConfiguration? CortexGraph { get; set; } = new();
-        public AvatarApiConfiguration? AvatarApi { get; set; } = new();
-        public CortexLibraryConfiguration? CortexLibrary { get; set; } = new();
-        public D23Configuration? D23 { get; set; } = new();
-        public NetworkConfiguration? Network { get; set; } = new();
+        public CortexGraphConfiguration CortexGraph { get; set; } = new();
+        public AvatarApiConfiguration AvatarApi { get; set; } = new();
+        public CortexLibraryConfiguration CortexLibrary { get; set; } = new();
+        public D23Configuration D23 { get; set; } = new();
+        public NetworkConfiguration Network { get; set; } = new();
 
         [JsonConstructor]
         public AvatarConfigurationItem(string name)
@@ -108,7 +111,7 @@ namespace ei8.Avatar.Installer.Domain.Model.Configuration
         public string LocalIp { get; set; }
         public int AvatarInPort { get; set; }
         public int D23BlazorPort { get; set; }
-        public SshConfiguration? Ssh { get; set; } = new();
+        public SshConfiguration Ssh { get; set; } = new();
 
         /// <summary>
         /// Initialize with defaults
@@ -150,5 +153,4 @@ namespace ei8.Avatar.Installer.Domain.Model.Configuration
         [JsonConstructor]
         public SshConfiguration() : this("sample") { }
     }
-
 }

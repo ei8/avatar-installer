@@ -1,5 +1,4 @@
 ﻿using ei8.Avatar.Installer.Application.Settings;
-using ei8.Avatar.Installer.Domain.Model.Configuration;
 using ei8.Avatar.Installer.Domain.Model.Template;
 using LibGit2Sharp;
 

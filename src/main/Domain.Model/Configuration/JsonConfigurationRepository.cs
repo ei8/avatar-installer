@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using ei8.Avatar.Installer.Common;
+using System.Text.Json;
 
 namespace ei8.Avatar.Installer.Domain.Model.Configuration
 {
@@ -20,19 +21,7 @@ namespace ei8.Avatar.Installer.Domain.Model.Configuration
 
         private class SnakeCaseNamingPolicy : JsonNamingPolicy
         {
-            public override string ConvertName(string name) => ToSnakeCase(name);
-
-            private string ToSnakeCase(string name)
-            {
-                // insert an underscore before each char that is uppercase
-                return string.Concat(name.Select((x, i) =>
-                {
-                    if (i > 0 && char.IsUpper(x))
-                        return "_" + x.ToString();
-                    else
-                        return x.ToString();
-                })).ToLower();
-            }
+            public override string ConvertName(string name) => name.ToSnakeCase();
         }
     }
 }
