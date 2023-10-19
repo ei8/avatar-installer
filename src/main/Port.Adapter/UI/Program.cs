@@ -65,7 +65,7 @@ namespace ei8.Avatar.Installer.CLI
                         var avatar = await avatarRepository.GetByAsync(subdirectory);
                         var mappedAvatar = avatarMapperService.Apply(item, avatar);
 
-                        //await avatarRepo.SaveAsync(avatar);
+                        await avatarRepository.SaveAsync(subdirectory, avatar);
                     }
 
                     // TODO: create avatar server here

@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using ei8.Avatar.Installer.Common;
 using ei8.Avatar.Installer.Domain.Model.Avatars;
+using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Logging;
 
 namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
@@ -37,12 +38,12 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
                             logger.LogInformation($"Loading {file}");
 
                             var variables = await GetEnvironmentVariablesFromFileAsync(file);
-                            avatarItem.CortexGraph = CreateFromEnvironmentVariables<CortexGraphSettings>(variables);
-                            avatarItem.EventSourcing = CreateFromEnvironmentVariables<EventSourcingSettings>(variables);
-                            avatarItem.AvatarApi = CreateFromEnvironmentVariables<AvatarApiSettings>(variables);
-                            avatarItem.IdentityAccess = CreateFromEnvironmentVariables<IdentityAccessSettings>(variables);
-                            avatarItem.CortexLibrary = CreateFromEnvironmentVariables<CortexLibrarySettings>(variables);
-                            avatarItem.CortexDiaryNucleus = CreateFromEnvironmentVariables<CortexDiaryNucleusSettings>(variables);
+                            avatarItem.CortexGraph = DeserializeEnvironmentVariables<CortexGraphSettings>(variables);
+                            avatarItem.EventSourcing = DeserializeEnvironmentVariables<EventSourcingSettings>(variables);
+                            avatarItem.AvatarApi = DeserializeEnvironmentVariables<AvatarApiSettings>(variables);
+                            avatarItem.IdentityAccess = DeserializeEnvironmentVariables<IdentityAccessSettings>(variables);
+                            avatarItem.CortexLibrary = DeserializeEnvironmentVariables<CortexLibrarySettings>(variables);
+                            avatarItem.CortexDiaryNucleus = DeserializeEnvironmentVariables<CortexDiaryNucleusSettings>(variables);
                         }
                         break;
 
@@ -51,7 +52,7 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
                             logger.LogInformation($"Loading {file}");
 
                             var variables = await GetEnvironmentVariablesFromFileAsync(file);
-                            avatarItem.Network = CreateFromEnvironmentVariables<AvatarNetworkSettings>(variables);
+                            avatarItem.Network = DeserializeEnvironmentVariables<AvatarNetworkSettings>(variables);
                         }
                         break;
 
@@ -60,7 +61,7 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
                             logger.LogInformation($"Loading {file}");
 
                             var variables = await GetEnvironmentVariablesFromFileAsync(file);
-                            avatarItem.D23 = CreateFromEnvironmentVariables<D23Settings>(variables);
+                            avatarItem.D23 = DeserializeEnvironmentVariables<D23Settings>(variables);
                         }
                         break;
                 }
@@ -77,7 +78,7 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
                               .ToDictionary(l => l[0], l => l[1]);
         }
 
-        private T? CreateFromEnvironmentVariables<T>(Dictionary<string, string> variables)
+        private T? DeserializeEnvironmentVariables<T>(Dictionary<string, string> variables)
             where T : class, new()
         {
             if (!variables.Any())
@@ -110,13 +111,75 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
             return settings;
         }
 
-        public Task SaveAsync(AvatarItem avatarItem)
+        private List<string> SerializeEnvironmentVariables<T>(T settings)
+            where T: class, new()
         {
-            // TODO: commit AvatarItem to filesystem
+            if (settings == null)
+                return null;
 
-            // TODO: generate the following files
-            // sql scripts for sqlite databases (save and execute to create dbs)
-            throw new NotImplementedException();
+            var lines = new List<string>();
+
+            foreach (var property in settings.GetType().GetProperties())
+            {
+                var environmentVariableKey = property.Name.ToMacroCase();
+                var environmentVariableValue = property.GetValue(settings);
+
+                if (property == typeof(bool))
+                    environmentVariableValue = ((string)environmentVariableValue).ToLower();
+
+                if (environmentVariableValue != null)
+                {
+                    lines.Add($"{environmentVariableKey}={environmentVariableValue}");
+                }
+            }
+
+            return lines;
+        }
+
+        public async Task SaveAsync(string id, AvatarItem avatarItem)
+        {
+            await SaveEnvironmentVariablesAsync(id, avatarItem);
+            await CreateSqliteDatabasesAsync(id);
+        }
+
+        private async Task SaveEnvironmentVariablesAsync(string id, AvatarItem avatarItem)
+        {
+            logger.LogInformation("Serializing variables.env");
+            var variablesLines = new List<string>();
+            variablesLines.AddRange(SerializeEnvironmentVariables(avatarItem.EventSourcing));
+            variablesLines.AddRange(SerializeEnvironmentVariables(avatarItem.CortexGraph));
+            variablesLines.AddRange(SerializeEnvironmentVariables(avatarItem.AvatarApi));
+            variablesLines.AddRange(SerializeEnvironmentVariables(avatarItem.IdentityAccess));
+            variablesLines.AddRange(SerializeEnvironmentVariables(avatarItem.CortexLibrary));
+            variablesLines.AddRange(SerializeEnvironmentVariables(avatarItem.CortexDiaryNucleus));
+            await File.WriteAllLinesAsync(Path.Combine(id, "variables.env"), variablesLines);
+
+            logger.LogInformation("Serializing d23-variables.env");
+            var d23Lines = SerializeEnvironmentVariables(avatarItem.D23);
+            await File.WriteAllLinesAsync(Path.Combine(id, "d23-variables.env"), d23Lines);
+
+            logger.LogInformation("Serializing .env");
+            var envLines = SerializeEnvironmentVariables(avatarItem.Network);
+            await File.WriteAllLinesAsync(Path.Combine(id, ".env"), envLines);
+        }
+
+        private async Task CreateSqliteDatabasesAsync(string id)
+        {
+            foreach (var sqlFile in Directory.EnumerateFiles("./Avatars", "*.sql"))
+            {
+                logger.LogInformation($"Creating database for {sqlFile}");
+
+                var sqlStatements = File.ReadAllText(sqlFile);
+                var sqliteFileName = $"{Path.GetFileNameWithoutExtension(sqlFile)}.db";
+
+                using (var connection = new SqliteConnection($@"Data Source=file:{Path.Combine(id, sqliteFileName)}"))
+                {
+                    connection.Open();
+
+                    using var cmd = new SqliteCommand(sqlStatements, connection);
+                    await cmd.ExecuteNonQueryAsync();
+                }
+            }
         }
     }
 }
