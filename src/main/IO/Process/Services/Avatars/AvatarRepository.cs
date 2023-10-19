@@ -1,11 +1,19 @@
 ﻿using System.ComponentModel;
 using ei8.Avatar.Installer.Common;
 using ei8.Avatar.Installer.Domain.Model.Avatars;
+using Microsoft.Extensions.Logging;
 
 namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
 {
     public class AvatarRepository : IAvatarRepository
     {
+        private readonly ILogger<AvatarRepository> logger;
+
+        public AvatarRepository(ILogger<AvatarRepository> logger) 
+        {
+            this.logger = logger;
+        }
+
         // TODO: Add unit tests
         public async Task<AvatarItem?> GetByAsync(string id)
         {
@@ -26,7 +34,7 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
                     // load other files here as needed
                     case "variables.env":
                         {
-                            Console.WriteLine($"Loading {file}");
+                            logger.LogInformation($"Loading {file}");
 
                             var variables = await GetEnvironmentVariablesFromFileAsync(file);
                             avatarItem.CortexGraph = CreateFromEnvironmentVariables<CortexGraphSettings>(variables);
@@ -40,7 +48,7 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
 
                     case ".env":
                         {
-                            Console.WriteLine($"Loading {file}");
+                            logger.LogInformation($"Loading {file}");
 
                             var variables = await GetEnvironmentVariablesFromFileAsync(file);
                             avatarItem.Network = CreateFromEnvironmentVariables<AvatarNetworkSettings>(variables);
@@ -49,7 +57,7 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
 
                     case "d23-variables.env":
                         {
-                            Console.WriteLine($"Loading {file}");
+                            logger.LogInformation($"Loading {file}");
 
                             var variables = await GetEnvironmentVariablesFromFileAsync(file);
                             avatarItem.D23 = CreateFromEnvironmentVariables<D23Settings>(variables);

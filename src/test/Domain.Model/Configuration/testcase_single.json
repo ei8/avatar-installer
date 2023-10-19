@@ -11,7 +11,7 @@
             },
 
             "avatar_api": {
-                "token_issuer_url": "https://login.fibona.cc",
+                "token_issuer_url": "https://www.example.com/token",
                 "api_name": "avatarapi-junvic"
             },
 
@@ -21,7 +21,7 @@
             },
 
             "d23": {
-                "oidc_authority_url": "https://login.fibona.cc",
+                "oidc_authority_url": "https://www.example.com/oidc",
                 "client_id": "d23-junvic",
                 "base_path": "/junvic/d23"
             },

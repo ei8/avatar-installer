@@ -9,6 +9,7 @@ using ei8.Avatar.Installer.IO.Process.Services.Template;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace ei8.Avatar.Installer.CLI
 {
@@ -28,8 +29,14 @@ namespace ei8.Avatar.Installer.CLI
                                 .AddScoped<IAvatarRepository, AvatarRepository>()
                                 .AddScoped<IAvatarMapperService, AvatarMapperService>();
 
+                builder.Services.AddAutoMapper(typeof(AvatarAutoMapperProfile));
+
+                builder.Logging.AddConsole();
+
                 using (IHost host = builder.Build())
                 {
+                    var logger = host.Services.GetRequiredService<ILogger<Program>>();
+
                     // entry point here
                     var templateService = host.Services.GetRequiredService<ITemplateService>();
 
@@ -42,6 +49,7 @@ namespace ei8.Avatar.Installer.CLI
                     var configObject = await configRepository.GetByAsync(configPath);
 
                     var avatarRepository = host.Services.GetRequiredService<IAvatarRepository>();
+                    var avatarMapperService = host.Services.GetRequiredService<IAvatarMapperService>();
 
                     foreach (var item in configObject.Avatars)
                     {
@@ -50,12 +58,13 @@ namespace ei8.Avatar.Installer.CLI
                         var subdirectory = Path.Combine(configObject.Destination, item.Name);
 
                         if (Directory.Exists(subdirectory) && Directory.GetFiles(subdirectory).Any())
-                            Console.WriteLine($"{subdirectory} is not empty. Using existing files.");
+                            logger.LogInformation($"{subdirectory} is not empty. Using existing files.");
                         else
                             templateService.DownloadTemplate(subdirectory);
 
                         var avatar = await avatarRepository.GetByAsync(subdirectory);
-                        //avatarMapperService.Apply(item, avatar);
+                        var mappedAvatar = avatarMapperService.Apply(item, avatar);
+
                         //await avatarRepo.SaveAsync(avatar);
                     }
 

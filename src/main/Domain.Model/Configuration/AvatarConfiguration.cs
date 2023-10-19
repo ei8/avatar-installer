@@ -78,8 +78,8 @@ namespace ei8.Avatar.Installer.Domain.Model.Configuration
         /// </summary>
         public CortexLibraryConfiguration(string avatarName)
         {
-            NeuronsUrl = $@"http://fibona.cc/{avatarName}/cortex/neurons";
-            TerminalsUrl = $@"http://fibona.cc/{avatarName}/cortex/terminals";
+            NeuronsUrl = $@"https://fibona.cc/{avatarName}/cortex/neurons";
+            TerminalsUrl = $@"https://fibona.cc/{avatarName}/cortex/terminals";
         }
 
         [JsonConstructor]
