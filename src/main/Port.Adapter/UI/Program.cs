@@ -27,7 +27,8 @@ namespace ei8.Avatar.Installer.CLI
                                 .AddScoped<ITemplateService, GithubTemplateService>()
                                 .AddScoped<IConfigurationRepository, JsonConfigurationRepository>()
                                 .AddScoped<IAvatarRepository, AvatarRepository>()
-                                .AddScoped<IAvatarMapperService, AvatarMapperService>();
+                                .AddScoped<IAvatarMapperService, AvatarMapperService>()
+                                .AddScoped<IAvatarServerRepository, AvatarServerRepository>();
 
                 builder.Services.AddAutoMapper(typeof(AvatarAutoMapperProfile));
 
@@ -68,8 +69,11 @@ namespace ei8.Avatar.Installer.CLI
                         await avatarRepository.SaveAsync(subdirectory, avatar);
                     }
 
+                    var avatarServerRepository = host.Services.GetRequiredService<IAvatarServerRepository>();
+
                     // TODO: create avatar server here
-                    // var avatarServer = await avatarServerRepository.Get();
+                    var avatarServer = await avatarServerRepository.GetByAsync(configObject.Destination);
+
                     // await avatarServerMapperService.Apply(configObject, avatarServer);
                     // await avatarServerRepo.SaveAsync();
                 }

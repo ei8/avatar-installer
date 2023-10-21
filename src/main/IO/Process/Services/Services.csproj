@@ -37,6 +37,7 @@
     <PackageReference Include="LibGit2Sharp" Version="0.27.2" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="7.0.12" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0" />
+    <PackageReference Include="Tomlyn" Version="0.16.2" />
   </ItemGroup>
 
   <ItemGroup>

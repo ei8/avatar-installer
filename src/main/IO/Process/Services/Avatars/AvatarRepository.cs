@@ -20,7 +20,7 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
         {
             if (!Directory.Exists(id))
             {
-                Console.WriteLine($"No files found in {id}");
+                logger.LogInformation($"No files found in {id}");
                 return null;
             }
 
@@ -91,21 +91,7 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
                 var environmentVariableKey = property.Name.ToMacroCase();
 
                 if (variables.TryGetValue(environmentVariableKey, out var savedValue))
-                {
-                    if (property.PropertyType == typeof(string))
-                    {
-                        property.SetValue(settings, savedValue);
-                        continue;
-                    }
-
-                    var converter = TypeDescriptor.GetConverter(property.PropertyType);
-
-                    if (converter != null)
-                    {
-                        var convertedValue = converter.ConvertFrom(savedValue);
-                        property.SetValue(settings, convertedValue);
-                    }
-                }
+                    property.SetValueFromString(settings, savedValue);
             }
 
             return settings;

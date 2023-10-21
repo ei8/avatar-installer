@@ -8,7 +8,7 @@ namespace ei8.Avatar.Installer.Domain.Model.Avatars
 {
     public interface IAvatarServerRepository
     {
-        Task<AvatarServer> GetById(string id);
+        Task<AvatarServer?> GetByAsync(string id);
         Task Save(AvatarServer avatarServer);
     }
 }

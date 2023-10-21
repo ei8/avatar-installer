@@ -5,35 +5,79 @@
     /// </summary>
     public class AvatarServer
     {
-        public TraefikSettings TraefikSettings { get; set; } = new();
-        public SshSettings SshSettings { get; set; } = new();
+        public TraefikSettings? TraefikSettings { get; set; } = new();
+        public SshSettings? SshSettings { get; set; } = new();
     }
+
+    #region Traefik TOML structure
 
     public class TraefikSettings
     {
-        public string LogLevel { get; set; }
-        public string WebAddress { get; set; }
-        public string EntryPointAddress { get; set; }
-        public List<TraefikFrontend> Frontends { get; set; } = new();
-        public List<TraefikBackend> Backends { get; set; } = new();
+        public string[] DefaultEntryPoints { get; set; }
+        public TraefikLogSettings Log { get; set; }
+        public TraefikWebSettings Web { get; set; }
+        public TraefikEntryPointsSettings EntryPoints { get; set; }
+
+        /// <summary>
+        /// Marker property that tells Traefik to read the configuration backend from the same TOML file
+        /// </summary>
+        /// <remarks>
+        /// The dictionary is expected to be empty, but it should not be null.
+        /// </remarks>
+        public Dictionary<string, object?> File { get; set; }
+        public Dictionary<string, TraefikFrontend> Frontends { get; set; }
+        public Dictionary<string, TraefikBackend> Backends { get; set; }
+    }
+
+    public class TraefikLogSettings
+    {
+        public string Level { get; set; }
+    }
+
+    public class TraefikWebSettings
+    {
+        public string Address { get; set; }
+    }
+
+    public class TraefikEntryPointsSettings
+    {
+        public TraefikEntryPoint Http { get; set; }
+    }
+
+    public class TraefikEntryPoint
+    {
+        public string Address { get; set; }
     }
 
     public class TraefikFrontend
     {
-        public string Name { get; set; }
-        public string BackendName { get; set; }
-        public string EntryPointName { get; set; }
-        public string EntryPointRule { get; set; }
+        public string Backend { get; set; }
+        public string[] Entrypoints { get; set; }
+        public Dictionary<string, TraefikFrontendRule> Routes { get; set; }
+    }
+
+    public class TraefikFrontendRule
+    {
+        public string Rule { get; set; }
     }
 
     public class TraefikBackend
     {
-        public string Name { get; set; }
-        public string ServerName { get; set; }
-        public string Url { get; set; }
+        public Dictionary<string, TraefikBackendServer> Servers { get; set; }
     }
 
+    public class TraefikBackendServer
+    {
+        public string Url { get; set; }
+    }
+    #endregion
+
     public class SshSettings
+    {
+        public Dictionary<string, SshHostSettings> Hosts { get; set; }
+    }
+
+    public class SshHostSettings
     {
         public int ServerAliveInterval { get; set; }
         public int ServerAliveCountMax { get; set; }
