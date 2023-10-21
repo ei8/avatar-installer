@@ -27,7 +27,7 @@ namespace ei8.Avatar.Installer.Domain.Model.Mapping
             CreateMap<CortexGraphConfiguration, CortexGraphSettings>();
             CreateMap<AvatarApiConfiguration, AvatarApiSettings>();
             CreateMap<CortexLibraryConfiguration, CortexLibrarySettings>();
-            CreateMap<D23Configuration, D23Settings>()
+            CreateMap<d23Configuration, d23Settings>()
                 .ForMember(dest => dest.OidcAuthority, opt => opt.MapFrom(src => src.OidcAuthorityUrl));
 
             CreateMap<NetworkConfiguration, AvatarNetworkSettings>()

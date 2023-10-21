@@ -12,7 +12,7 @@
         public IdentityAccessSettings IdentityAccess { get; set; } = new();
         public CortexLibrarySettings CortexLibrary { get; set; } = new();
         public CortexDiaryNucleusSettings CortexDiaryNucleus { get; set; } = new();
-        public D23Settings D23 { get; set; } = new();
+        public d23Settings d23 { get; set; } = new();
         public AvatarNetworkSettings Network { get; set; } = new();
 
         public AvatarItem(string name)
@@ -86,8 +86,7 @@
     {
         public string AspnetcoreEnvironment { get; set; }
     }
-
-    public class D23Settings
+    public class d23Settings
     {
         public string OidcAuthority { get; set; }
         public string ClientId { get; set; }

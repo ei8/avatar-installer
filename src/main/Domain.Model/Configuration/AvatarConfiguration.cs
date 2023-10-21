@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Runtime.Intrinsics.X86;
+using System.Text.Json.Serialization;
 
 namespace ei8.Avatar.Installer.Domain.Model.Configuration
 {
@@ -9,6 +10,25 @@ namespace ei8.Avatar.Installer.Domain.Model.Configuration
     {
         public AvatarConfigurationItem[] Avatars { get; set; }
         public string Destination { get; set; }
+        public SharedNetworkConfiguration Network { get; set; } = new();
+    }
+
+    public class SharedNetworkConfiguration
+    {
+        public string LocalIp { get; set; }
+        public SshConfiguration Ssh { get; set; } = new();
+
+        /// <summary>
+        /// Initialize with defaults
+        /// </summary>
+        public SharedNetworkConfiguration(string avatarName)
+        {
+            LocalIp = "192.168.1.110";
+            Ssh = new(avatarName);
+        }
+
+        [JsonConstructor]
+        public SharedNetworkConfiguration() : this("sample") { }
     }
 
     public class AvatarConfigurationItem
@@ -17,7 +37,7 @@ namespace ei8.Avatar.Installer.Domain.Model.Configuration
         public CortexGraphConfiguration CortexGraph { get; set; } = new();
         public AvatarApiConfiguration AvatarApi { get; set; } = new();
         public CortexLibraryConfiguration CortexLibrary { get; set; } = new();
-        public D23Configuration D23 { get; set; } = new();
+        public d23Configuration D23 { get; set; } = new();
         public NetworkConfiguration Network { get; set; } = new();
 
         [JsonConstructor]
@@ -27,7 +47,6 @@ namespace ei8.Avatar.Installer.Domain.Model.Configuration
             AvatarApi = new(name);
             CortexLibrary = new(name);
             D23 = new(name);
-            Network = new(name);
         }
     }
 
@@ -86,7 +105,7 @@ namespace ei8.Avatar.Installer.Domain.Model.Configuration
         public CortexLibraryConfiguration() : this("sample") { }
     }
 
-    public class D23Configuration
+    public class d23Configuration
     {
         public string OidcAuthorityUrl { get; set; }
         public string ClientId { get; set; }
@@ -95,7 +114,7 @@ namespace ei8.Avatar.Installer.Domain.Model.Configuration
         /// <summary>
         /// Initialize with defaults
         /// </summary>
-        public D23Configuration(string avatarName)
+        public d23Configuration(string avatarName)
         {
             OidcAuthorityUrl = @"https://login.fibona.cc";
             ClientId = $"d23-{avatarName}";
@@ -103,7 +122,7 @@ namespace ei8.Avatar.Installer.Domain.Model.Configuration
         }
 
         [JsonConstructor]
-        public D23Configuration() : this("sample") { }
+        public d23Configuration() : this("sample") { }
     }
 
     public class NetworkConfiguration
@@ -111,21 +130,18 @@ namespace ei8.Avatar.Installer.Domain.Model.Configuration
         public string LocalIp { get; set; }
         public int AvatarInPort { get; set; }
         public int D23BlazorPort { get; set; }
-        public SshConfiguration Ssh { get; set; } = new();
 
         /// <summary>
         /// Initialize with defaults
         /// </summary>
-        public NetworkConfiguration(string avatarName)
+
+        [JsonConstructor]
+        public NetworkConfiguration()
         {
             LocalIp = "192.168.1.110";
             AvatarInPort = 64101;
             D23BlazorPort = 64103;
-            Ssh = new(avatarName);
         }
-
-        [JsonConstructor]
-        public NetworkConfiguration() : this("sample") { }
     }
 
     public class SshConfiguration

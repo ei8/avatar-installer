@@ -156,17 +156,17 @@ namespace Domain.Model.Test.Mapping
             var sampleTarget = new AvatarItem("sample");
             var sampleResult = sut.Apply(config.Avatars[0], sampleTarget);
 
-            Assert.Equal(@"https://www.example.com", sampleResult.D23.OidcAuthority);
-            Assert.Equal("not-sample", sampleResult.D23.ClientId);
-            Assert.Equal("/", sampleResult.D23.BasePath);
+            Assert.Equal(@"https://www.example.com", sampleResult.d23.OidcAuthority);
+            Assert.Equal("not-sample", sampleResult.d23.ClientId);
+            Assert.Equal("/", sampleResult.d23.BasePath);
 
 
             var defaultTarget = new AvatarItem("defaults");
             var defaultResult = sut.Apply(config.Avatars[1], defaultTarget);
 
-            Assert.Equal(@"https://login.fibona.cc", defaultResult.D23.OidcAuthority);
-            Assert.Equal("d23-defaults", defaultResult.D23.ClientId);
-            Assert.Equal("/defaults/d23", defaultResult.D23.BasePath);
+            Assert.Equal(@"https://login.fibona.cc", defaultResult.d23.OidcAuthority);
+            Assert.Equal("d23-defaults", defaultResult.d23.ClientId);
+            Assert.Equal("/defaults/d23", defaultResult.d23.BasePath);
         }
 
         [Fact]

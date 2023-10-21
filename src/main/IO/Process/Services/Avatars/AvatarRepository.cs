@@ -60,7 +60,7 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
                             logger.LogInformation("Loading {file}", file);
 
                             var variables = await GetEnvironmentVariablesFromFileAsync(file);
-                            avatarItem.D23 = DeserializeEnvironmentVariables<D23Settings>(variables);
+                            avatarItem.d23 = DeserializeEnvironmentVariables<d23Settings>(variables);
                         }
                         break;
                 }
@@ -140,7 +140,7 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
             await File.WriteAllLinesAsync(Path.Combine(id, "variables.env"), variablesLines);
 
             logger.LogInformation("Serializing d23-variables.env");
-            var d23Lines = SerializeEnvironmentVariables(avatarItem.D23);
+            var d23Lines = SerializeEnvironmentVariables(avatarItem.d23);
             await File.WriteAllLinesAsync(Path.Combine(id, "d23-variables.env"), d23Lines);
 
             logger.LogInformation("Serializing .env");

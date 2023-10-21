@@ -36,16 +36,18 @@ namespace Domain.Model.Test.Configuration
             Assert.Equal("d23-junvic", result.Avatars[0].D23!.ClientId);
             Assert.Equal("/junvic/d23", result.Avatars[0].D23!.BasePath);
 
-            // network
+            // avatar network
             Assert.Equal("192.168.1.110", result.Avatars[0].Network!.LocalIp);
             Assert.Equal(64101, result.Avatars[0].Network!.AvatarInPort);
             Assert.Equal(64103, result.Avatars[0].Network!.D23BlazorPort);
-            Assert.Equal(60, result.Avatars[0].Network!.Ssh!.ServerAliveInterval);
-            Assert.Equal(525600, result.Avatars[0].Network!.Ssh!.ServerAliveCountMax);
-            Assert.Equal(2222, result.Avatars[0].Network!.Ssh!.Port);
-            Assert.Equal("ei8.host", result.Avatars[0].Network!.Ssh!.HostName);
-            Assert.Equal("jv:80", result.Avatars[0].Network!.Ssh!.RemoteForward);
-            Assert.Equal(9393, result.Avatars[0].Network!.Ssh!.LocalPort);
+
+            // root network
+            Assert.Equal(60, result.Network!.Ssh!.ServerAliveInterval);
+            Assert.Equal(525600, result.Network!.Ssh!.ServerAliveCountMax);
+            Assert.Equal(2222, result.Network!.Ssh!.Port);
+            Assert.Equal("ei8.host", result.Network!.Ssh!.HostName);
+            Assert.Equal("jv:80", result.Network!.Ssh!.RemoteForward);
+            Assert.Equal(9393, result.Network!.Ssh!.LocalPort);
         }
 
         [Fact]
@@ -82,12 +84,14 @@ namespace Domain.Model.Test.Configuration
             Assert.Equal("192.168.50.2", result.Avatars[0].Network!.LocalIp);
             Assert.Equal(12345, result.Avatars[0].Network!.AvatarInPort);
             Assert.Equal(64103, result.Avatars[0].Network!.D23BlazorPort);
-            Assert.Equal(90, result.Avatars[0].Network!.Ssh!.ServerAliveInterval);
-            Assert.Equal(365000, result.Avatars[0].Network!.Ssh!.ServerAliveCountMax);
-            Assert.Equal(2222, result.Avatars[0].Network!.Ssh!.Port);
-            Assert.Equal("ei8.host", result.Avatars[0].Network!.Ssh!.HostName);
-            Assert.Equal("jv:8080", result.Avatars[0].Network!.Ssh!.RemoteForward);
-            Assert.Equal(9393, result.Avatars[0].Network!.Ssh!.LocalPort);
+
+            // root network - should infer defaults
+            Assert.Equal(90, result.Network!.Ssh!.ServerAliveInterval);
+            Assert.Equal(365000, result.Network!.Ssh!.ServerAliveCountMax);
+            Assert.Equal(2222, result.Network!.Ssh!.Port);
+            Assert.Equal("ei8.host", result.Network!.Ssh!.HostName);
+            Assert.Equal("jv:8080", result.Network!.Ssh!.RemoteForward);
+            Assert.Equal(9393, result.Network!.Ssh!.LocalPort);
         }
 
         [Fact]
@@ -132,12 +136,6 @@ namespace Domain.Model.Test.Configuration
             Assert.Equal("192.168.1.110", avatar.Network!.LocalIp);
             Assert.Equal(64101, avatar.Network!.AvatarInPort);
             Assert.Equal(64103, avatar.Network!.D23BlazorPort);
-            Assert.Equal(60, avatar.Network!.Ssh!.ServerAliveInterval);
-            Assert.Equal(525600, avatar.Network!.Ssh!.ServerAliveCountMax);
-            Assert.Equal(2222, avatar.Network!.Ssh!.Port);
-            Assert.Equal("ei8.host", avatar.Network!.Ssh!.HostName);
-            Assert.Equal($"{avatarName}:80", avatar.Network!.Ssh!.RemoteForward);
-            Assert.Equal(9393, avatar.Network!.Ssh!.LocalPort);
         }
     }
 }

@@ -12,14 +12,16 @@
 
             "network": {
                 "local_ip": "192.168.50.2",
-                "avatar_in_port": 12345,
-                "ssh": {
-                    "server_alive_interval": 90,
-                    "server_alive_count_max": 365000,
-                    "remote_forward": "jv:8080"
-                }
+                "avatar_in_port": 12345
             }
         }
     ],
-    "destination": "./sample"
+    "destination": "./sample",
+    "network": {
+        "ssh": {
+            "server_alive_interval": 90,
+            "server_alive_count_max": 365000,
+            "remote_forward": "jv:8080"
+        }
+    }
 }

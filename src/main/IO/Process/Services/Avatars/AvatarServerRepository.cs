@@ -64,13 +64,6 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
                 }
             }
 
-            //var hostNames = lines.Where(l => l.StartsWith("Host"))
-            //                     .Select(l => l.Split(' '))
-
-
-            //var settings = lines.Select(l => l.Split(' '))
-            //                    .ToDictionary(s => s[0], s => string.Join(' ', s.Skip(1)));
-
             return result;
         }
 
