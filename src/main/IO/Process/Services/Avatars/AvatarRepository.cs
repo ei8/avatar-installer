@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using ei8.Avatar.Installer.Common;
+﻿using ei8.Avatar.Installer.Common;
 using ei8.Avatar.Installer.Domain.Model.Avatars;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Logging;
@@ -20,7 +19,7 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
         {
             if (!Directory.Exists(id))
             {
-                logger.LogInformation($"No files found in {id}");
+                logger.LogInformation("No files found in {id}", id);
                 return null;
             }
 
@@ -35,7 +34,7 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
                     // load other files here as needed
                     case "variables.env":
                         {
-                            logger.LogInformation($"Loading {file}");
+                            logger.LogInformation("Loading {file}", file);
 
                             var variables = await GetEnvironmentVariablesFromFileAsync(file);
                             avatarItem.CortexGraph = DeserializeEnvironmentVariables<CortexGraphSettings>(variables);
@@ -49,7 +48,7 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
 
                     case ".env":
                         {
-                            logger.LogInformation($"Loading {file}");
+                            logger.LogInformation("Loading {file}", file);
 
                             var variables = await GetEnvironmentVariablesFromFileAsync(file);
                             avatarItem.Network = DeserializeEnvironmentVariables<AvatarNetworkSettings>(variables);
@@ -58,7 +57,7 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
 
                     case "d23-variables.env":
                         {
-                            logger.LogInformation($"Loading {file}");
+                            logger.LogInformation("Loading {file}", file);
 
                             var variables = await GetEnvironmentVariablesFromFileAsync(file);
                             avatarItem.D23 = DeserializeEnvironmentVariables<D23Settings>(variables);
@@ -97,7 +96,7 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
             return settings;
         }
 
-        private List<string> SerializeEnvironmentVariables<T>(T settings)
+        private List<string>? SerializeEnvironmentVariables<T>(T settings)
             where T: class, new()
         {
             if (settings == null)
@@ -153,7 +152,7 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
         {
             foreach (var sqlFile in Directory.EnumerateFiles("./Avatars", "*.sql"))
             {
-                logger.LogInformation($"Creating database for {sqlFile}");
+                logger.LogInformation("Creating database for {sqlFile}", sqlFile);
 
                 var sqlStatements = File.ReadAllText(sqlFile);
                 var sqliteFileName = $"{Path.GetFileNameWithoutExtension(sqlFile)}.db";

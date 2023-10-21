@@ -56,10 +56,12 @@ namespace ei8.Avatar.Installer.CLI
                     {
                         // TODO: Move loop logic into an application service
 
+                        logger.LogInformation("Setting up avatar {itemName}", item.Name);
+
                         var subdirectory = Path.Combine(configObject.Destination, item.Name);
 
                         if (Directory.Exists(subdirectory) && Directory.GetFiles(subdirectory).Any())
-                            logger.LogInformation($"{subdirectory} is not empty. Using existing files.");
+                            logger.LogInformation("{subdirectory} is not empty. Using existing files.", subdirectory);
                         else
                             templateService.DownloadTemplate(subdirectory);
 
