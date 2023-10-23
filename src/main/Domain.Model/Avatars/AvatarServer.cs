@@ -1,4 +1,8 @@
-﻿namespace ei8.Avatar.Installer.Domain.Model.Avatars
+﻿using System;
+using System.Data;
+using System.Reflection.Emit;
+
+namespace ei8.Avatar.Installer.Domain.Model.Avatars
 {
     /// <summary>
     /// Represents the network configuration within the user's filesystem
@@ -27,6 +31,43 @@
         public Dictionary<string, object?> File { get; set; }
         public Dictionary<string, TraefikFrontend> Frontends { get; set; }
         public Dictionary<string, TraefikBackend> Backends { get; set; }
+
+        public void AddRoute(string name, string frontendRule, string backendUrl, string[]? entryPoints = null)
+        {
+            entryPoints ??= new[] { "http" };
+
+            if (this.Frontends == null)
+                this.Frontends = new();
+
+            this.Frontends.Add(name, new()
+            {
+                Backend = name,
+                Entrypoints = entryPoints,
+                Routes = new()
+                {
+                    { "test_1", new()
+                    {
+                            Rule = frontendRule
+                        }
+                    }
+                }
+            });
+
+            if (this.Backends == null)
+                this.Backends = new();
+
+            this.Backends.Add(name, new()
+            {
+                Servers = new()
+                {
+                    { "server1", new()
+                    {
+                            Url = backendUrl
+                        }
+                    }
+                }
+            });
+        }
     }
 
     public class TraefikLogSettings

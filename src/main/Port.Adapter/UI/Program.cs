@@ -28,7 +28,8 @@ namespace ei8.Avatar.Installer.CLI
                                 .AddScoped<IConfigurationRepository, JsonConfigurationRepository>()
                                 .AddScoped<IAvatarRepository, AvatarRepository>()
                                 .AddScoped<IAvatarMapperService, AvatarMapperService>()
-                                .AddScoped<IAvatarServerRepository, AvatarServerRepository>();
+                                .AddScoped<IAvatarServerRepository, AvatarServerRepository>()
+                                .AddScoped<IAvatarServerMapperService, AvatarServerMapperService>();
 
                 builder.Services.AddAutoMapper(typeof(AvatarAutoMapperProfile));
 
@@ -72,12 +73,13 @@ namespace ei8.Avatar.Installer.CLI
                     }
 
                     var avatarServerRepository = host.Services.GetRequiredService<IAvatarServerRepository>();
+                    var avatarServerMapperService = host.Services.GetRequiredService<IAvatarServerMapperService>();
 
                     // TODO: create avatar server here
                     var avatarServer = await avatarServerRepository.GetByAsync(configObject.Destination);
+                    var mappedAvatarServer = avatarServerMapperService.Apply(configObject, avatarServer);
 
-                    // await avatarServerMapperService.Apply(configObject, avatarServer);
-                    // await avatarServerRepo.SaveAsync();
+                    await avatarServerRepository.SaveAsync(configObject.Destination, mappedAvatarServer!);
                 }
             }
             catch (Exception ex)

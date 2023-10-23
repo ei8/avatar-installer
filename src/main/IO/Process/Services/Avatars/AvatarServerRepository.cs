@@ -1,4 +1,5 @@
-﻿using ei8.Avatar.Installer.Common;
+﻿using System.Text;
+using ei8.Avatar.Installer.Common;
 using ei8.Avatar.Installer.Domain.Model.Avatars;
 using Tomlyn;
 
@@ -14,17 +15,18 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
             var result = new AvatarServer();
 
             result.TraefikSettings = await DeserializeTraefikFile(Path.Combine(id, "traefik.toml"));
-            result.SshSettings = await DeserializeSshSettings(Path.Combine(id, "ssh_config"));
+            result.SshSettings = await DeserializeSshSettingsFile(Path.Combine(id, "ssh_config"));
 
             return result;
         }
 
-        public Task Save(AvatarServer avatarServer)
+        public async Task SaveAsync(string id, AvatarServer avatarServer)
         {
-            throw new NotImplementedException();
+            await SerializeTraefikFile(Path.Combine(id, "traefik.toml"), avatarServer.TraefikSettings!);
+            await SerializeSshSettingsFile(Path.Combine(id, "ssh_config"), avatarServer.SshSettings!);
         }
 
-        private async Task<SshSettings?> DeserializeSshSettings(string fileName)
+        private async Task<SshSettings?> DeserializeSshSettingsFile(string fileName)
         {
             if (!File.Exists(fileName))
                 return null;
@@ -67,6 +69,27 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
             return result;
         }
 
+        private async Task SerializeSshSettingsFile(string fileName, SshSettings settings)
+        {
+            var sb = new StringBuilder();
+
+            foreach (var kvp in settings.Hosts)
+            {
+                sb.AppendLine($"Host {kvp.Key}");
+
+                var props = typeof(SshHostSettings).GetProperties();
+                foreach (var prop in props)
+                {
+                    var propValue = prop.GetValue(kvp.Value);
+
+                    if (propValue != null)
+                        sb.AppendLine($"\t{prop.Name} {propValue}");
+                }
+            }
+
+            await File.WriteAllTextAsync(fileName, sb.ToString());
+        }
+
         private async Task<TraefikSettings?> DeserializeTraefikFile(string fileName)
         {
             if (!File.Exists(fileName))
@@ -82,6 +105,19 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
             });
 
             return result;
+        }
+
+        private async Task SerializeTraefikFile(string fileName, TraefikSettings settings)
+        {
+            var tomlString = Toml.FromModel(settings, new TomlModelOptions()
+            {
+                ConvertPropertyName = (fieldName) =>
+                {
+                    return string.Concat(char.ToLower(fieldName[0]), fieldName.Substring(1));
+                },
+            });
+
+            await File.WriteAllTextAsync(fileName, tomlString);
         }
     }
 }

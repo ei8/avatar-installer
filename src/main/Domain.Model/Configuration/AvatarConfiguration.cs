@@ -10,10 +10,10 @@ namespace ei8.Avatar.Installer.Domain.Model.Configuration
     {
         public AvatarConfigurationItem[] Avatars { get; set; }
         public string Destination { get; set; }
-        public SharedNetworkConfiguration Network { get; set; } = new();
+        public AvatarServerConfiguration Network { get; set; } = new();
     }
 
-    public class SharedNetworkConfiguration
+    public class AvatarServerConfiguration
     {
         public string LocalIp { get; set; }
         public SshConfiguration Ssh { get; set; } = new();
@@ -21,14 +21,14 @@ namespace ei8.Avatar.Installer.Domain.Model.Configuration
         /// <summary>
         /// Initialize with defaults
         /// </summary>
-        public SharedNetworkConfiguration(string avatarName)
+        public AvatarServerConfiguration(string avatarName)
         {
             LocalIp = "192.168.1.110";
             Ssh = new(avatarName);
         }
 
         [JsonConstructor]
-        public SharedNetworkConfiguration() : this("sample") { }
+        public AvatarServerConfiguration() : this("sample") { }
     }
 
     public class AvatarConfigurationItem
