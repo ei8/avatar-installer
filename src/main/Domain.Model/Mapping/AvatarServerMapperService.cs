@@ -5,6 +5,7 @@ namespace ei8.Avatar.Installer.Domain.Model.Mapping
 {
     public class AvatarServerMapperService : IAvatarServerMapperService
     {
+        // TODO: Add unit tests
         public AvatarServer? Apply(AvatarConfiguration configuration, AvatarServer? item)
         {
             if (item == null)
@@ -51,12 +52,11 @@ namespace ei8.Avatar.Installer.Domain.Model.Mapping
                 {
                     var avatarRouteName = $"{avatar.Name}avatar";
                     var avatarLocalUrl = $"http://{configuration.Network.LocalIp}:{avatar.Network.AvatarInPort}";
-                    // TODO: Use neurul_setting from the config object
-                    item.AddRoute(avatarRouteName, $"PathPrefixStrip:/fibona.cc/{avatar.Name}", avatarLocalUrl);
+                    item.AddRoute(avatarRouteName, $"PathPrefixStrip:/{avatar.Network.NeurULServer}/{avatar.Name}", avatarLocalUrl);
 
                     var d23RouteName = $"{avatar.Name}d23";
-                    var d23LocalUrl = $"http://{configuration.Network.LocalIp}:{avatar.Network.D23BlazorPort}";
-                    item.AddRoute(d23RouteName, $"PathPrefixStrip:/fibona.cc/{avatar.Name}/d23", d23LocalUrl);
+                    var d23LocalUrl = $"http://{configuration.Network.LocalIp}:{avatar.Network.d23BlazorPort}";
+                    item.AddRoute(d23RouteName, $"PathPrefixStrip:/{avatar.Network.NeurULServer}/{avatar.Name}/d23", d23LocalUrl);
                 }
             }
 

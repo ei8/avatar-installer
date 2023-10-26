@@ -39,7 +39,8 @@ namespace Domain.Model.Test.Configuration
             // avatar network
             Assert.Equal("192.168.1.110", result.Avatars[0].Network!.LocalIp);
             Assert.Equal(64101, result.Avatars[0].Network!.AvatarInPort);
-            Assert.Equal(64103, result.Avatars[0].Network!.D23BlazorPort);
+            Assert.Equal(64103, result.Avatars[0].Network!.d23BlazorPort);
+            Assert.Equal("neurul.net", result.Avatars[0].Network!.NeurULServer);
 
             // root network
             Assert.Equal(60, result.Network!.Ssh!.ServerAliveInterval);
@@ -83,7 +84,8 @@ namespace Domain.Model.Test.Configuration
             // network - should infer defaults
             Assert.Equal("192.168.50.2", result.Avatars[0].Network!.LocalIp);
             Assert.Equal(12345, result.Avatars[0].Network!.AvatarInPort);
-            Assert.Equal(64103, result.Avatars[0].Network!.D23BlazorPort);
+            Assert.Equal(64103, result.Avatars[0].Network!.d23BlazorPort);
+            Assert.Equal("fibona.cc", result.Avatars[0].Network!.NeurULServer);
 
             // root network - should infer defaults
             Assert.Equal(90, result.Network!.Ssh!.ServerAliveInterval);
@@ -135,7 +137,8 @@ namespace Domain.Model.Test.Configuration
             // network
             Assert.Equal("192.168.1.110", avatar.Network!.LocalIp);
             Assert.Equal(64101, avatar.Network!.AvatarInPort);
-            Assert.Equal(64103, avatar.Network!.D23BlazorPort);
+            Assert.Equal(64103, avatar.Network!.d23BlazorPort);
+            Assert.Equal("fibona.cc", avatar.Network!.NeurULServer);
         }
     }
 }

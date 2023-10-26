@@ -181,7 +181,7 @@ namespace Domain.Model.Test.Mapping
                         Network = new()
                         {
                             AvatarInPort = 12345,
-                            D23BlazorPort = 67890,
+                            d23BlazorPort = 67890,
                             LocalIp = "127.0.0.1",
                         }
                     },

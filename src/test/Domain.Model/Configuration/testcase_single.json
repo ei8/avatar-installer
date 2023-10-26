@@ -29,7 +29,8 @@
             "network": {
                 "local_ip": "192.168.1.110",
                 "avatar_in_port": 64101,
-                "d23_blazor_port": 64103
+                "d23_blazor_port": 64103,
+                "neurul_server": "neurul.net"
             }
         }
     ],

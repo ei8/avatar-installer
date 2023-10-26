@@ -15,6 +15,7 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
             this.logger = logger;
         }
 
+        // TODO: add unit tests
         public async Task<AvatarServer?> GetByAsync(string id)
         {
             if (!Directory.Exists(id))

@@ -22,7 +22,8 @@
         private static string AppendUnderscores(string value) => 
             string.Concat(value.Select((x, i) =>
             {
-                if (i > 0 && char.IsUpper(x))
+                if (i > 0 && char.IsUpper(x) && 
+                    !(i + 1 < value.Length && char.IsUpper(value[i + 1]))) // excludes cases with consecutive uppercase letters e.g. NeurULServer
                     return "_" + x.ToString();
                 else
                     return x.ToString();

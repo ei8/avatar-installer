@@ -129,7 +129,8 @@ namespace ei8.Avatar.Installer.Domain.Model.Configuration
     {
         public string LocalIp { get; set; }
         public int AvatarInPort { get; set; }
-        public int D23BlazorPort { get; set; }
+        public int d23BlazorPort { get; set; }
+        public string NeurULServer { get; set; }
 
         /// <summary>
         /// Initialize with defaults
@@ -140,7 +141,8 @@ namespace ei8.Avatar.Installer.Domain.Model.Configuration
         {
             LocalIp = "192.168.1.110";
             AvatarInPort = 64101;
-            D23BlazorPort = 64103;
+            d23BlazorPort = 64103;
+            NeurULServer = "fibona.cc";
         }
     }
 
