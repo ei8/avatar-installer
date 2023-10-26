@@ -1,35 +1,84 @@
 ﻿using System.Text;
 using ei8.Avatar.Installer.Common;
 using ei8.Avatar.Installer.Domain.Model.Avatars;
+using Microsoft.Extensions.Logging;
 using Tomlyn;
 
 namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
 {
     public class AvatarServerRepository : IAvatarServerRepository
     {
+        private readonly ILogger<AvatarServerRepository> logger;
+
+        public AvatarServerRepository(ILogger<AvatarServerRepository> logger) 
+        {
+            this.logger = logger;
+        }
+
         public async Task<AvatarServer?> GetByAsync(string id)
         {
             if (!Directory.Exists(id))
+            {
+                logger.LogWarning("Unable to find directory {id}", id);
                 return null;
+            }
 
             var result = new AvatarServer();
 
-            result.TraefikSettings = await DeserializeTraefikFile(Path.Combine(id, "traefik.toml"));
-            result.SshSettings = await DeserializeSshSettingsFile(Path.Combine(id, "ssh_config"));
+            result.TraefikSettings = await DeserializeTraefikFile(Path.Combine(id, Constants.Filenames.TraefikToml));
+            result.SshSettings = await DeserializeSshSettingsFile(Path.Combine(id, Constants.Filenames.SshConfig));
 
             return result;
         }
 
         public async Task SaveAsync(string id, AvatarServer avatarServer)
         {
-            await SerializeTraefikFile(Path.Combine(id, "traefik.toml"), avatarServer.TraefikSettings!);
-            await SerializeSshSettingsFile(Path.Combine(id, "ssh_config"), avatarServer.SshSettings!);
+            if (!Directory.Exists(id))
+            {
+                logger.LogWarning("Unable to find directory {id}", id);
+                return;
+            }
+
+            await SerializeTraefikFileAsync(Path.Combine(id, Constants.Filenames.TraefikToml), avatarServer.TraefikSettings!);
+            await SerializeSshSettingsFileAsync(Path.Combine(id, Constants.Filenames.SshConfig), avatarServer.SshSettings!);
+
+            await CreateBatchFilesAsync(id);
+        }
+
+        private async Task CreateBatchFilesAsync(string path)
+        {
+            // start - traefik.bat
+            logger.LogInformation("Creating {fileName}", Constants.Filenames.StartTraefikBat);
+            var startTraefikBatPath = Path.Combine(path, Constants.Filenames.StartTraefikBat);
+            var traefikScript = String.Format(Constants.BatchFileTemplates.StartTraefikBat, Constants.Filenames.TraefikToml);
+            await File.WriteAllTextAsync(startTraefikBatPath, traefikScript);
+
+            // start - ei8.site.bat
+            logger.LogInformation("Creating {fileName}", Constants.Filenames.StartEi8SiteBat);
+            var startEi8SiteBatPath = Path.Combine(path, Constants.Filenames.StartEi8SiteBat);
+            var sshScript = String.Format(Constants.BatchFileTemplates.StartEi8SiteBat, Path.GetFullPath(Path.Combine(path, Constants.Filenames.SshConfig)));
+            await File.WriteAllTextAsync(startEi8SiteBatPath, sshScript);
+
+            // loop start - ei8.site.bat
+            logger.LogInformation("Creating {fileName}", Constants.Filenames.LoopStartEi8SiteBat);
+            var loopStartEi8SiteBatPath = Path.Combine(path, Constants.Filenames.LoopStartEi8SiteBat);
+            await File.WriteAllTextAsync(loopStartEi8SiteBatPath, Constants.BatchFileTemplates.LoopStartEi8SiteBat);
+
+            // autolock.cmd
+            logger.LogInformation("Creating {fileName}", Constants.Filenames.AutoLockCmd);
+            var autolockCmdPath = Path.Combine(path, Constants.Filenames.AutoLockCmd);
+            await File.WriteAllTextAsync(autolockCmdPath, Constants.BatchFileTemplates.AutoLockCmd);
         }
 
         private async Task<SshSettings?> DeserializeSshSettingsFile(string fileName)
         {
             if (!File.Exists(fileName))
+            {
+                logger.LogWarning("Unable to find SSH settings file: {fileName}", fileName);
                 return null;
+            }
+
+            logger.LogInformation("Deserializing {fileName}", fileName);
 
             var result = new SshSettings()
             {
@@ -69,8 +118,10 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
             return result;
         }
 
-        private async Task SerializeSshSettingsFile(string fileName, SshSettings settings)
+        private async Task SerializeSshSettingsFileAsync(string fileName, SshSettings settings)
         {
+            logger.LogInformation("Creating {fileName}", fileName);
+
             var sb = new StringBuilder();
 
             foreach (var kvp in settings.Hosts)
@@ -93,7 +144,12 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
         private async Task<TraefikSettings?> DeserializeTraefikFile(string fileName)
         {
             if (!File.Exists(fileName))
+            {
+                logger.LogWarning("Unable to find traefik TOML file: {fileName}", fileName);
                 return null;
+            }
+
+            logger.LogInformation("Deserializing {fileName}", fileName);
 
             var tomlString = await File.ReadAllTextAsync(fileName);
             var result = Toml.ToModel<TraefikSettings>(tomlString, options: new TomlModelOptions()
@@ -107,8 +163,10 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
             return result;
         }
 
-        private async Task SerializeTraefikFile(string fileName, TraefikSettings settings)
+        private async Task SerializeTraefikFileAsync(string fileName, TraefikSettings settings)
         {
+            logger.LogInformation("Creating {fileName}", fileName);
+
             var tomlString = Toml.FromModel(settings, new TomlModelOptions()
             {
                 ConvertPropertyName = (fieldName) =>

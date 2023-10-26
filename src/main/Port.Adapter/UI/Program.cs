@@ -75,7 +75,6 @@ namespace ei8.Avatar.Installer.CLI
                     var avatarServerRepository = host.Services.GetRequiredService<IAvatarServerRepository>();
                     var avatarServerMapperService = host.Services.GetRequiredService<IAvatarServerMapperService>();
 
-                    // TODO: create avatar server here
                     var avatarServer = await avatarServerRepository.GetByAsync(configObject.Destination);
                     var mappedAvatarServer = avatarServerMapperService.Apply(configObject, avatarServer);
 

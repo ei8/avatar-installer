@@ -51,6 +51,7 @@ namespace ei8.Avatar.Installer.Domain.Model.Mapping
                 {
                     var avatarRouteName = $"{avatar.Name}avatar";
                     var avatarLocalUrl = $"http://{configuration.Network.LocalIp}:{avatar.Network.AvatarInPort}";
+                    // TODO: Use neurul_setting from the config object
                     item.AddRoute(avatarRouteName, $"PathPrefixStrip:/fibona.cc/{avatar.Name}", avatarLocalUrl);
 
                     var d23RouteName = $"{avatar.Name}d23";
