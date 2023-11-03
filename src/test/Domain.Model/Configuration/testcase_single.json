@@ -1,0 +1,49 @@
+{
+    "avatars": [
+        {
+            "name": "junvic",
+
+            "cortex_graph": {
+                "db_name": "graph",
+                "db_username": "root",
+                "db_url": "http://cortex.graph.persistence:8529",
+                "arango_root_password": ""
+            },
+
+            "avatar_api": {
+                "token_issuer_url": "https://www.example.com/token",
+                "api_name": "avatarapi-junvic"
+            },
+
+            "cortex_library": {
+                "neurons_url": "http://fibona.cc/junvic/cortex/neurons",
+                "terminals_url": "http://fibona.cc/junvic/cortex/terminals"
+            },
+
+            "d23": {
+                "oidc_authority_url": "https://www.example.com/oidc",
+                "client_id": "d23-junvic",
+                "base_path": "/junvic/d23"
+            },
+
+            "network": {
+                "local_ip": "192.168.1.110",
+                "avatar_in_port": 64101,
+                "d23_blazor_port": 64103,
+                "neurul_server": "neurul.net"
+            }
+        }
+    ],
+    "destination": "./sample",
+    "network": {
+        "local_ip": "192.168.1.110",
+        "ssh": {
+            "server_alive_interval": 60,
+            "server_alive_count_max": 525600,
+            "port": 2222,
+            "host_name": "ei8.host",
+            "remote_forward": "jv:80",
+            "local_port": 9393
+        }
+    }
+}

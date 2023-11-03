@@ -1,0 +1,37 @@
+BEGIN TRANSACTION;
+CREATE TABLE IF NOT EXISTS "User" (
+	"UserNeuronId"	TEXT NOT NULL UNIQUE,
+	PRIMARY KEY("UserNeuronId")
+);
+CREATE TABLE IF NOT EXISTS "Avatar" (
+	"Hash"	TEXT,
+	"Url"	TEXT NOT NULL UNIQUE,
+	"Id"	TEXT NOT NULL,
+	PRIMARY KEY("Id")
+);
+CREATE TABLE IF NOT EXISTS "BrowserReceiver" (
+	"Id"	TEXT NOT NULL,
+	"UserNeuronId"	TEXT NOT NULL,
+	"Name"	TEXT NOT NULL,
+	"PushEndpoint"	TEXT NOT NULL,
+	"PushP256DH"	TEXT NOT NULL,
+	"PushAuth"	TEXT NOT NULL,
+	PRIMARY KEY("Id"),
+	FOREIGN KEY("UserNeuronId") REFERENCES "User"("UserNeuronId")
+);
+CREATE TABLE IF NOT EXISTS "Subscription" (
+	"Id"	TEXT NOT NULL,
+	"AvatarId"	TEXT NOT NULL,
+	"UserNeuronId"	TEXT NOT NULL,
+	PRIMARY KEY("Id"),
+	FOREIGN KEY("AvatarId") REFERENCES "Avatar"("Id"),
+	FOREIGN KEY("UserNeuronId") REFERENCES "User"("UserNeuronId")
+);
+CREATE TABLE IF NOT EXISTS "SmtpReceiver" (
+	"Id"	TEXT NOT NULL,
+	"UserNeuronId"	TEXT NOT NULL,
+	"Address"	TEXT NOT NULL,
+	PRIMARY KEY("Id"),
+	FOREIGN KEY("UserNeuronId") REFERENCES "User"("UserNeuronId")
+);
+COMMIT;

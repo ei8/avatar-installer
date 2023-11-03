@@ -1,0 +1,11 @@
+{
+    "avatars": [
+        {
+            "name": "avatar-work"
+        },
+        {
+            "name": "avatar-personal"
+        }
+    ],
+    "destination": "./sample"
+}
