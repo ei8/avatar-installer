@@ -8,4 +8,7 @@ CREATE TABLE IF NOT EXISTS "View" (
 	"Icon"	varchar,
 	PRIMARY KEY("Url")
 );
+
+INSERT INTO "View" VALUES("Messages", NULL, "Messages", 0, 3, "oi-envelope-closed");
+
 COMMIT;
