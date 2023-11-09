@@ -9,6 +9,6 @@ CREATE TABLE IF NOT EXISTS "View" (
 	PRIMARY KEY("Url")
 );
 
-INSERT INTO "View" VALUES("Messages", NULL, "Messages", 0, 3, "oi-envelope-closed");
+INSERT OR IGNORE INTO "View" VALUES("Messages", NULL, "Messages", 0, 3, "oi-envelope-closed");
 
 COMMIT;
