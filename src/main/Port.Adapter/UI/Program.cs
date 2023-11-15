@@ -1,4 +1,5 @@
-﻿using ei8.Avatar.Installer.Application.Settings;
+﻿using ei8.Avatar.Installer.Application.Avatar;
+using ei8.Avatar.Installer.Application.Settings;
 using ei8.Avatar.Installer.Domain.Model.Avatars;
 using ei8.Avatar.Installer.Domain.Model.Configuration;
 using ei8.Avatar.Installer.Domain.Model.Mapping;
@@ -29,7 +30,8 @@ namespace ei8.Avatar.Installer.CLI
                                 .AddScoped<IAvatarRepository, AvatarRepository>()
                                 .AddScoped<IAvatarMapperService, AvatarMapperService>()
                                 .AddScoped<IAvatarServerRepository, AvatarServerRepository>()
-                                .AddScoped<IAvatarServerMapperService, AvatarServerMapperService>();
+                                .AddScoped<IAvatarServerMapperService, AvatarServerMapperService>()
+                                .AddScoped<IAvatarApplicationService, AvatarApplicationService>();
 
                 builder.Services.AddAutoMapper(typeof(AvatarAutoMapperProfile));
 
@@ -42,43 +44,48 @@ namespace ei8.Avatar.Installer.CLI
                     // entry point here
                     var templateService = host.Services.GetRequiredService<ITemplateService>();
 
-                    var configRepository = host.Services.GetRequiredService<IConfigurationRepository>();
-                    var configPath = builder.Configuration.GetValue<string>("config");
+                    //var configRepository = host.Services.GetRequiredService<IConfigurationRepository>();
+                    //var configPath = builder.Configuration.GetValue<string>("config");
 
-                    if (string.IsNullOrEmpty(configPath))
-                        configPath = ".";
+                    //if (string.IsNullOrEmpty(configPath))
+                    //    configPath = ".";
 
-                    var configObject = await configRepository.GetByAsync(configPath);
+                    //var configObject = await configRepository.GetByAsync(configPath);
 
-                    var avatarRepository = host.Services.GetRequiredService<IAvatarRepository>();
-                    var avatarMapperService = host.Services.GetRequiredService<IAvatarMapperService>();
+                    var avatarApplicationService = host.Services.GetRequiredService<IAvatarApplicationService>();
 
-                    foreach (var item in configObject.Avatars)
-                    {
-                        // TODO: Move loop logic into an application service
+                    await avatarApplicationService.CreateAvatarAsync();
 
-                        logger.LogInformation("Setting up avatar {itemName}", item.Name);
+                    //var avatarRepository = host.Services.GetRequiredService<IAvatarRepository>();
+                    //var avatarMapperService = host.Services.GetRequiredService<IAvatarMapperService>();
 
-                        var subdirectory = Path.Combine(configObject.Destination, item.Name);
+                    //// TODO: Move logic into application service
+                    //foreach (var item in configObject.Avatars)
+                    //{
+                    //    // TODO: Move loop logic into an application service
 
-                        if (Directory.Exists(subdirectory) && Directory.GetFiles(subdirectory).Any())
-                            logger.LogInformation("{subdirectory} is not empty. Using existing files.", subdirectory);
-                        else
-                            templateService.DownloadTemplate(subdirectory);
+                    //    logger.LogInformation("Setting up avatar {itemName}", item.Name);
 
-                        var avatar = await avatarRepository.GetByAsync(subdirectory);
-                        var mappedAvatar = avatarMapperService.Apply(item, avatar);
+                    //    var subdirectory = Path.Combine(configObject.Destination, item.Name);
 
-                        await avatarRepository.SaveAsync(subdirectory, avatar);
-                    }
+                    //    if (Directory.Exists(subdirectory) && Directory.GetFiles(subdirectory).Any())
+                    //        logger.LogInformation("{subdirectory} is not empty. Using existing files.", subdirectory);
+                    //    else
+                    //        templateService.DownloadTemplate(subdirectory);
 
-                    var avatarServerRepository = host.Services.GetRequiredService<IAvatarServerRepository>();
-                    var avatarServerMapperService = host.Services.GetRequiredService<IAvatarServerMapperService>();
+                    //    var avatar = await avatarRepository.GetByAsync(subdirectory);
+                    //    var mappedAvatar = avatarMapperService.Apply(item, avatar);
 
-                    var avatarServer = await avatarServerRepository.GetByAsync(configObject.Destination);
-                    var mappedAvatarServer = avatarServerMapperService.Apply(configObject, avatarServer);
+                    //    await avatarRepository.SaveAsync(subdirectory, avatar);
+                    //}
 
-                    await avatarServerRepository.SaveAsync(configObject.Destination, mappedAvatarServer!);
+                    //var avatarServerRepository = host.Services.GetRequiredService<IAvatarServerRepository>();
+                    //var avatarServerMapperService = host.Services.GetRequiredService<IAvatarServerMapperService>();
+
+                    //var avatarServer = await avatarServerRepository.GetByAsync(configObject.Destination);
+                    //var mappedAvatarServer = avatarServerMapperService.Apply(configObject, avatarServer);
+
+                    //await avatarServerRepository.SaveAsync(configObject.Destination, mappedAvatarServer!);
                 }
             }
             catch (Exception ex)
