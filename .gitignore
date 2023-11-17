@@ -6,3 +6,4 @@
 /src/packages
 **/publish
 /src/main/Port.Adapter/CLI/Properties/launchSettings.json
+src/main/Port.Adapter/UI/Properties/launchSettings.json
