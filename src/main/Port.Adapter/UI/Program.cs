@@ -1,4 +1,5 @@
-﻿using ei8.Avatar.Installer.Application.Settings;
+﻿using ei8.Avatar.Installer.Application.Avatar;
+using ei8.Avatar.Installer.Application.Settings;
 using ei8.Avatar.Installer.Domain.Model.Avatars;
 using ei8.Avatar.Installer.Domain.Model.Configuration;
 using ei8.Avatar.Installer.Domain.Model.Mapping;
@@ -29,7 +30,8 @@ namespace ei8.Avatar.Installer.CLI
                                 .AddScoped<IAvatarRepository, AvatarRepository>()
                                 .AddScoped<IAvatarMapperService, AvatarMapperService>()
                                 .AddScoped<IAvatarServerRepository, AvatarServerRepository>()
-                                .AddScoped<IAvatarServerMapperService, AvatarServerMapperService>();
+                                .AddScoped<IAvatarServerMapperService, AvatarServerMapperService>()
+                                .AddScoped<IAvatarApplicationService, AvatarApplicationService>();
 
                 builder.Services.AddAutoMapper(typeof(AvatarAutoMapperProfile));
 
@@ -37,48 +39,9 @@ namespace ei8.Avatar.Installer.CLI
 
                 using (IHost host = builder.Build())
                 {
-                    var logger = host.Services.GetRequiredService<ILogger<Program>>();
+                    var avatarApplicationService = host.Services.GetRequiredService<IAvatarApplicationService>();
 
-                    // entry point here
-                    var templateService = host.Services.GetRequiredService<ITemplateService>();
-
-                    var configRepository = host.Services.GetRequiredService<IConfigurationRepository>();
-                    var configPath = builder.Configuration.GetValue<string>("config");
-
-                    if (string.IsNullOrEmpty(configPath))
-                        configPath = ".";
-
-                    var configObject = await configRepository.GetByAsync(configPath);
-
-                    var avatarRepository = host.Services.GetRequiredService<IAvatarRepository>();
-                    var avatarMapperService = host.Services.GetRequiredService<IAvatarMapperService>();
-
-                    foreach (var item in configObject.Avatars)
-                    {
-                        // TODO: Move loop logic into an application service
-
-                        logger.LogInformation("Setting up avatar {itemName}", item.Name);
-
-                        var subdirectory = Path.Combine(configObject.Destination, item.Name);
-
-                        if (Directory.Exists(subdirectory) && Directory.GetFiles(subdirectory).Any())
-                            logger.LogInformation("{subdirectory} is not empty. Using existing files.", subdirectory);
-                        else
-                            templateService.DownloadTemplate(subdirectory);
-
-                        var avatar = await avatarRepository.GetByAsync(subdirectory);
-                        var mappedAvatar = avatarMapperService.Apply(item, avatar);
-
-                        await avatarRepository.SaveAsync(subdirectory, avatar);
-                    }
-
-                    var avatarServerRepository = host.Services.GetRequiredService<IAvatarServerRepository>();
-                    var avatarServerMapperService = host.Services.GetRequiredService<IAvatarServerMapperService>();
-
-                    var avatarServer = await avatarServerRepository.GetByAsync(configObject.Destination);
-                    var mappedAvatarServer = avatarServerMapperService.Apply(configObject, avatarServer);
-
-                    await avatarServerRepository.SaveAsync(configObject.Destination, mappedAvatarServer!);
+                    await avatarApplicationService.CreateAvatarAsync();
                 }
             }
             catch (Exception ex)
