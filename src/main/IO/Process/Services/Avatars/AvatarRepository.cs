@@ -25,7 +25,7 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
 
             // assuming id is a path string, get the avatar name from it
             var avatarName = new DirectoryInfo(id).Name;
-            var avatarItem = new AvatarItem(avatarName);
+            var avatarItem = new AvatarItem(id, avatarName);
 
             foreach (var file in Directory.EnumerateFiles(id))
             {

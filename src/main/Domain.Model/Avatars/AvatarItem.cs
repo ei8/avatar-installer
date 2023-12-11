@@ -5,6 +5,7 @@
     /// </summary>
     public class AvatarItem
     {
+        public string Id { get; set; }
         public string Name { get; set; }
         public EventSourcingSettings EventSourcing { get; set; } = new();
         public CortexGraphSettings CortexGraph { get; set; } = new();
@@ -15,8 +16,9 @@
         public d23Settings d23 { get; set; } = new();
         public AvatarNetworkSettings Network { get; set; } = new();
 
-        public AvatarItem(string name)
+        public AvatarItem(string id, string name)
         {
+            Id = id;
             Name = name;
         }
     }
