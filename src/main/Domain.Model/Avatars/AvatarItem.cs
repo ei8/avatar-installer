@@ -1,4 +1,6 @@
-﻿namespace ei8.Avatar.Installer.Domain.Model.Avatars
+﻿using neurUL.Common.Domain.Model;
+
+namespace ei8.Avatar.Installer.Domain.Model.Avatars
 {
     /// <summary>
     /// A concrete representation of an avatar, derived from a <see cref="Configuration.AvatarConfiguration"/>
@@ -18,6 +20,17 @@
 
         public AvatarItem(string id, string name)
         {
+            AssertionConcern.AssertArgumentNotEmpty(id, "Specified 'id' cannot be empty.", nameof(id));
+            AssertionConcern.AssertArgumentNotNull(id, nameof(id));
+
+            AssertionConcern.AssertArgumentNotEmpty(name, "Specified 'name' cannot be empty.", nameof(name));
+            AssertionConcern.AssertArgumentNotNull(name, nameof(name));
+
+            if (string.IsNullOrEmpty(id))
+            {
+                throw new ArgumentNullException($"{nameof(id)} cannot be null");
+            }
+
             Id = id;
             Name = name;
         }

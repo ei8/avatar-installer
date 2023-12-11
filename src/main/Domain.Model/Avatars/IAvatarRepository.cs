@@ -8,7 +8,7 @@
         /// <param name="id"></param>
         /// <param name="avatarItem"></param>
         /// <returns></returns>
-        Task SaveAsync(string id, AvatarItem avatarItem);
+        Task SaveAsync(AvatarItem avatarItem);
 
         /// <summary>
         /// Retrieves an instance of a <see cref="AvatarItem"/> with the specified identifier.

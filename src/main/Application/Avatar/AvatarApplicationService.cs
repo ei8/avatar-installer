@@ -61,7 +61,10 @@ namespace ei8.Avatar.Installer.Application.Avatar
 
                 var mappedAvatar = avatarMapperService.Apply(item, avatar);
 
-                await avatarRepository.SaveAsync(subdirectory, mappedAvatar);
+                mappedAvatar.Id = subdirectory; // is this necessary?
+
+                await avatarRepository.SaveAsync(mappedAvatar);
+                //await avatarRepository.SaveAsync(subdirectory, mappedAvatar);
             }
 
             var avatarServer = await avatarServerRepository.GetByAsync(configObject.Destination);
