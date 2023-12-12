@@ -10,7 +10,7 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
     {
         private readonly ILogger<AvatarServerRepository> logger;
 
-        public AvatarServerRepository(ILogger<AvatarServerRepository> logger) 
+        public AvatarServerRepository(ILogger<AvatarServerRepository> logger)
         {
             this.logger = logger;
         }
@@ -24,26 +24,28 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
                 return null;
             }
 
-            var result = new AvatarServer();
-
-            result.TraefikSettings = await DeserializeTraefikFile(Path.Combine(id, Constants.Filenames.TraefikToml));
-            result.SshSettings = await DeserializeSshSettingsFile(Path.Combine(id, Constants.Filenames.SshConfig));
+            var result = new AvatarServer()
+            {
+                Id = id,
+                TraefikSettings = await DeserializeTraefikFile(Path.Combine(id, Constants.Filenames.TraefikToml)),
+                SshSettings = await DeserializeSshSettingsFile(Path.Combine(id, Constants.Filenames.SshConfig)),
+            };
 
             return result;
         }
 
-        public async Task SaveAsync(string id, AvatarServer avatarServer)
+        public async Task SaveAsync(AvatarServer avatarServer)
         {
-            if (!Directory.Exists(id))
+            if (!Directory.Exists(avatarServer.Id))
             {
-                logger.LogWarning("Unable to find directory {id}", id);
+                logger.LogWarning("Unable to find directory {id}", avatarServer.Id);
                 return;
             }
 
-            await SerializeTraefikFileAsync(Path.Combine(id, Constants.Filenames.TraefikToml), avatarServer.TraefikSettings!);
-            await SerializeSshSettingsFileAsync(Path.Combine(id, Constants.Filenames.SshConfig), avatarServer.SshSettings!);
+            await SerializeTraefikFileAsync(Path.Combine(avatarServer.Id, Constants.Filenames.TraefikToml), avatarServer.TraefikSettings!);
+            await SerializeSshSettingsFileAsync(Path.Combine(avatarServer.Id, Constants.Filenames.SshConfig), avatarServer.SshSettings!);
 
-            await CreateBatchFilesAsync(id);
+            await CreateBatchFilesAsync(avatarServer.Id);
         }
 
         private async Task CreateBatchFilesAsync(string path)

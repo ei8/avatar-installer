@@ -26,13 +26,8 @@ namespace ei8.Avatar.Installer.Domain.Model.Avatars
             AssertionConcern.AssertArgumentNotEmpty(name, "Specified 'name' cannot be empty.", nameof(name));
             AssertionConcern.AssertArgumentNotNull(name, nameof(name));
 
-            if (string.IsNullOrEmpty(id))
-            {
-                throw new ArgumentNullException($"{nameof(id)} cannot be null");
-            }
-
-            Id = id;
-            Name = name;
+            this.Id = id;
+            this.Name = name;
         }
     }
 

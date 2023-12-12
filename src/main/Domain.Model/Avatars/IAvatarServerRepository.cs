@@ -3,6 +3,6 @@
     public interface IAvatarServerRepository
     {
         Task<AvatarServer?> GetByAsync(string id);
-        Task SaveAsync(string id, AvatarServer avatarServer);
+        Task SaveAsync(AvatarServer avatarServer);
     }
 }
