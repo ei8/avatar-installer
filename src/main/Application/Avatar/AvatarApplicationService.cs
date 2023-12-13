@@ -67,7 +67,7 @@ namespace ei8.Avatar.Installer.Application.Avatar
             var avatarServer = await avatarServerRepository.GetByAsync(configObject.Destination);
             var mappedAvatarServer = avatarServerMapperService.Apply(configObject, avatarServer);
 
-            await avatarServerRepository.SaveAsync(mappedAvatarServer!);
+            await avatarServerRepository.SaveAsync(mappedAvatarServer);
         }
     }
 }
