@@ -9,6 +9,7 @@ namespace ei8.Avatar.Installer.Domain.Model.Avatars
     /// </summary>
     public class AvatarServer
     {
+        public string Id { get; set; }
         public TraefikSettings? TraefikSettings { get; set; } = new();
         public SshSettings? SshSettings { get; set; } = new();
     }

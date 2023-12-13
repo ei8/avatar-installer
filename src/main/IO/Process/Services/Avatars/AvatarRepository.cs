@@ -25,7 +25,7 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
 
             // assuming id is a path string, get the avatar name from it
             var avatarName = new DirectoryInfo(id).Name;
-            var avatarItem = new AvatarItem(avatarName);
+            var avatarItem = new AvatarItem(id, avatarName);
 
             foreach (var file in Directory.EnumerateFiles(id))
             {
@@ -121,13 +121,13 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
             return lines;
         }
 
-        public async Task SaveAsync(string id, AvatarItem avatarItem)
+        public async Task SaveAsync(AvatarItem avatarItem)
         {
-            await SaveEnvironmentVariablesAsync(id, avatarItem);
-            await CreateSqliteDatabasesAsync(id);
+            await SaveEnvironmentVariablesAsync(avatarItem);
+            await CreateSqliteDatabasesAsync(avatarItem.Id);
         }
 
-        private async Task SaveEnvironmentVariablesAsync(string id, AvatarItem avatarItem)
+        private async Task SaveEnvironmentVariablesAsync(AvatarItem avatarItem)
         {
             logger.LogInformation("Serializing variables.env");
             var variablesLines = new List<string>();
@@ -137,15 +137,15 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
             variablesLines.AddRange(SerializeEnvironmentVariables(avatarItem.IdentityAccess));
             variablesLines.AddRange(SerializeEnvironmentVariables(avatarItem.CortexLibrary));
             variablesLines.AddRange(SerializeEnvironmentVariables(avatarItem.CortexDiaryNucleus));
-            await File.WriteAllLinesAsync(Path.Combine(id, "variables.env"), variablesLines);
+            await File.WriteAllLinesAsync(Path.Combine(avatarItem.Id, "variables.env"), variablesLines);
 
             logger.LogInformation("Serializing d23-variables.env");
             var d23Lines = SerializeEnvironmentVariables(avatarItem.d23);
-            await File.WriteAllLinesAsync(Path.Combine(id, "d23-variables.env"), d23Lines);
+            await File.WriteAllLinesAsync(Path.Combine(avatarItem.Id, "d23-variables.env"), d23Lines);
 
             logger.LogInformation("Serializing .env");
             var envLines = SerializeEnvironmentVariables(avatarItem.Network);
-            await File.WriteAllLinesAsync(Path.Combine(id, ".env"), envLines);
+            await File.WriteAllLinesAsync(Path.Combine(avatarItem.Id, ".env"), envLines);
         }
 
         private async Task CreateSqliteDatabasesAsync(string id)

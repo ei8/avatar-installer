@@ -44,7 +44,7 @@ namespace Domain.Model.Test.Mapping
 
             var sut = new AvatarMapperService(mapper);
 
-            var sampleTarget = new AvatarItem("sample");
+            var sampleTarget = new AvatarItem("id_sample1", "sample");
             var sampleResult = sut.Apply(config.Avatars[0], sampleTarget);
 
             Assert.Equal("test", sampleResult.CortexGraph.ArangoRootPassword);
@@ -52,7 +52,7 @@ namespace Domain.Model.Test.Mapping
             Assert.Equal(@"http://www.example.com", sampleResult.CortexGraph.DbUrl);
             Assert.Equal("not-root", sampleResult.CortexGraph.DbUsername);
 
-            var defaultTarget = new AvatarItem("defaults");
+            var defaultTarget = new AvatarItem("id_defaults1", "defaults");
             var defaultResult = sut.Apply(config.Avatars[1], defaultTarget);
 
             Assert.Equal("", defaultResult.CortexGraph.ArangoRootPassword);
@@ -82,14 +82,14 @@ namespace Domain.Model.Test.Mapping
             };
 
             var sut = new AvatarMapperService(mapper);
-            var sampleTarget = new AvatarItem("sample");
+            var sampleTarget = new AvatarItem("id_sample2", "sample");
             var sampleResult = sut.Apply(config.Avatars[0], sampleTarget);
 
             Assert.Equal("api", sampleResult.AvatarApi.ApiName);
             Assert.Equal(@"https://www.junvic.me", sampleResult.AvatarApi.TokenIssuerUrl);
 
 
-            var defaultTarget = new AvatarItem("defaults");
+            var defaultTarget = new AvatarItem("id_defaults2", "defaults");
             var defaultResult = sut.Apply(config.Avatars[1], defaultTarget);
 
             Assert.Equal("avatarapi-defaults", defaultResult.AvatarApi.ApiName);
@@ -117,14 +117,14 @@ namespace Domain.Model.Test.Mapping
             };
 
             var sut = new AvatarMapperService(mapper);
-            var sampleTarget = new AvatarItem("sample");
+            var sampleTarget = new AvatarItem("id_sample3", "sample");
             var sampleResult = sut.Apply(config.Avatars[0], sampleTarget);
 
             Assert.Equal(@"https://neuronsurl.example.com", sampleResult.CortexLibrary.NeuronsUrl);
             Assert.Equal(@"https://terminalsurl.example.com", sampleResult.CortexLibrary.TerminalsUrl);
 
 
-            var defaultTarget = new AvatarItem("defaults");
+            var defaultTarget = new AvatarItem("id_defaults3", "defaults");
             var defaultResult = sut.Apply(config.Avatars[1], defaultTarget);
 
             Assert.Equal(@"https://fibona.cc/defaults/cortex/neurons", defaultResult.CortexLibrary.NeuronsUrl);
@@ -153,7 +153,7 @@ namespace Domain.Model.Test.Mapping
             };
 
             var sut = new AvatarMapperService(mapper);
-            var sampleTarget = new AvatarItem("sample");
+            var sampleTarget = new AvatarItem("id_sample4", "sample");
             var sampleResult = sut.Apply(config.Avatars[0], sampleTarget);
 
             Assert.Equal(@"https://www.example.com", sampleResult.d23.OidcAuthority);
@@ -161,7 +161,7 @@ namespace Domain.Model.Test.Mapping
             Assert.Equal("/", sampleResult.d23.BasePath);
 
 
-            var defaultTarget = new AvatarItem("defaults");
+            var defaultTarget = new AvatarItem("id_defaults4", "defaults");
             var defaultResult = sut.Apply(config.Avatars[1], defaultTarget);
 
             Assert.Equal(@"https://login.fibona.cc", defaultResult.d23.OidcAuthority);
@@ -191,7 +191,7 @@ namespace Domain.Model.Test.Mapping
             };
 
             var sut = new AvatarMapperService(mapper);
-            var sampleTarget = new AvatarItem("sample");
+            var sampleTarget = new AvatarItem("id_sample5", "sample");
             var sampleResult = sut.Apply(config.Avatars[0], sampleTarget);
 
             Assert.Equal("127.0.0.1", sampleResult.Network.AvatarIp);
@@ -200,7 +200,7 @@ namespace Domain.Model.Test.Mapping
             Assert.Equal(67890, sampleResult.Network.D23BlazorPort);
 
 
-            var defaultTarget = new AvatarItem("defaults");
+            var defaultTarget = new AvatarItem("id_defaults5", "defaults");
             var defaultResult = sut.Apply(config.Avatars[1], defaultTarget);
 
             Assert.Equal("192.168.1.110", defaultResult.Network.AvatarIp);
@@ -221,7 +221,7 @@ namespace Domain.Model.Test.Mapping
             };
 
             var sut = new AvatarMapperService(mapper);
-            var sampleTarget = new AvatarItem("sample")
+            var sampleTarget = new AvatarItem("id_sample6", "sample")
             {
                 EventSourcing = new EventSourcingSettings()
                 {
