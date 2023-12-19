@@ -190,7 +190,7 @@ COMMIT;";
                     string id2 = guid.ToString();
                     int version2 = 2;
                     string authorId2 = authorGuid.ToString();
-                    string data2 = "{\"Tag\":\"" + avatarItem.SpecifiedName + "\",\"Id\":\"" + id2 + "\",\"Version\":" + version2 + ",\"Timestamp\":\"" + timestamp2 + "\"}";
+                    string data2 = "{\"Tag\":\"" + avatarItem.OwnerName + "\",\"Id\":\"" + id2 + "\",\"Version\":" + version2 + ",\"Timestamp\":\"" + timestamp2 + "\"}";
 
                     using var command = new SqliteCommand(sqlStatements + sqlInsertionCommand, connection);
 

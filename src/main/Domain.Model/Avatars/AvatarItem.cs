@@ -9,7 +9,7 @@ namespace ei8.Avatar.Installer.Domain.Model.Avatars
     {
         public string Id { get; set; }
         public string Name { get; set; }
-        public string SpecifiedName { get; set; }
+        public string OwnerName { get; set; }
         public EventSourcingSettings EventSourcing { get; set; } = new();
         public CortexGraphSettings CortexGraph { get; set; } = new();
         public AvatarApiSettings AvatarApi { get; set; } = new();
@@ -19,7 +19,7 @@ namespace ei8.Avatar.Installer.Domain.Model.Avatars
         public d23Settings d23 { get; set; } = new();
         public AvatarNetworkSettings Network { get; set; } = new();
 
-        public AvatarItem(string id, string name, string specifiedName = null)
+        public AvatarItem(string id, string name)
         {
             AssertionConcern.AssertArgumentNotEmpty(id, "Specified 'id' cannot be empty.", nameof(id));
             AssertionConcern.AssertArgumentNotNull(id, nameof(id));
@@ -29,7 +29,6 @@ namespace ei8.Avatar.Installer.Domain.Model.Avatars
 
             this.Id = id;
             this.Name = name;
-            this.SpecifiedName = specifiedName;
         }
     }
 
