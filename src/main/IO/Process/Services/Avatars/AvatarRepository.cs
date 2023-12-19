@@ -174,22 +174,21 @@ VALUES
 COMMIT;";
 
                     var guid = Guid.NewGuid();
-                    var authorGuid = Guid.NewGuid();
 
                     int sequenceId1 = 1;
-                    string timestamp1 = DateTime.Now.ToString();
+                    string timestamp1 = DateTimeOffset.UtcNow.ToString("o");
                     string typeName1 = "neurUL.Cortex.Domain.Model.Neurons.NeuronCreated, neurUL.Cortex.Domain.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
                     string id1 = guid.ToString();
                     int version1 = 1;
-                    string authorId1 = authorGuid.ToString();
+                    string authorId1 = guid.ToString();
                     string data1 = "{\"Id\":\"" + id1 + "\",\"Version\":" + version1 + ",\"Timestamp\":\"" + timestamp1 + "\"}";
 
                     int sequenceId2 = 2;
-                    string timestamp2 = DateTime.Now.ToString();
+                    string timestamp2 = DateTimeOffset.UtcNow.ToString("o");
                     string typeName2 = "ei8.Data.Tag.Domain.Model.TagChanged, ei8.Data.Tag.Domain.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
                     string id2 = guid.ToString();
                     int version2 = 2;
-                    string authorId2 = authorGuid.ToString();
+                    string authorId2 = guid.ToString();
                     string data2 = "{\"Tag\":\"" + avatarItem.OwnerName + "\",\"Id\":\"" + id2 + "\",\"Version\":" + version2 + ",\"Timestamp\":\"" + timestamp2 + "\"}";
 
                     using var command = new SqliteCommand(sqlStatements + sqlInsertionCommand, connection);
