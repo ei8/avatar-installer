@@ -181,7 +181,7 @@ COMMIT;";
                     string id1 = guid.ToString();
                     int version1 = 1;
                     string authorId1 = guid.ToString();
-                    string data1 = "{\"Id\":\"" + id1 + "\",\"Version\":" + version1 + ",\"Timestamp\":\"" + timestamp1 + "\"}";
+                    string data1 = $"{{\"Id\":\"{id1}\",\"Version\":{version1},\"Timestamp\":\"{timestamp1}\"}}";
 
                     int sequenceId2 = 2;
                     string timestamp2 = DateTimeOffset.UtcNow.ToString("o");
@@ -189,7 +189,7 @@ COMMIT;";
                     string id2 = guid.ToString();
                     int version2 = 2;
                     string authorId2 = guid.ToString();
-                    string data2 = "{\"Tag\":\"" + avatarItem.OwnerName + "\",\"Id\":\"" + id2 + "\",\"Version\":" + version2 + ",\"Timestamp\":\"" + timestamp2 + "\"}";
+                    string data2 = $"{{\"Tag\":\"{avatarItem.OwnerName}\",\"Id\":\"{id2}\",\"Version\":{version2},\"Timestamp\":\"{timestamp2}\"}}";
 
                     using var command = new SqliteCommand(sqlStatements + sqlInsertionCommand, connection);
 
@@ -216,6 +216,7 @@ COMMIT;";
                 else
                 {
                     using var command = new SqliteCommand(sqlStatements, connection);
+
                     await command.ExecuteNonQueryAsync();
                 }
             }
