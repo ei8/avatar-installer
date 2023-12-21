@@ -34,6 +34,7 @@ namespace ei8.Avatar.Installer.Domain.Model.Configuration
     public class AvatarConfigurationItem
     {
         public string Name { get; set; }
+        public string OwnerName { get; set; }
         public CortexGraphConfiguration CortexGraph { get; set; } = new();
         public AvatarApiConfiguration AvatarApi { get; set; } = new();
         public CortexLibraryConfiguration CortexLibrary { get; set; } = new();
@@ -44,9 +45,6 @@ namespace ei8.Avatar.Installer.Domain.Model.Configuration
         public AvatarConfigurationItem(string name)
         {
             Name = name;
-            AvatarApi = new(name);
-            CortexLibrary = new(name);
-            D23 = new(name);
         }
     }
 

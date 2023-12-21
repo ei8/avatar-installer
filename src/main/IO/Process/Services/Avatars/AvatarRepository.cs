@@ -124,7 +124,7 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
         public async Task SaveAsync(AvatarItem avatarItem)
         {
             await SaveEnvironmentVariablesAsync(avatarItem);
-            await CreateSqliteDatabasesAsync(avatarItem.Id);
+            await CreateSqliteDatabasesAsync(avatarItem);
         }
 
         private async Task SaveEnvironmentVariablesAsync(AvatarItem avatarItem)
@@ -148,7 +148,7 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
             await File.WriteAllLinesAsync(Path.Combine(avatarItem.Id, ".env"), envLines);
         }
 
-        private async Task CreateSqliteDatabasesAsync(string id)
+        private async Task CreateSqliteDatabasesAsync(AvatarItem avatarItem)
         {
             foreach (var sqlFile in Directory.EnumerateFiles("./Avatars", "*.sql"))
             {
@@ -157,12 +157,67 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
                 var sqlStatements = File.ReadAllText(sqlFile);
                 var sqliteFileName = $"{Path.GetFileNameWithoutExtension(sqlFile)}.db";
 
-                using (var connection = new SqliteConnection($@"Data Source=file:{Path.Combine(id, sqliteFileName)}"))
-                {
-                    connection.Open();
+                using var connection = new SqliteConnection($@"Data Source=file:{Path.Combine(avatarItem.Id, sqliteFileName)}");
 
-                    using var cmd = new SqliteCommand(sqlStatements, connection);
-                    await cmd.ExecuteNonQueryAsync();
+                connection.Open();
+
+                if (sqliteFileName == "events.db")
+                {
+                    #region Notification Table Insertion
+
+                    string sqlInsertionCommand = @"
+BEGIN TRANSACTION;
+INSERT OR REPLACE INTO ""Notification"" (""SequenceId"", ""Timestamp"", ""TypeName"", ""Id"", ""Version"", ""AuthorId"", ""Data"")
+VALUES
+    (@SequenceId1, @Timestamp1, @TypeName1, @Id1, @Version1, @AuthorId1, @Data1),
+    (@SequenceId2, @Timestamp2, @TypeName2, @Id2, @Version2, @AuthorId2, @Data2);
+COMMIT;";
+
+                    var guid = Guid.NewGuid();
+
+                    int sequenceId1 = 1;
+                    string timestamp1 = DateTimeOffset.UtcNow.ToString("o");
+                    string typeName1 = "neurUL.Cortex.Domain.Model.Neurons.NeuronCreated, neurUL.Cortex.Domain.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
+                    string id1 = guid.ToString();
+                    int version1 = 1;
+                    string authorId1 = guid.ToString();
+                    string data1 = $"{{\"Id\":\"{id1}\",\"Version\":{version1},\"Timestamp\":\"{timestamp1}\"}}";
+
+                    int sequenceId2 = 2;
+                    string timestamp2 = DateTimeOffset.UtcNow.ToString("o");
+                    string typeName2 = "ei8.Data.Tag.Domain.Model.TagChanged, ei8.Data.Tag.Domain.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
+                    string id2 = guid.ToString();
+                    int version2 = 2;
+                    string authorId2 = guid.ToString();
+                    string data2 = $"{{\"Tag\":\"{avatarItem.OwnerName}\",\"Id\":\"{id2}\",\"Version\":{version2},\"Timestamp\":\"{timestamp2}\"}}";
+
+                    using var command = new SqliteCommand(sqlStatements + sqlInsertionCommand, connection);
+
+                    command.Parameters.AddWithValue("@SequenceId1", sequenceId1);
+                    command.Parameters.AddWithValue("@Timestamp1", timestamp1);
+                    command.Parameters.AddWithValue("@TypeName1", typeName1);
+                    command.Parameters.AddWithValue("@Id1", id1);
+                    command.Parameters.AddWithValue("@Version1", version1);
+                    command.Parameters.AddWithValue("@AuthorId1", authorId1);
+                    command.Parameters.AddWithValue("@Data1", data1);
+
+                    command.Parameters.AddWithValue("@SequenceId2", sequenceId2);
+                    command.Parameters.AddWithValue("@Timestamp2", timestamp2);
+                    command.Parameters.AddWithValue("@TypeName2", typeName2);
+                    command.Parameters.AddWithValue("@Id2", id2);
+                    command.Parameters.AddWithValue("@Version2", version2);
+                    command.Parameters.AddWithValue("@AuthorId2", authorId2);
+                    command.Parameters.AddWithValue("@Data2", data2);
+
+                    await command.ExecuteNonQueryAsync();
+
+                    #endregion
+                }
+                else
+                {
+                    using var command = new SqliteCommand(sqlStatements, connection);
+
+                    await command.ExecuteNonQueryAsync();
                 }
             }
         }
