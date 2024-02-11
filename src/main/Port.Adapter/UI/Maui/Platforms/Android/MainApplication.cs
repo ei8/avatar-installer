@@ -1,11 +1,11 @@
 ﻿using Android.App;
 using Android.Runtime;
 
-namespace Maui;
+namespace Maui.Platforms.Android;
 [Application]
 public class MainApplication : MauiApplication
 {
-    public MainApplication(IntPtr handle, JniHandleOwnership ownership)
+    public MainApplication(nint handle, JniHandleOwnership ownership)
         : base(handle, ownership)
     {
     }
