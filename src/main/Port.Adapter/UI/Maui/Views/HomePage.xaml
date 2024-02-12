@@ -18,7 +18,7 @@
             <Button
                 Margin="10"
                 Command="{Binding InstallAvatarCommand}"
-                Text="Install" />
+                Text="Create New" />
             <Button
                 Margin="10"
                 Command="{Binding EditAvatarCommand}"

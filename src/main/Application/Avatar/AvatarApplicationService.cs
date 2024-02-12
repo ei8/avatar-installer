@@ -37,14 +37,14 @@ namespace ei8.Avatar.Installer.Application.Avatar
             this.avatarServerMapperService = avatarServerMapperService;
         }
 
-        public async Task CreateAvatarAsync(string? configPath)
+        public async Task CreateAvatarAsync(string id)
         {
             //var configPath = configuration.GetSection("config").Value;
 
-            if (string.IsNullOrEmpty(configPath))
-                configPath = ".";
+            if (string.IsNullOrEmpty(id))
+                id = ".";
 
-            var configObject = await configurationRepository.GetByAsync(configPath);
+            var configObject = await configurationRepository.GetByAsync(id);
 
             foreach (var item in configObject.Avatars)
             {

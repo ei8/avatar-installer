@@ -4,13 +4,13 @@ namespace Maui.Views;
 
 public partial class IdentityAccessPage : ContentPage
 {
-	private readonly IdentityAccessViewModel _viewModel;
+	private readonly IdentityAccessViewModel viewModel;
 
 	public IdentityAccessPage(IdentityAccessViewModel viewModel)
 	{
 		InitializeComponent();
 
-		_viewModel = viewModel;
-		BindingContext = _viewModel;
+		this.viewModel = viewModel;
+		BindingContext = this.viewModel;
 	}
 }

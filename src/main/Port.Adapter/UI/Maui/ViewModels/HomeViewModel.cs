@@ -12,14 +12,13 @@ namespace Maui.ViewModels;
 
 public partial class HomeViewModel : BaseViewModel
 {
-    private readonly IAvatarApplicationService _avatarApplicationService;
+    private readonly IAvatarApplicationService avatarApplicationService;
 
     public HomeViewModel(IAvatarApplicationService avatarApplicationService)
-    //public HomeViewModel()
     {
         Title = "Avatar Installer";
 
-        _avatarApplicationService = avatarApplicationService;
+        this.avatarApplicationService = avatarApplicationService;
     }
 
     [RelayCommand]
@@ -53,7 +52,7 @@ public partial class HomeViewModel : BaseViewModel
                 return;
             }
 
-            await _avatarApplicationService.CreateAvatarAsync(configFile.FullPath);
+            await avatarApplicationService.CreateAvatarAsync(configFile.FullPath);
 
             await Shell.Current.DisplayAlert("Success!", "Avatar Installed", "OK");
         }

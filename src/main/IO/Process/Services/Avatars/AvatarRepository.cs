@@ -151,9 +151,11 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
 
         private async Task CreateSqliteDatabasesAsync(AvatarItem avatarItem)
         {
-            // current directory: Directory.GetCurrentDirectory();
+            // Save the original directory for later use
             // Maui's current directory: "C:\\WINDOWS\\system32"
             // CLI's current directory: "avatar-installer\\src\\main\\Port.Adapter\\UI\\CLI\\bin\\Debug\\net6.0"
+            var originalDirectory = Directory.GetCurrentDirectory();
+
             // Get the directory where the compiled executable (.exe) is located to fix directory issues
             var exeDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             Directory.SetCurrentDirectory(exeDirectory);
@@ -228,6 +230,9 @@ COMMIT;";
                     await command.ExecuteNonQueryAsync();
                 }
             }
+
+            // Revert changes to current directory
+            Directory.SetCurrentDirectory(originalDirectory);
         }
     }
 }
