@@ -14,6 +14,13 @@
             Text="Welcome to .NET MAUI!"
             VerticalOptions="Center" />
 
-        <Button Clicked="Button_Clicked" Text="Edit" />
+        <Button
+            Margin="10"
+            Command="{Binding InstallAvatarCommand}"
+            Text="Install" />
+        <Button
+            Margin="10"
+            Command="{Binding EditAvatarCommand}"
+            Text="Edit" />
     </VerticalStackLayout>
 </ContentPage>
