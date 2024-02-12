@@ -1,4 +1,6 @@
 ﻿using CommunityToolkit.Maui;
+using Maui.ViewModels;
+using Maui.Views;
 using Microsoft.Extensions.Logging;
 
 namespace Maui;
@@ -19,6 +21,12 @@ public static class MauiProgram
 #if DEBUG
 		builder.Logging.AddDebug();
 #endif
+
+        builder.Services.AddSingleton<HomePage>();
+        builder.Services.AddSingleton<HomeViewModel>();
+
+        builder.Services.AddSingleton<IdentityAccessPage>();
+        builder.Services.AddSingleton<IdentityAccessViewModel>();
 
         return builder.Build();
     }
