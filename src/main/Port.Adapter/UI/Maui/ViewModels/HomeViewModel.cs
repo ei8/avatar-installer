@@ -28,14 +28,39 @@ public partial class HomeViewModel : BaseViewModel
         if (IsBusy)
             return;
 
+        IsBusy = true;
+
         try
         {
+            var configFile = await FilePicker.PickAsync(new PickOptions
+            {
+                PickerTitle = "Choose a config file"
+            });
+
+            if (configFile is null)
+            {
+                await Shell.Current.CurrentPage.DisplayAlert("Cancelled!",
+                    $"Choosing a file cancelled", "OK");
+
+                return;
+            }
+
+            if (!configFile.FileName.EndsWith("json", StringComparison.OrdinalIgnoreCase))
+            {
+                await Shell.Current.CurrentPage.DisplayAlert("Invalid File!",
+                    $"Configuration must be a a json file", "OK");
+
+                return;
+            }
+
+            await _avatarApplicationService.CreateAvatarAsync(configFile.FullPath);
+
             await Shell.Current.DisplayAlert("Success!", "Avatar Installed", "OK");
         }
         catch (Exception ex)
         {
             Debug.WriteLine(ex);
-            await Shell.Current.DisplayAlert("Error Installing Avatar!", "See debug log for details", "OK");
+            await Shell.Current.DisplayAlert("Error Installing Avatar!", ex.ToString(), "OK");
         }
         finally
         {
@@ -48,6 +73,8 @@ public partial class HomeViewModel : BaseViewModel
     {
         if (IsBusy)
             return;
+
+        IsBusy = true;
 
         try
         {
