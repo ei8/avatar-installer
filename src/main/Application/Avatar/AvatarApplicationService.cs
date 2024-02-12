@@ -37,9 +37,9 @@ namespace ei8.Avatar.Installer.Application.Avatar
             this.avatarServerMapperService = avatarServerMapperService;
         }
 
-        public async Task CreateAvatarAsync()
+        public async Task CreateAvatarAsync(string? configPath)
         {
-            var configPath = configuration.GetSection("config").Value;
+            //var configPath = configuration.GetSection("config").Value;
 
             if (string.IsNullOrEmpty(configPath))
                 configPath = ".";

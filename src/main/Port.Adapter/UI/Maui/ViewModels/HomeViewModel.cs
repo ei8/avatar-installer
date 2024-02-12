@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using ei8.Avatar.Installer.Application.Avatar;
 using Maui.Views;
 using System;
 using System.Collections.Generic;
@@ -11,9 +12,14 @@ namespace Maui.ViewModels;
 
 public partial class HomeViewModel : BaseViewModel
 {
-    public HomeViewModel()
+    private readonly IAvatarApplicationService _avatarApplicationService;
+
+    public HomeViewModel(IAvatarApplicationService avatarApplicationService)
+    //public HomeViewModel()
     {
         Title = "Avatar Installer";
+
+        _avatarApplicationService = avatarApplicationService;
     }
 
     [RelayCommand]

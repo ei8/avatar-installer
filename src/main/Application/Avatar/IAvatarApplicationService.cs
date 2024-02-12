@@ -9,6 +9,6 @@ namespace ei8.Avatar.Installer.Application.Avatar
 {
     public interface IAvatarApplicationService
     {
-        Task CreateAvatarAsync();
+        Task CreateAvatarAsync(string? configPath);
     }
 }

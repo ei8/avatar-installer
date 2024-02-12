@@ -1,4 +1,13 @@
 ﻿using CommunityToolkit.Maui;
+using ei8.Avatar.Installer.Application.Avatar;
+using ei8.Avatar.Installer.Application.Settings;
+using ei8.Avatar.Installer.Domain.Model.Avatars;
+using ei8.Avatar.Installer.Domain.Model.Configuration;
+using ei8.Avatar.Installer.Domain.Model.Mapping;
+using ei8.Avatar.Installer.Domain.Model.Template;
+using ei8.Avatar.Installer.IO.Process.Services.Avatars;
+using ei8.Avatar.Installer.IO.Process.Services.Settings;
+using ei8.Avatar.Installer.IO.Process.Services.Template;
 using Maui.ViewModels;
 using Maui.Views;
 using Microsoft.Extensions.Logging;
@@ -20,7 +29,14 @@ public static class MauiProgram
             });
 
 #if DEBUG
-		builder.Logging.AddDebug();
+        builder.Logging.AddDebug();
+
+        builder.Services.AddLogging(
+            configure =>
+            {
+                configure.AddDebug();
+            }
+        );
 #endif
 
         builder.Services.AddSingleton<HomePage>();
@@ -28,6 +44,17 @@ public static class MauiProgram
 
         builder.Services.AddSingleton<IdentityAccessPage>();
         builder.Services.AddSingleton<IdentityAccessViewModel>();
+
+        builder.Services.AddScoped<ISettingsService, SettingsService>()
+                .AddScoped<ITemplateService, GithubTemplateService>()
+                .AddScoped<IConfigurationRepository, JsonConfigurationRepository>()
+                .AddScoped<IAvatarRepository, AvatarRepository>()
+                .AddScoped<IAvatarMapperService, AvatarMapperService>()
+                .AddScoped<IAvatarServerRepository, AvatarServerRepository>()
+                .AddScoped<IAvatarServerMapperService, AvatarServerMapperService>()
+                .AddScoped<IAvatarApplicationService, AvatarApplicationService>();
+
+        builder.Services.AddAutoMapper(typeof(AvatarAutoMapperProfile));
 
         return builder.Build();
     }
