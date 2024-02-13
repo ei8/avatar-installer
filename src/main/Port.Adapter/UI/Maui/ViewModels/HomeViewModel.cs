@@ -27,6 +27,18 @@ public partial class HomeViewModel : BaseViewModel
     private string loadingText = string.Empty;
 
     [RelayCommand]
+    private async Task GoToCreateAvatarAsync()
+    {
+        await Shell.Current.GoToAsync($"//{nameof(CreateAvatarPage)}", false);
+    }
+
+    [RelayCommand]
+    private async Task GoToEditAvatarAsync()
+    {
+        await Shell.Current.GoToAsync($"//{nameof(EditAvatarPage)}", false);
+    }
+
+    [RelayCommand]
     private async Task CreateAvatarAsync()
     {
         if (IsBusy)
@@ -101,7 +113,7 @@ public partial class HomeViewModel : BaseViewModel
                 if (!File.Exists(filePath))
                 {
                     await Shell.Current.DisplayAlert("Incomplete files!", $"{file} does not exists", "OK");
-                    return; 
+                    return;
                 }
             }
 

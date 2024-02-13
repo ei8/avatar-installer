@@ -44,6 +44,12 @@ public static class MauiProgram
         builder.Services.AddSingleton<HomePage>();
         builder.Services.AddSingleton<HomeViewModel>();
 
+        builder.Services.AddSingleton<CreateAvatarPage>();
+        builder.Services.AddSingleton<CreateAvatarViewModel>();
+
+        builder.Services.AddSingleton<EditAvatarPage>();
+        builder.Services.AddSingleton<EditAvatarViewModel>();
+
         builder.Services.AddSingleton<IdentityAccessPage>();
         builder.Services.AddSingleton<IdentityAccessViewModel>();
 
