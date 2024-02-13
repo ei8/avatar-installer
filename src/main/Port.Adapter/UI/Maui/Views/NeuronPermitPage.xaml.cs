@@ -2,11 +2,11 @@ using Maui.ViewModels;
 
 namespace Maui.Views;
 
-public partial class HomePage : ContentPage
+public partial class NeuronPermitPage : ContentPage
 {
-	private readonly HomeViewModel viewModel;
+	private readonly NeuronPermitViewModel viewModel;
 
-	public HomePage(HomeViewModel viewModel)
+	public NeuronPermitPage(NeuronPermitViewModel viewModel)
 	{
 		InitializeComponent();
 
@@ -18,6 +18,6 @@ public partial class HomePage : ContentPage
     {
         base.OnNavigatedTo(args);
 
-		Preferences.Default.Remove("WorkingDirectory");
+		viewModel.GetNeuronPermitsCommand.ExecuteAsync(this);
     }
 }

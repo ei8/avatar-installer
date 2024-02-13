@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Maui.Views.NeuronPermitPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:models="clr-namespace:ei8.Avatar.Installer.Domain.Model.DTO;assembly=Domain.Model"
+    xmlns:viewmodels="clr-namespace:Maui.ViewModels"
+    Title="{Binding Title}"
+    x:DataType="viewmodels:NeuronPermitViewModel">
+
+    <ScrollView>
+        <StackLayout>
+            <CollectionView ItemsSource="{Binding NeuronPermits}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:NeuronPermitDto">
+                        <StackLayout>
+                            <HorizontalStackLayout>
+                                <Label Text="UserNeuronId: " />
+                                <Label Text=" " />
+                                <Label Text="{Binding UserNeuronId}" />
+                            </HorizontalStackLayout>
+                            <HorizontalStackLayout>
+                                <Label Text="NeuronId: " />
+                                <Label Text=" " />
+                                <Label Text="{Binding NeuronId}" />
+                            </HorizontalStackLayout>
+                            <HorizontalStackLayout>
+                                <Label Text="Expiration Date: " />
+                                <Label Text=" " />
+                                <Label Text="{Binding ExpirationDate}" />
+                            </HorizontalStackLayout>
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

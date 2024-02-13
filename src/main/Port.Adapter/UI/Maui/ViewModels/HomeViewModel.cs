@@ -1,4 +1,6 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Maui.Storage;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using ei8.Avatar.Installer.Application.Avatar;
 using Maui.Views;
 using System;
@@ -21,8 +23,11 @@ public partial class HomeViewModel : BaseViewModel
         this.avatarApplicationService = avatarApplicationService;
     }
 
+    [ObservableProperty]
+    private string loadingText = string.Empty;
+
     [RelayCommand]
-    private async Task InstallAvatarAsync()
+    private async Task CreateAvatarAsync()
     {
         if (IsBusy)
             return;
@@ -31,6 +36,8 @@ public partial class HomeViewModel : BaseViewModel
 
         try
         {
+            LoadingText = "Choosing a configuration file...";
+
             var configFile = await FilePicker.PickAsync(new PickOptions
             {
                 PickerTitle = "Choose a config file"
@@ -39,8 +46,7 @@ public partial class HomeViewModel : BaseViewModel
             if (configFile is null)
             {
                 await Shell.Current.CurrentPage.DisplayAlert("Cancelled!",
-                    $"Choosing a file cancelled", "OK");
-
+                    $"Creating Avatar cancelled", "OK");
                 return;
             }
 
@@ -48,12 +54,12 @@ public partial class HomeViewModel : BaseViewModel
             {
                 await Shell.Current.CurrentPage.DisplayAlert("Invalid File!",
                     $"Configuration must be a a json file", "OK");
-
                 return;
             }
 
-            await avatarApplicationService.CreateAvatarAsync(configFile.FullPath);
+            LoadingText = "Creating Avatar...";
 
+            await avatarApplicationService.CreateAvatarAsync(configFile.FullPath);
             await Shell.Current.DisplayAlert("Success!", "Avatar Installed", "OK");
         }
         catch (Exception ex)
@@ -77,7 +83,30 @@ public partial class HomeViewModel : BaseViewModel
 
         try
         {
-            await Shell.Current.GoToAsync($"//{nameof(IdentityAccessPage)}");
+            LoadingText = "Choosing a directory...";
+            var workingDirectory = await FolderPicker.PickAsync(default);
+
+            if (workingDirectory.Folder is null)
+            {
+                await Shell.Current.CurrentPage.DisplayAlert("Cancelled!", $"Editing avatar cancelled", "OK");
+                return;
+            }
+
+            string[] requiredFiles = ["avatar.db", "d23.db", "events.db", "identity-access.db", "subscriptions.db"];
+
+            foreach (var file in requiredFiles)
+            {
+                var filePath = Path.Combine(workingDirectory.Folder.Path, file);
+
+                if (!File.Exists(filePath))
+                {
+                    await Shell.Current.DisplayAlert("Incomplete files!", $"{file} does not exists", "OK");
+                    return; 
+                }
+            }
+
+            Preferences.Default.Set("WorkingDirectory", workingDirectory.Folder.Path);
+            await Shell.Current.GoToAsync($"//{nameof(NeuronPermitPage)}");
         }
         catch (Exception ex)
         {

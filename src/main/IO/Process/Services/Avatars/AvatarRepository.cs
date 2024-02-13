@@ -181,7 +181,8 @@ INSERT OR REPLACE INTO ""Notification"" (""SequenceId"", ""Timestamp"", ""TypeNa
 VALUES
     (@SequenceId1, @Timestamp1, @TypeName1, @Id1, @Version1, @AuthorId1, @Data1),
     (@SequenceId2, @Timestamp2, @TypeName2, @Id2, @Version2, @AuthorId2, @Data2);
-COMMIT;";
+COMMIT;
+";
 
                     var guid = Guid.NewGuid();
 

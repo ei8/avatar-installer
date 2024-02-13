@@ -7,15 +7,18 @@
     Title="Avatar Installer"
     Shell.FlyoutBehavior="Flyout">
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate views:HomePage}"
-        Route="HomePage"
-        Shell.FlyoutBehavior="Disabled" />
+    <FlyoutItem Title="Home">
+        <ShellContent
+            Title="Home"
+            ContentTemplate="{DataTemplate views:HomePage}"
+            Route="HomePage"
+            Shell.FlyoutBehavior="Disabled" />
+    </FlyoutItem>
 
-    <ShellContent
-        Title="Identity Access"
-        ContentTemplate="{DataTemplate views:IdentityAccessPage}"
-        Route="IdentityAccessPage" />
-
+    <FlyoutItem Title="Identity Access">
+        <ShellContent
+            Title="Neuron Permit"
+            ContentTemplate="{DataTemplate views:NeuronPermitPage}"
+            Route="NeuronPermitPage" />
+    </FlyoutItem>
 </Shell>

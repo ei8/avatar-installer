@@ -10,5 +10,6 @@ public partial class AppShell : Shell
 
         Routing.RegisterRoute(nameof(HomePage), typeof(HomePage));
         Routing.RegisterRoute(nameof(IdentityAccessPage), typeof(IdentityAccessPage));
+        Routing.RegisterRoute(nameof(NeuronPermitPage), typeof(NeuronPermitPage));
     }
 }

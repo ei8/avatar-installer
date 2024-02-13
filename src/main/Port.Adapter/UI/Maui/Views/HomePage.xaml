@@ -17,7 +17,7 @@
 
             <Button
                 Margin="10"
-                Command="{Binding InstallAvatarCommand}"
+                Command="{Binding CreateAvatarCommand}"
                 Text="Create New" />
             <Button
                 Margin="10"
@@ -36,7 +36,7 @@
             <Label
                 FontSize="30"
                 HorizontalOptions="Center"
-                Text="Installing Avatar..."
+                Text="{Binding LoadingText}"
                 TextColor="White" />
 
         </StackLayout>
