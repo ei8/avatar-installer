@@ -1,7 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ei8.Avatar.Installer.Domain.Model.DTO;
-using ei8.Avatar.Installer.Domain.Model.External;
+using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
+using Maui.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,16 +12,18 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Maui.ViewModels;
-
-public partial class NeuronPermitViewModel : BaseViewModel
+public partial class NeuronPermitsViewModel : BaseViewModel
 {
     public ObservableCollection<NeuronPermitDto> NeuronPermits { get; set; } = [];
     private readonly INeuronPermitRepository neuronPermitRepository;
+    private readonly EditAvatarSettings editAvatarSettings;
 
-    public NeuronPermitViewModel(INeuronPermitRepository neuronPermitRepository)
+    public NeuronPermitsViewModel(EditAvatarSettings editAvatarSettings, INavigationService navigationService, INeuronPermitRepository neuronPermitRepository)
+        : base(navigationService)
     {
         Title = "Neuron Permit";
         this.neuronPermitRepository = neuronPermitRepository;
+        this.editAvatarSettings = editAvatarSettings;
     }
 
     [ObservableProperty]
@@ -37,12 +40,12 @@ public partial class NeuronPermitViewModel : BaseViewModel
             IsBusy = true;
 
             NeuronPermits.Clear();
-            var workingDirectory = Preferences.Default.Get("WorkingDirectory", string.Empty);
+            var workingDirectory = editAvatarSettings.WorkingDirectory;
             var neuronPermits = await neuronPermitRepository.GetNeuronPermitsAsync(workingDirectory);
 
             foreach (var neuronPermit in neuronPermits)
             {
-                NeuronPermits.Add(neuronPermit); 
+                NeuronPermits.Add(neuronPermit);
             }
         }
         catch (Exception ex)

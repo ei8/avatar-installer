@@ -3,24 +3,61 @@
     x:Class="Maui.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:Maui.Controls"
     xmlns:views="clr-namespace:Maui.Views"
     Title="Avatar Installer"
     Shell.FlyoutBehavior="Flyout"
+    Shell.FlyoutWidth="300"
     Shell.NavBarIsVisible="False">
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate views:HomePage}"
-        Route="HomePage"
-        Shell.FlyoutBehavior="Disabled" />
-    <ShellContent
-        Title="Create Avatar"
-        ContentTemplate="{DataTemplate views:CreateAvatarPage}"
-        Route="CreateAvatarPage"
-        Shell.FlyoutBehavior="Flyout" />
-    <ShellContent
-        Title="Edit Avatar"
-        ContentTemplate="{DataTemplate views:EditAvatarPage}"
-        Route="EditAvatarPage"
-        Shell.FlyoutBehavior="Flyout" />
+    <FlyoutItem Title="Home">
+        <ShellContent
+            Title="Home"
+            ContentTemplate="{DataTemplate views:HomePage}"
+            Route="HomePage"
+            Shell.FlyoutBehavior="Flyout" />
+    </FlyoutItem>
+    <FlyoutItem Title="Create">
+        <ShellContent
+            Title="Create Avatar"
+            ContentTemplate="{DataTemplate views:CreateAvatarPage}"
+            Route="CreateAvatarPage"
+            Shell.FlyoutBehavior="Flyout" />
+    </FlyoutItem>
+    <FlyoutItem Title="Edit Avatar">
+        <Tab Title="Identity Access">
+            <ShellContent
+                Title="Neuron Permit"
+                ContentTemplate="{DataTemplate views:NeuronPermitsPage}"
+                Route="NeuronPermitPage"
+                Shell.FlyoutBehavior="Flyout" />
+            <ShellContent
+                Title="Region Permit"
+                ContentTemplate="{DataTemplate views:RegionPermitsPage}"
+                Route="RegionPermitsPage"
+                Shell.FlyoutBehavior="Flyout" />
+            <ShellContent
+                Title="Users"
+                ContentTemplate="{DataTemplate views:UsersPage}"
+                Route="UsersPage"
+                Shell.FlyoutBehavior="Flyout" />
+        </Tab>
+        <Tab Title="Events">
+            <ShellContent
+                Title="Neuron Permit"
+                ContentTemplate="{DataTemplate views:NeuronPermitsPage}"
+                Route="NeuronPermitPage"
+                Shell.FlyoutBehavior="Flyout" />
+            <ShellContent
+                Title="Region Permit"
+                ContentTemplate="{DataTemplate views:RegionPermitsPage}"
+                Route="RegionPermitsPage"
+                Shell.FlyoutBehavior="Flyout" />
+            <ShellContent
+                Title="Users"
+                ContentTemplate="{DataTemplate views:UsersPage}"
+                Route="UsersPage"
+                Shell.FlyoutBehavior="Flyout" />
+        </Tab>
+    </FlyoutItem>
 </Shell>

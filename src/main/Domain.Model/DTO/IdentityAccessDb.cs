@@ -17,8 +17,8 @@ public class NeuronPermitDto
 public class RegionPermitDto
 {
     public int SequenceId { get; set; }
-    public Guid UserNeuronId { get; set; }
-    public Guid RegionNeuronId { get; set; }
+    public string UserNeuronId { get; set; }
+    public string RegionNeuronId { get; set; }
     public int WriteLevel { get; set; }
     public int ReadLevel { get; set; }
 }
@@ -26,7 +26,7 @@ public class RegionPermitDto
 public class UserDto
 {
     public string UserId { get; set; }
-    public Guid NeuronId { get; set; }
+    public string NeuronId { get; set; }
     public int? Active { get; set; }
 }
 

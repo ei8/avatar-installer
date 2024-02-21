@@ -9,6 +9,13 @@ namespace ei8.Avatar.Installer.Application.Avatar
 {
     public interface IAvatarApplicationService
     {
+        event EventHandler OnCreateAvatar;
+        event EventHandler OnGettingAvatar;
+        event EventHandler OnConfiguringAvatar;
+        event EventHandler OnAvatarMapping;
+        event EventHandler OnAvatarSaving;
+        event EventHandler OnAvatarCreated;
+
         Task CreateAvatarAsync(string? configPath);
     }
 }

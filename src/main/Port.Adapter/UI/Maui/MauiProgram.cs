@@ -3,15 +3,17 @@ using ei8.Avatar.Installer.Application.Avatar;
 using ei8.Avatar.Installer.Application.Settings;
 using ei8.Avatar.Installer.Domain.Model.Avatars;
 using ei8.Avatar.Installer.Domain.Model.Configuration;
-using ei8.Avatar.Installer.Domain.Model.External;
+using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
 using ei8.Avatar.Installer.Domain.Model.Mapping;
 using ei8.Avatar.Installer.Domain.Model.Template;
 using ei8.Avatar.Installer.IO.Process.Services.Avatars;
-using ei8.Avatar.Installer.IO.Process.Services.External;
+using ei8.Avatar.Installer.IO.Process.Services.IdentityAccess;
 using ei8.Avatar.Installer.IO.Process.Services.Settings;
 using ei8.Avatar.Installer.IO.Process.Services.Template;
+using Maui.Services;
 using Maui.ViewModels;
 using Maui.Views;
+using MetroLog.MicrosoftExtensions;
 using Microsoft.Extensions.Logging;
 
 namespace Maui;
@@ -41,20 +43,36 @@ public static class MauiProgram
         );
 #endif
 
+        builder.Logging.AddInMemoryLogger(
+                options =>
+                {
+                    options.MaxLines = 1024;
+                    options.MinLevel = LogLevel.Debug;
+                    options.MaxLevel = LogLevel.Critical;
+                });
+
         builder.Services.AddSingleton<HomePage>();
         builder.Services.AddSingleton<HomeViewModel>();
 
         builder.Services.AddSingleton<CreateAvatarPage>();
         builder.Services.AddSingleton<CreateAvatarViewModel>();
 
-        builder.Services.AddSingleton<EditAvatarPage>();
-        builder.Services.AddSingleton<EditAvatarViewModel>();
+        //builder.Services.AddSingleton<EditAvatarPage>();
+        //builder.Services.AddSingleton<EditAvatarViewModel>();
 
         builder.Services.AddSingleton<IdentityAccessPage>();
         builder.Services.AddSingleton<IdentityAccessViewModel>();
 
-        builder.Services.AddSingleton<NeuronPermitPage>();
-        builder.Services.AddSingleton<NeuronPermitViewModel>();
+        builder.Services.AddTransient<NeuronPermitsPage>();
+        builder.Services.AddTransient<NeuronPermitsViewModel>();
+        builder.Services.AddTransient<RegionPermitsPage>();
+        builder.Services.AddTransient<RegionPermitsViewModel>();
+        builder.Services.AddTransient<UsersPage>();
+        builder.Services.AddTransient<UsersViewModel>();
+
+        builder.Services.AddSingleton<INavigationService, NavigationService>();
+
+        builder.Services.AddSingleton<EditAvatarSettings>();
 
         builder.Services.AddScoped<ISettingsService, SettingsService>()
                 .AddScoped<ITemplateService, GithubTemplateService>()
@@ -64,10 +82,11 @@ public static class MauiProgram
                 .AddScoped<IAvatarServerRepository, AvatarServerRepository>()
                 .AddScoped<IAvatarServerMapperService, AvatarServerMapperService>()
                 .AddScoped<IAvatarApplicationService, AvatarApplicationService>();
-
         builder.Services.AddAutoMapper(typeof(AvatarAutoMapperProfile));
 
         builder.Services.AddSingleton<INeuronPermitRepository, NeuronPermitRepository>();
+        builder.Services.AddSingleton<IRegionPermitRepository, RegionPermitRepository>();
+        builder.Services.AddSingleton<IUserRepository, UserRepository>();
 
         return builder.Build();
     }

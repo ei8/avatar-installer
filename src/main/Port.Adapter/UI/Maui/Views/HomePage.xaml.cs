@@ -17,7 +17,5 @@ public partial class HomePage : ContentPage
     protected override void OnNavigatedTo(NavigatedToEventArgs args)
     {
         base.OnNavigatedTo(args);
-
-		Preferences.Default.Remove("WorkingDirectory");
     }
 }

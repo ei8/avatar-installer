@@ -1,5 +1,5 @@
 ﻿using ei8.Avatar.Installer.Domain.Model.DTO;
-using ei8.Avatar.Installer.Domain.Model.External;
+using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
 using Microsoft.Data.Sqlite;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ei8.Avatar.Installer.IO.Process.Services.External;
+namespace ei8.Avatar.Installer.IO.Process.Services.IdentityAccess;
 
 public class NeuronPermitRepository : INeuronPermitRepository
 {
@@ -25,14 +25,14 @@ public class NeuronPermitRepository : INeuronPermitRepository
 
         while (await reader.ReadAsync())
         {
-            var permit = new NeuronPermitDto
+            var neuronPermit = new NeuronPermitDto
             {
                 UserNeuronId = reader["UserNeuronId"].ToString(),
                 NeuronId = reader["NeuronId"].ToString(),
                 ExpirationDate = reader["ExpirationDate"].ToString(),
             };
 
-            neuronPermits.Add(permit);
+            neuronPermits.Add(neuronPermit);
         }
 
         return neuronPermits;

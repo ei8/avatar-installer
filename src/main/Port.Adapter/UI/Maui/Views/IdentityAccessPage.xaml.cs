@@ -2,15 +2,23 @@ using Maui.ViewModels;
 
 namespace Maui.Views;
 
-public partial class IdentityAccessPage : ContentPage
+public partial class IdentityAccessPage : TabbedPage
 {
 	private readonly IdentityAccessViewModel viewModel;
+	private readonly NeuronPermitsViewModel neuronPermitsViewModel;
 
-	public IdentityAccessPage(IdentityAccessViewModel viewModel)
+	public IdentityAccessPage(IdentityAccessViewModel viewModel, NeuronPermitsViewModel neuronPermitsViewModel)
 	{
 		InitializeComponent();
 
 		this.viewModel = viewModel;
-		BindingContext = this.viewModel;
+		this.neuronPermitsViewModel = neuronPermitsViewModel;
 	}
+
+    protected override void OnNavigatedTo(NavigatedToEventArgs args)
+    {
+        base.OnNavigatedTo(args);
+
+		neuronPermitsViewModel.GetNeuronPermitsCommand.ExecuteAsync(null);
+    }
 }

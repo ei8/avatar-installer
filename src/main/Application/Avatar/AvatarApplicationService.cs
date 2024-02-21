@@ -12,8 +12,17 @@ using System.Threading.Tasks;
 
 namespace ei8.Avatar.Installer.Application.Avatar
 {
+    public delegate void EventHandler();
+
     public class AvatarApplicationService : IAvatarApplicationService
     {
+        public event EventHandler OnCreateAvatar;
+        public event EventHandler OnGettingAvatar;
+        public event EventHandler OnConfiguringAvatar;
+        public event EventHandler OnAvatarMapping;
+        public event EventHandler OnAvatarSaving;
+        public event EventHandler OnAvatarCreated;
+
         private IConfigurationRepository configurationRepository;
         private IConfiguration configuration;
         private ILogger<AvatarApplicationService> logger;
@@ -23,8 +32,8 @@ namespace ei8.Avatar.Installer.Application.Avatar
         private IAvatarServerRepository avatarServerRepository;
         private IAvatarServerMapperService avatarServerMapperService;
 
-        public AvatarApplicationService(IConfigurationRepository configurationRepository, IConfiguration configuration, 
-            ILogger<AvatarApplicationService> logger, IAvatarRepository avatarRepository, IAvatarMapperService avatarMapperService, 
+        public AvatarApplicationService(IConfigurationRepository configurationRepository, IConfiguration configuration,
+            ILogger<AvatarApplicationService> logger, IAvatarRepository avatarRepository, IAvatarMapperService avatarMapperService,
             ITemplateService templateService, IAvatarServerRepository avatarServerRepository, IAvatarServerMapperService avatarServerMapperService)
         {
             this.configurationRepository = configurationRepository;
@@ -40,12 +49,14 @@ namespace ei8.Avatar.Installer.Application.Avatar
         public async Task CreateAvatarAsync(string id)
         {
             //var configPath = configuration.GetSection("config").Value;
+            OnCreateAvatar?.Invoke();
 
             if (string.IsNullOrEmpty(id))
                 id = ".";
 
             var configObject = await configurationRepository.GetByAsync(id);
 
+            OnConfiguringAvatar?.Invoke();
             foreach (var item in configObject.Avatars)
             {
                 logger.LogInformation("Setting up avatar {itemName}", item.Name);
@@ -64,10 +75,14 @@ namespace ei8.Avatar.Installer.Application.Avatar
                 await avatarRepository.SaveAsync(mappedAvatar);
             }
 
+            OnAvatarMapping?.Invoke();
             var avatarServer = await avatarServerRepository.GetByAsync(configObject.Destination);
             var mappedAvatarServer = avatarServerMapperService.Apply(configObject, avatarServer);
 
+            OnAvatarSaving?.Invoke();
             await avatarServerRepository.SaveAsync(mappedAvatarServer);
+
+            OnAvatarCreated?.Invoke();
         }
     }
 }

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Maui.Views.RegionPermitsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:models="clr-namespace:ei8.Avatar.Installer.Domain.Model.DTO;assembly=Domain.Model"
+    xmlns:viewmodels="clr-namespace:Maui.ViewModels"
+    Title="{Binding Title}"
+    x:DataType="viewmodels:RegionPermitsViewModel">
+
+    <ScrollView>
+        <StackLayout>
+            <Label Text="RegionPermit" />
+            <CollectionView ItemsSource="{Binding RegionPermits}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:RegionPermitDto">
+                        <StackLayout>
+                            <HorizontalStackLayout>
+                                <Label Text="SequenceId: " />
+                                <Label Text="{Binding SequenceId}" />
+                            </HorizontalStackLayout>
+                            <HorizontalStackLayout>
+                                <Label Text="UserNeuronId: " />
+                                <Label Text="{Binding UserNeuronId}" />
+                            </HorizontalStackLayout>
+                            <HorizontalStackLayout>
+                                <Label Text="RegionNeuronId: " />
+                                <Label Text="{Binding RegionNeuronId}" />
+                            </HorizontalStackLayout>
+                            <HorizontalStackLayout>
+                                <Label Text="WriteLevel: " />
+                                <Label Text="{Binding WriteLevel}" />
+                            </HorizontalStackLayout>
+                            <HorizontalStackLayout>
+                                <Label Text="ReadLevel: " />
+                                <Label Text="{Binding ReadLevel}" />
+                            </HorizontalStackLayout>
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

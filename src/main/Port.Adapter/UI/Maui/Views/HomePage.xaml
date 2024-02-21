@@ -9,21 +9,36 @@
     Shell.NavBarIsVisible="False">
 
     <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
-        <VerticalStackLayout AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All">
+        <Grid
+            AbsoluteLayout.LayoutBounds="0,0,1,1"
+            AbsoluteLayout.LayoutFlags="All"
+            ColumnDefinitions="*,*"
+            RowDefinitions="2*,*">
+
             <Label
+                Grid.Row="0"
+                Grid.ColumnSpan="2"
+                FontAttributes="Bold"
+                FontSize="50"
                 HorizontalOptions="Center"
-                Text="Welcome to .NET MAUI!"
+                Text="Avatar Installer"
                 VerticalOptions="Center" />
 
             <Button
-                Margin="10"
+                Grid.Row="1"
+                Grid.Column="0"
+                Margin="20,20,10,20"
                 Command="{Binding GoToCreateAvatarCommand}"
-                Text="Create New" />
+                CornerRadius="30"
+                Text="New" />
             <Button
-                Margin="10"
-                Command="{Binding GoToEditAvatarCommand}"
-                Text="Edit" />
-        </VerticalStackLayout>
+                Grid.Row="1"
+                Grid.Column="1"
+                Margin="10,20,20,20"
+                Command="{Binding SetAvatarSettingsCommand}"
+                CornerRadius="30"
+                Text="{Binding WorkingDirectory}" />
+        </Grid>
 
         <StackLayout
             Padding="12"
@@ -32,12 +47,6 @@
             IsVisible="{Binding IsBusy}">
 
             <ActivityIndicator IsRunning="{Binding IsBusy}" />
-
-            <Label
-                FontSize="30"
-                HorizontalOptions="Center"
-                Text="{Binding LoadingText}"
-                TextColor="White" />
 
         </StackLayout>
     </AbsoluteLayout>

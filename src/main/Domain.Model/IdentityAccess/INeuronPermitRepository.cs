@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ei8.Avatar.Installer.Domain.Model.External;
+namespace ei8.Avatar.Installer.Domain.Model.IdentityAccess;
 
 public interface INeuronPermitRepository
 {
