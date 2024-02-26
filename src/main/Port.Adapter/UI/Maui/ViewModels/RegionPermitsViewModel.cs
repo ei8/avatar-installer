@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using ei8.Avatar.Installer.Domain.Model.DTO;
 using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
 using Maui.Services;
+using Maui.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,22 +14,17 @@ using System.Threading.Tasks;
 
 namespace Maui.ViewModels;
 
-public partial class RegionPermitsViewModel : BaseViewModel
+public partial class RegionPermitsViewModel : EditAvatarViewModel
 {
-    public ObservableCollection<RegionPermitDto> RegionPermits { get; set; } = [];
+    public ObservableCollection<RegionPermit> RegionPermits { get; set; } = [];
     private readonly IRegionPermitRepository RegionPermitRepository;
-    private readonly EditAvatarSettings editAvatarSettings;
 
     public RegionPermitsViewModel(EditAvatarSettings editAvatarSettings, INavigationService navigationService, IRegionPermitRepository RegionPermitRepository)
-        : base(navigationService)
+        : base(editAvatarSettings, navigationService)
     {
         Title = "Neuron Permit";
         this.RegionPermitRepository = RegionPermitRepository;
-        this.editAvatarSettings = editAvatarSettings;
     }
-
-    [ObservableProperty]
-    private bool isRefreshing;
 
     [RelayCommand]
     private async Task GetRegionPermitsAsync()
@@ -52,12 +48,24 @@ public partial class RegionPermitsViewModel : BaseViewModel
         catch (Exception ex)
         {
             Debug.WriteLine(ex);
-            await Shell.Current.DisplayAlert("Error!", $"Unable to get RegionPermits: {ex.Message}", "OK");
+            await Shell.Current.DisplayAlert("Error!", $"Unable to get Region Permits: {ex.Message}", "OK");
         }
         finally
         {
             IsBusy = false;
-            IsRefreshing = false;
         }
+    }
+
+    [RelayCommand]
+    private async Task GoToRegionPermitDetailsAsync(RegionPermit regionPermit)
+    {
+        if (regionPermit is null)
+            return;
+
+        await navigationService.NavigateToAsync($"{nameof(RegionPermitDetailsPage)}",
+            new Dictionary<string, object>
+            {
+                { "RegionPermit", regionPermit }
+            });
     }
 }

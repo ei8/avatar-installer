@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Maui.Views.UserDetailsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:models="clr-namespace:ei8.Avatar.Installer.Domain.Model.DTO;assembly=Domain.Model"
+    xmlns:viewmodels="clr-namespace:Maui.ViewModels"
+    Title="UserDetailsPage"
+    x:DataType="viewmodels:UserDetailsViewModel">
+    <Grid RowDefinitions="*,Auto">
+        <ScrollView Grid.Row="0">
+            <StackLayout>
+                <Grid Margin="10" ColumnDefinitions="Auto,*">
+                    <Label
+                        Grid.Column="0"
+                        Text="User ID: "
+                        VerticalOptions="Center" />
+                    <Entry Grid.Column="1" Text="{Binding User.UserId}" />
+                </Grid>
+                <Grid Margin="10" ColumnDefinitions="Auto,*">
+                    <Label
+                        Grid.Column="0"
+                        Text="Neuron ID: "
+                        VerticalOptions="Center" />
+                    <Entry
+                        Grid.Column="1"
+                        HorizontalOptions="Fill"
+                        Text="{Binding User.NeuronId}" />
+                </Grid>
+                <Grid Margin="10" ColumnDefinitions="Auto,*">
+                    <Label
+                        Grid.Column="0"
+                        Text="Active: "
+                        VerticalOptions="Center" />
+                    <Entry Grid.Column="1" Text="{Binding User.Active}" />
+                </Grid>
+            </StackLayout>
+        </ScrollView>
+        <Grid
+            Grid.Row="1"
+            Padding="10"
+            ColumnDefinitions="*">
+            <Button
+                Margin="0,0,5,0"
+                Command="{Binding UpdateUserCommand}"
+                Text="Update" />
+        </Grid>
+    </Grid>
+</ContentPage>

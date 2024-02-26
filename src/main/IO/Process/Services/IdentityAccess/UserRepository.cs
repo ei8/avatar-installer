@@ -11,10 +11,10 @@ namespace ei8.Avatar.Installer.IO.Process.Services.IdentityAccess;
 
 public class UserRepository : IUserRepository
 {
-    public async Task<IEnumerable<UserDto>> GetUsersAsync(string access)
+    public async Task<IEnumerable<User>> GetUsersAsync(string access)
     {
         var connectionString = $@"Data Source=file:{Path.Combine(access, "identity-access.db")}";
-        var users = new List<UserDto>();
+        var users = new List<User>();
         var tableName = "User";
 
         using var connection = new SqliteConnection(connectionString);
@@ -25,16 +25,13 @@ public class UserRepository : IUserRepository
 
         while (await reader.ReadAsync())
         {
-            var user = new UserDto
-            {
-                UserId = reader.IsDBNull(0) ? string.Empty : reader.GetString(0),
-                NeuronId = reader.IsDBNull(1) ? string.Empty : reader.GetString(1),
-                Active = reader.IsDBNull(2) ? 0 : reader.GetInt32(2),
-            };
+            var user = new User(reader.IsDBNull(0) ? string.Empty : reader.GetString(0), 
+                reader.IsDBNull(1) ? string.Empty : reader.GetString(1),
+                reader.IsDBNull(2) ? 0 : reader.GetInt32(2));
 
             users.Add(user);
         }
 
-        return users; 
+        return users;
     }
 }

@@ -8,34 +8,43 @@
     Title="{Binding Title}"
     x:DataType="viewmodels:RegionPermitsViewModel">
 
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior Command="{Binding GoToHomeCommand}" />
+    </Shell.BackButtonBehavior>
+
     <ScrollView>
         <StackLayout>
             <Label Text="RegionPermit" />
             <CollectionView ItemsSource="{Binding RegionPermits}">
                 <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="models:RegionPermitDto">
-                        <StackLayout>
-                            <HorizontalStackLayout>
-                                <Label Text="SequenceId: " />
-                                <Label Text="{Binding SequenceId}" />
-                            </HorizontalStackLayout>
-                            <HorizontalStackLayout>
-                                <Label Text="UserNeuronId: " />
-                                <Label Text="{Binding UserNeuronId}" />
-                            </HorizontalStackLayout>
-                            <HorizontalStackLayout>
-                                <Label Text="RegionNeuronId: " />
-                                <Label Text="{Binding RegionNeuronId}" />
-                            </HorizontalStackLayout>
-                            <HorizontalStackLayout>
-                                <Label Text="WriteLevel: " />
-                                <Label Text="{Binding WriteLevel}" />
-                            </HorizontalStackLayout>
-                            <HorizontalStackLayout>
-                                <Label Text="ReadLevel: " />
-                                <Label Text="{Binding ReadLevel}" />
-                            </HorizontalStackLayout>
-                        </StackLayout>
+                    <DataTemplate x:DataType="models:RegionPermit">
+                        <Frame Padding="5">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:RegionPermitsViewModel}}, Path=GoToRegionPermitDetailsCommand}" CommandParameter="{Binding .}" />
+                            </Frame.GestureRecognizers>
+                            <StackLayout>
+                                <HorizontalStackLayout>
+                                    <Label Text="SequenceId: " />
+                                    <Label Text="{Binding SequenceId}" />
+                                </HorizontalStackLayout>
+                                <HorizontalStackLayout>
+                                    <Label Text="UserNeuronId: " />
+                                    <Label Text="{Binding UserNeuronId}" />
+                                </HorizontalStackLayout>
+                                <HorizontalStackLayout>
+                                    <Label Text="RegionNeuronId: " />
+                                    <Label Text="{Binding RegionNeuronId}" />
+                                </HorizontalStackLayout>
+                                <HorizontalStackLayout>
+                                    <Label Text="WriteLevel: " />
+                                    <Label Text="{Binding WriteLevel}" />
+                                </HorizontalStackLayout>
+                                <HorizontalStackLayout>
+                                    <Label Text="ReadLevel: " />
+                                    <Label Text="{Binding ReadLevel}" />
+                                </HorizontalStackLayout>
+                            </StackLayout>
+                        </Frame>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>

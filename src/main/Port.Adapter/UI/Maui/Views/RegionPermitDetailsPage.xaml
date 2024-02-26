@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Maui.Views.RegionPermitDetailsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:models="clr-namespace:ei8.Avatar.Installer.Domain.Model.DTO;assembly=Domain.Model"
+    xmlns:viewmodels="clr-namespace:Maui.ViewModels"
+    Title="RegionPermitDetailsPage"
+    x:DataType="viewmodels:RegionPermitDetailsViewModel">
+    <Grid RowDefinitions="*,Auto">
+        <ScrollView Grid.Row="0">
+            <StackLayout>
+                <Grid Margin="10" ColumnDefinitions="Auto,*">
+                    <Label
+                        Grid.Column="0"
+                        Text="Sequence ID: "
+                        VerticalOptions="Center" />
+                    <Entry Grid.Column="1" Text="{Binding RegionPermit.SequenceId}" />
+                </Grid>
+                <Grid Margin="10" ColumnDefinitions="Auto,*">
+                    <Label
+                        Grid.Column="0"
+                        Text="User Neuron ID: "
+                        VerticalOptions="Center" />
+                    <Entry
+                        Grid.Column="1"
+                        HorizontalOptions="Fill"
+                        Text="{Binding RegionPermit.UserNeuronId}" />
+                </Grid>
+                <Grid Margin="10" ColumnDefinitions="Auto,*">
+                    <Label
+                        Grid.Column="0"
+                        Text="User Neuron ID: "
+                        VerticalOptions="Center" />
+                    <Entry Grid.Column="1" Text="{Binding RegionPermit.RegionNeuronId}" />
+                </Grid>
+                <Grid Margin="10" ColumnDefinitions="Auto,*">
+                    <Label
+                        Grid.Column="0"
+                        Text="Write Level: "
+                        VerticalOptions="Center" />
+                    <Entry Grid.Column="1" Text="{Binding RegionPermit.WriteLevel}" />
+                </Grid>
+                <Grid Margin="10" ColumnDefinitions="Auto,*">
+                    <Label
+                        Grid.Column="0"
+                        Text="Read Level: "
+                        VerticalOptions="Center" />
+                    <Entry Grid.Column="1" Text="{Binding RegionPermit.ReadLevel}" />
+                </Grid>
+            </StackLayout>
+        </ScrollView>
+        <Grid
+            Grid.Row="1"
+            Padding="10"
+            ColumnDefinitions="*">
+            <Button
+                Margin="0,0,5,0"
+                Command="{Binding UpdateRegionPermitCommand}"
+                Text="Update" />
+        </Grid>
+    </Grid>
+</ContentPage>

@@ -64,11 +64,17 @@ public static class MauiProgram
         builder.Services.AddSingleton<IdentityAccessViewModel>();
 
         builder.Services.AddTransient<NeuronPermitsPage>();
+        builder.Services.AddTransient<NeuronPermitDetailsPage>();
         builder.Services.AddTransient<NeuronPermitsViewModel>();
+        builder.Services.AddTransient<NeuronPermitDetailsViewModel>();
         builder.Services.AddTransient<RegionPermitsPage>();
+        builder.Services.AddTransient<RegionPermitDetailsPage>();
         builder.Services.AddTransient<RegionPermitsViewModel>();
+        builder.Services.AddTransient<RegionPermitDetailsViewModel>();
         builder.Services.AddTransient<UsersPage>();
+        builder.Services.AddTransient<UserDetailsPage>();
         builder.Services.AddTransient<UsersViewModel>();
+        builder.Services.AddTransient<UserDetailsViewModel>();
 
         builder.Services.AddSingleton<INavigationService, NavigationService>();
 

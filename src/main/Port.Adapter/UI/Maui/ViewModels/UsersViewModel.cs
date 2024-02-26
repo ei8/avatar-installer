@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using ei8.Avatar.Installer.Domain.Model.DTO;
 using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
 using Maui.Services;
+using Maui.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,22 +14,17 @@ using System.Threading.Tasks;
 
 namespace Maui.ViewModels;
 
-public partial class UsersViewModel : BaseViewModel
+public partial class UsersViewModel : EditAvatarViewModel
 {
-    public ObservableCollection<UserDto> Users { get; set; } = [];
+    public ObservableCollection<User> Users { get; set; } = [];
     private readonly IUserRepository UserRepository;
-    private readonly EditAvatarSettings editAvatarSettings;
 
     public UsersViewModel(EditAvatarSettings editAvatarSettings, INavigationService navigationService, IUserRepository UserRepository)
-        : base(navigationService)
+        : base(editAvatarSettings, navigationService)
     {
         Title = "Neuron Permit";
         this.UserRepository = UserRepository;
-        this.editAvatarSettings = editAvatarSettings;
     }
-
-    [ObservableProperty]
-    private bool isRefreshing;
 
     [RelayCommand]
     private async Task GetUsersAsync()
@@ -57,7 +53,19 @@ public partial class UsersViewModel : BaseViewModel
         finally
         {
             IsBusy = false;
-            IsRefreshing = false;
         }
+    }
+
+    [RelayCommand]
+    private async Task GoToUserDetailsAsync(User user)
+    {
+        if (user is null)
+            return;
+
+        await navigationService.NavigateToAsync($"{nameof(UserDetailsPage)}",
+            new Dictionary<string, object>
+            {
+                { "User", user }
+            });
     }
 }

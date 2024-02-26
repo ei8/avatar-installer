@@ -18,7 +18,7 @@ public partial class HomeViewModel : BaseViewModel
     private readonly EditAvatarSettings editAvatarSettings;
 
     [ObservableProperty]
-    private string workingDirectory = "Set Working Directory";
+    private string workingDirectory = "Edit";
 
     public HomeViewModel(EditAvatarSettings editAvatarSettings, INavigationService navigationService)
         : base(navigationService)
@@ -158,6 +158,10 @@ public partial class HomeViewModel : BaseViewModel
 
             editAvatarSettings.WorkingDirectory = workingDirectory.Folder.Path;
             WorkingDirectory = editAvatarSettings.WorkingDirectory;
+            //await navigationService.NavigateToAsync($"//IdentityAccessPage/{nameof(NeuronPermitsPage)}");
+            //await navigationService.NavigateToAsync($"{nameof(NeuronPermitsPage)}");
+            await navigationService.NavigateToAsync($"//IdentityAccessPage");
+            //await navigationService.NavigateToAsync($"IdentityAccessPage");
         }
         catch (Exception ex)
         {

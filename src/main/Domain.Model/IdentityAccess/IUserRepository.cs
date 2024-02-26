@@ -9,5 +9,5 @@ namespace ei8.Avatar.Installer.Domain.Model.IdentityAccess;
 
 public interface IUserRepository
 {
-    Task<IEnumerable<UserDto>> GetUsersAsync(string access);
+    Task<IEnumerable<User>> GetUsersAsync(string access);
 }

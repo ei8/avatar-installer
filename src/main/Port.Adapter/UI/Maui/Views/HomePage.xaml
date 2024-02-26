@@ -37,7 +37,7 @@
                 Margin="10,20,20,20"
                 Command="{Binding SetAvatarSettingsCommand}"
                 CornerRadius="30"
-                Text="{Binding WorkingDirectory}" />
+                Text="Edit" />
         </Grid>
 
         <StackLayout

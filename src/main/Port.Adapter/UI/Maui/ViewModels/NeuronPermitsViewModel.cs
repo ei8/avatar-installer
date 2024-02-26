@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using ei8.Avatar.Installer.Domain.Model.DTO;
 using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
 using Maui.Services;
+using Maui.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,22 +13,18 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Maui.ViewModels;
-public partial class NeuronPermitsViewModel : BaseViewModel
+
+public partial class NeuronPermitsViewModel : EditAvatarViewModel
 {
-    public ObservableCollection<NeuronPermitDto> NeuronPermits { get; set; } = [];
+    public ObservableCollection<NeuronPermit> NeuronPermits { get; set; } = [];
     private readonly INeuronPermitRepository neuronPermitRepository;
-    private readonly EditAvatarSettings editAvatarSettings;
 
     public NeuronPermitsViewModel(EditAvatarSettings editAvatarSettings, INavigationService navigationService, INeuronPermitRepository neuronPermitRepository)
-        : base(navigationService)
+        : base(editAvatarSettings, navigationService)
     {
         Title = "Neuron Permit";
         this.neuronPermitRepository = neuronPermitRepository;
-        this.editAvatarSettings = editAvatarSettings;
     }
-
-    [ObservableProperty]
-    private bool isRefreshing;
 
     [RelayCommand]
     private async Task GetNeuronPermitsAsync()
@@ -56,7 +53,19 @@ public partial class NeuronPermitsViewModel : BaseViewModel
         finally
         {
             IsBusy = false;
-            IsRefreshing = false;
         }
+    }
+
+    [RelayCommand]
+    private async Task GoToNeuronPermitDetailsAsync(NeuronPermit neuronPermit)
+    {
+        if (neuronPermit is null)
+            return;
+
+        await navigationService.NavigateToAsync($"{nameof(NeuronPermitDetailsPage)}",
+            new Dictionary<string, object>
+            {
+                { "NeuronPermit", neuronPermit }
+            });
     }
 }

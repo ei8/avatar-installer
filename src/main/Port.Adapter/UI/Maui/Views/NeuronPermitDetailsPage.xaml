@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Maui.Views.NeuronPermitDetailsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:models="clr-namespace:ei8.Avatar.Installer.Domain.Model.DTO;assembly=Domain.Model"
+    xmlns:viewmodels="clr-namespace:Maui.ViewModels"
+    Title="NeuronPermitDetailsPage"
+    x:DataType="viewmodels:NeuronPermitDetailsViewModel">
+    <Grid RowDefinitions="*,Auto">
+        <ScrollView Grid.Row="0">
+            <StackLayout>
+                <Grid Margin="10" ColumnDefinitions="Auto,*">
+                    <Label
+                        Grid.Column="0"
+                        Text="Neuron ID: "
+                        VerticalOptions="Center" />
+                    <Entry Grid.Column="1" Text="{Binding NeuronPermit.NeuronId}" />
+                </Grid>
+                <Grid Margin="10" ColumnDefinitions="Auto,*">
+                    <Label
+                        Grid.Column="0"
+                        Text="User Neuron ID: "
+                        VerticalOptions="Center" />
+                    <Entry
+                        Grid.Column="1"
+                        HorizontalOptions="Fill"
+                        Text="{Binding NeuronPermit.UserNeuronId}" />
+                </Grid>
+                <Grid Margin="10" ColumnDefinitions="Auto,*">
+                    <Label
+                        Grid.Column="0"
+                        Text="Expiration Date: "
+                        VerticalOptions="Center" />
+                    <Entry Grid.Column="1" Text="{Binding NeuronPermit.ExpirationDate}" />
+                </Grid>
+            </StackLayout>
+        </ScrollView>
+        <Grid
+            Grid.Row="1"
+            Padding="10"
+            ColumnDefinitions="*">
+            <Button
+                Margin="0,0,5,0"
+                Command="{Binding UpdateNeuronPermitCommand}"
+                Text="Update" />
+        </Grid>
+    </Grid>
+</ContentPage>

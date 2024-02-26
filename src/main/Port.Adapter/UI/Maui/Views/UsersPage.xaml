@@ -8,26 +8,35 @@
     Title="{Binding Title}"
     x:DataType="viewmodels:UsersViewModel">
 
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior Command="{Binding GoToHomeCommand}" />
+    </Shell.BackButtonBehavior>
+
     <ScrollView>
         <StackLayout>
-            <Label Text="RegionPermit" />
+            <Label Text="Users" />
             <CollectionView ItemsSource="{Binding Users}">
                 <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="models:UserDto">
-                        <StackLayout>
-                            <HorizontalStackLayout>
-                                <Label Text="UserId: " />
-                                <Label Text="{Binding UserId}" />
-                            </HorizontalStackLayout>
-                            <HorizontalStackLayout>
-                                <Label Text="NeuronId: " />
-                                <Label Text="{Binding NeuronId}" />
-                            </HorizontalStackLayout>
-                            <HorizontalStackLayout>
-                                <Label Text="Active: " />
-                                <Label Text="{Binding Active}" />
-                            </HorizontalStackLayout>
-                        </StackLayout>
+                    <DataTemplate x:DataType="models:User">
+                        <Frame Padding="5">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:UsersViewModel}}, Path=GoToUserDetailsCommand}" CommandParameter="{Binding .}" />
+                            </Frame.GestureRecognizers>
+                            <StackLayout>
+                                <HorizontalStackLayout>
+                                    <Label Text="UserId: " />
+                                    <Label Text="{Binding UserId}" />
+                                </HorizontalStackLayout>
+                                <HorizontalStackLayout>
+                                    <Label Text="NeuronId: " />
+                                    <Label Text="{Binding NeuronId}" />
+                                </HorizontalStackLayout>
+                                <HorizontalStackLayout>
+                                    <Label Text="Active: " />
+                                    <Label Text="{Binding Active}" />
+                                </HorizontalStackLayout>
+                            </StackLayout>
+                        </Frame>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>

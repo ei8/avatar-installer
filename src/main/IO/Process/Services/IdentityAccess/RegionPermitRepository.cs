@@ -10,10 +10,10 @@ using System.Threading.Tasks;
 namespace ei8.Avatar.Installer.IO.Process.Services.IdentityAccess;
 public class RegionPermitRepository : IRegionPermitRepository
 {
-    public async Task<IEnumerable<RegionPermitDto>> GetRegionPermitsAsync(string access)
+    public async Task<IEnumerable<RegionPermit>> GetRegionPermitsAsync(string access)
     {
         var connectionString = $@"Data Source=file:{Path.Combine(access, "identity-access.db")}";
-        var regionPermits = new List<RegionPermitDto>();
+        var regionPermits = new List<RegionPermit>();
         var tableName = "RegionPermit";
 
         using var connection = new SqliteConnection(connectionString);
@@ -24,14 +24,12 @@ public class RegionPermitRepository : IRegionPermitRepository
 
         while (await reader.ReadAsync())
         {
-            var regionPermit = new RegionPermitDto
-            {
-                SequenceId = reader.IsDBNull(0) ? 0 : reader.GetInt32(0),
-                UserNeuronId = reader.IsDBNull(1) ? string.Empty : reader.GetString(1),
-                RegionNeuronId = reader.IsDBNull(2) ? string.Empty : reader.GetString(2),
-                WriteLevel = reader.IsDBNull(3) ? 0 : reader.GetInt32(3),
-                ReadLevel = reader.IsDBNull(4) ? 0 : reader.GetInt32(4)
-            };
+            var regionPermit = new RegionPermit(
+                 reader.IsDBNull(0) ? 0 : reader.GetInt32(0),
+                 reader.IsDBNull(1) ? string.Empty : reader.GetString(1),
+                 reader.IsDBNull(2) ? string.Empty : reader.GetString(2),
+                 reader.IsDBNull(3) ? 0 : reader.GetInt32(3),
+                 reader.IsDBNull(4) ? 0 : reader.GetInt32(4));
 
             regionPermits.Add(regionPermit);
         }
