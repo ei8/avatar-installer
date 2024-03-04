@@ -8,17 +8,7 @@
     x:DataType="viewmodels:CreateAvatarViewModel"
     Shell.NavBarIsVisible="False">
 
-    <Shell.BackButtonBehavior>
-        <BackButtonBehavior Command="{Binding GoToHomePageCommand}" />
-    </Shell.BackButtonBehavior>
-
-    <!--<AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">-->
     <Grid RowDefinitions="*,2*,*">
-        <!--
-            AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1"
-            AbsoluteLayout.LayoutFlags="PositionProportional"
-        -->
-
         <Grid ColumnDefinitions="3*,*">
             <Entry
                 Margin="40"
@@ -62,21 +52,4 @@
             Command="{Binding CreateAvatarCommand}"
             Text="Create" />
     </Grid>
-
-    <!--<StackLayout
-            Padding="12"
-            AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1"
-            AbsoluteLayout.LayoutFlags="PositionProportional"
-            IsVisible="{Binding IsBusy}">
-
-            <ActivityIndicator IsRunning="{Binding IsBusy}" />
-
-            <Label
-                FontSize="30"
-                HorizontalOptions="Center"
-                Text="{Binding LoadingText}"
-                TextColor="White" />
-
-        </StackLayout>
-    </AbsoluteLayout>-->
 </ContentPage>

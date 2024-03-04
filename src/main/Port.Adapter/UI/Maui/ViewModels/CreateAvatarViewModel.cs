@@ -48,12 +48,6 @@ public partial class CreateAvatarViewModel : BaseViewModel
     private string loadingText = "Haven't started...";
 
     [RelayCommand]
-    private async Task GoToHomePageAsync()
-    {
-        await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
-    }
-
-    [RelayCommand]
     private async Task ChooseConfigurationAsync()
     {
         if (IsBusy)
