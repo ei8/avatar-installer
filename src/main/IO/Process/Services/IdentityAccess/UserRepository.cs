@@ -29,10 +29,6 @@ public class UserRepository : IUserRepository
                 reader.IsDBNull(0) ? string.Empty : reader.GetString(0),
                 reader.IsDBNull(1) ? string.Empty : reader.GetString(1),
                 reader.IsDBNull(2) ? null : reader.GetInt32(2));
-            //var user = new User(
-            //    reader.IsDBNull(0) ? string.Empty : reader.GetString(0), 
-            //    reader.IsDBNull(1) ? string.Empty : reader.GetString(1),
-            //    reader.IsDBNull(2) ? string.Empty : reader.GetString(2));
 
             users.Add(user);
         }
@@ -51,9 +47,7 @@ public class UserRepository : IUserRepository
         var query = $"UPDATE {tableName} SET NeuronId = @NeuronId, Active = @Active WHERE UserId = @UserId";
         using var command = new SqliteCommand(query, connection);
 
-        //command.Parameters.AddWithValue("@Active", string.IsNullOrEmpty(user.Active) ? DBNull.Value : user.Active);
-        //command.Parameters.AddWithValue("@NeuronId", user.NeuronId is null ? DBNull.Value : user.NeuronId);
-        command.Parameters.AddWithValue("@NeuronId", string.IsNullOrEmpty(user.NeuronId) ? DBNull.Value : user.NeuronId);
+        command.Parameters.AddWithValue("@NeuronId", user.NeuronId);
         command.Parameters.AddWithValue("@Active", user.Active is null ? DBNull.Value : user.Active);
 
         command.Parameters.AddWithValue("@UserId", user.UserId);

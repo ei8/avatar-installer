@@ -2,7 +2,7 @@
   "profiles": {
     "CLI": {
       "commandName": "Project",
-      "commandLineArgs": "--destination=\"C:\\Users\\dkrod\\Desktop\\Avatar Installer\\Output\" \r\n--config=\"C:\\Users\\dkrod\\Desktop\\Avatar Installer\\sample_config.json\"",
+      "commandLineArgs": "--destination=\"./template\\\"",
       "environmentVariables": {
         "TEMPLATE_DOWNLOAD_URL": "https://github.com/ei8/avatar-template.git"
       }

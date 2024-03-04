@@ -51,29 +51,27 @@ public static class MauiProgram
                     options.MaxLevel = LogLevel.Critical;
                 });
 
+        #region Maui Pages
         builder.Services.AddSingleton<HomePage>();
-        builder.Services.AddSingleton<HomeViewModel>();
-
         builder.Services.AddSingleton<CreateAvatarPage>();
-        builder.Services.AddSingleton<CreateAvatarViewModel>();
-
-        //builder.Services.AddSingleton<EditAvatarPage>();
-        //builder.Services.AddSingleton<EditAvatarViewModel>();
-
-        builder.Services.AddSingleton<IdentityAccessViewModel>();
-
         builder.Services.AddTransient<NeuronPermitsPage>();
         builder.Services.AddTransient<NeuronPermitDetailsPage>();
-        builder.Services.AddTransient<NeuronPermitsViewModel>();
-        builder.Services.AddTransient<NeuronPermitDetailsViewModel>();
         builder.Services.AddTransient<RegionPermitsPage>();
         builder.Services.AddTransient<RegionPermitDetailsPage>();
-        builder.Services.AddTransient<RegionPermitsViewModel>();
-        builder.Services.AddTransient<RegionPermitDetailsViewModel>();
         builder.Services.AddTransient<UsersPage>();
         builder.Services.AddTransient<UserDetailsPage>();
+        #endregion
+
+        #region Maui ViewModels
+        builder.Services.AddSingleton<HomeViewModel>();
+        builder.Services.AddSingleton<CreateAvatarViewModel>();
+        builder.Services.AddTransient<NeuronPermitsViewModel>();
+        builder.Services.AddTransient<NeuronPermitDetailsViewModel>();
+        builder.Services.AddTransient<RegionPermitsViewModel>();
+        builder.Services.AddTransient<RegionPermitDetailsViewModel>();
         builder.Services.AddTransient<UsersViewModel>();
         builder.Services.AddTransient<UserDetailsViewModel>();
+        #endregion
 
         builder.Services.AddSingleton<INavigationService, NavigationService>();
 

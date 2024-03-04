@@ -8,10 +8,6 @@
     Title="{Binding Title}"
     x:DataType="viewmodels:UsersViewModel">
 
-    <Shell.BackButtonBehavior>
-        <BackButtonBehavior Command="{Binding GoToHomeCommand}" />
-    </Shell.BackButtonBehavior>
-
     <Grid RowDefinitions="*,Auto">
         <Grid Grid.Row="0" Padding="5">
             <ScrollView>

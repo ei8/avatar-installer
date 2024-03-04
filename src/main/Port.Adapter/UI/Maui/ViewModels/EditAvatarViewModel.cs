@@ -19,12 +19,6 @@ public partial class EditAvatarViewModel : BaseViewModel
     }
 
     [RelayCommand]
-    private async Task GoToHomeAsync()
-    {
-        await navigationService.NavigateToAsync($"//{nameof(HomePage)}");
-    }
-
-    [RelayCommand]
     private async Task CancelEditAsync()
     {
         await navigationService.NavigateToAsync("..");

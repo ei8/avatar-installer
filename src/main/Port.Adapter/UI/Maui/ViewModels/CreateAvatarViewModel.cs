@@ -63,8 +63,6 @@ public partial class CreateAvatarViewModel : BaseViewModel
 
         try
         {
-            //LoadingText = "Choosing a configuration file...";
-
             var configFile = await FilePicker.PickAsync(new PickOptions
             {
                 PickerTitle = "Choose a config file"

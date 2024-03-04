@@ -35,7 +35,7 @@
                 Grid.Row="1"
                 Grid.Column="1"
                 Margin="10,20,20,20"
-                Command="{Binding SetAvatarSettingsCommand}"
+                Command="{Binding GoToEditAvatarCommand}"
                 CornerRadius="30"
                 Text="Edit" />
         </Grid>

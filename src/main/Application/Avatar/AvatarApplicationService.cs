@@ -24,7 +24,6 @@ namespace ei8.Avatar.Installer.Application.Avatar
         public event EventHandler OnAvatarCreated;
 
         private IConfigurationRepository configurationRepository;
-        private IConfiguration configuration;
         private ILogger<AvatarApplicationService> logger;
         private IAvatarRepository avatarRepository;
         private IAvatarMapperService avatarMapperService;
@@ -32,12 +31,11 @@ namespace ei8.Avatar.Installer.Application.Avatar
         private IAvatarServerRepository avatarServerRepository;
         private IAvatarServerMapperService avatarServerMapperService;
 
-        public AvatarApplicationService(IConfigurationRepository configurationRepository, IConfiguration configuration,
+        public AvatarApplicationService(IConfigurationRepository configurationRepository,
             ILogger<AvatarApplicationService> logger, IAvatarRepository avatarRepository, IAvatarMapperService avatarMapperService,
             ITemplateService templateService, IAvatarServerRepository avatarServerRepository, IAvatarServerMapperService avatarServerMapperService)
         {
             this.configurationRepository = configurationRepository;
-            this.configuration = configuration;
             this.logger = logger;
             this.avatarRepository = avatarRepository;
             this.avatarMapperService = avatarMapperService;
@@ -48,7 +46,6 @@ namespace ei8.Avatar.Installer.Application.Avatar
 
         public async Task CreateAvatarAsync(string id)
         {
-            //var configPath = configuration.GetSection("config").Value;
             OnCreateAvatar?.Invoke();
 
             if (string.IsNullOrEmpty(id))

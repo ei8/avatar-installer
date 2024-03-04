@@ -31,12 +31,6 @@ public class RegionPermitRepository : IRegionPermitRepository
                  reader.IsDBNull(2) ? null : reader.GetString(2),
                  reader.IsDBNull(3) ? null : reader.GetInt32(3),
                  reader.IsDBNull(4) ? null : reader.GetInt32(4));
-            //var regionPermit = new RegionPermit(
-            //     reader.IsDBNull(0) ? string.Empty : reader.GetString(0),
-            //     reader.IsDBNull(1) ? string.Empty : reader.GetString(1),
-            //     reader.IsDBNull(2) ? string.Empty : reader.GetString(2),
-            //     reader.IsDBNull(3) ? string.Empty : reader.GetString(3),
-            //     reader.IsDBNull(4) ? string.Empty : reader.GetString(4));
 
             regionPermits.Add(regionPermit);
         }
@@ -59,8 +53,6 @@ public class RegionPermitRepository : IRegionPermitRepository
         command.Parameters.AddWithValue("@RegionNeuronId", string.IsNullOrEmpty(regionPermit.RegionNeuronId) ? DBNull.Value : regionPermit.RegionNeuronId);
         command.Parameters.AddWithValue("@WriteLevel", regionPermit.WriteLevel is null ? DBNull.Value : regionPermit.WriteLevel);
         command.Parameters.AddWithValue("@ReadLevel", regionPermit.ReadLevel is null ? DBNull.Value : regionPermit.ReadLevel);
-        //command.Parameters.AddWithValue("@WriteLevel", string.IsNullOrEmpty(regionPermit.WriteLevel) ? DBNull.Value : regionPermit.WriteLevel);
-        //command.Parameters.AddWithValue("@ReadLevel", string.IsNullOrEmpty(regionPermit.ReadLevel) ? DBNull.Value : regionPermit.ReadLevel);
 
         command.Parameters.AddWithValue("@SequenceId", regionPermit.SequenceId);
 

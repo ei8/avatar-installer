@@ -11,6 +11,3 @@ namespace ei8.Avatar.Installer.Domain.Model.DTO;
 public record NeuronPermit(string UserNeuronId, string NeuronId, string? ExpirationDate);
 public record RegionPermit(int SequenceId, string? UserNeuronId, string? RegionNeuronId, int? WriteLevel, int? ReadLevel);
 public record User(string UserId, string NeuronId, int? Active);
-//public record NeuronPermit(string UserNeuronId, string NeuronId, string? ExpirationDate);
-//public record RegionPermit(string SequenceId, string? UserNeuronId, string? RegionNeuronId, string? WriteLevel, string? ReadLevel);
-//public record User(string UserId, string NeuronId, string? Active);
