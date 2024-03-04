@@ -25,13 +25,39 @@ public class UserRepository : IUserRepository
 
         while (await reader.ReadAsync())
         {
-            var user = new User(reader.IsDBNull(0) ? string.Empty : reader.GetString(0), 
+            var user = new User(
+                reader.IsDBNull(0) ? string.Empty : reader.GetString(0),
                 reader.IsDBNull(1) ? string.Empty : reader.GetString(1),
-                reader.IsDBNull(2) ? 0 : reader.GetInt32(2));
+                reader.IsDBNull(2) ? null : reader.GetInt32(2));
+            //var user = new User(
+            //    reader.IsDBNull(0) ? string.Empty : reader.GetString(0), 
+            //    reader.IsDBNull(1) ? string.Empty : reader.GetString(1),
+            //    reader.IsDBNull(2) ? string.Empty : reader.GetString(2));
 
             users.Add(user);
         }
 
         return users;
+    }
+
+    public async Task UpdateUserAsync(string access, User user)
+    {
+        var connectionString = $@"Data Source=file:{Path.Combine(access, "identity-access.db")}";
+        var tableName = "User";
+
+        using var connection = new SqliteConnection(connectionString);
+        await connection.OpenAsync();
+
+        var query = $"UPDATE {tableName} SET NeuronId = @NeuronId, Active = @Active WHERE UserId = @UserId";
+        using var command = new SqliteCommand(query, connection);
+
+        //command.Parameters.AddWithValue("@Active", string.IsNullOrEmpty(user.Active) ? DBNull.Value : user.Active);
+        //command.Parameters.AddWithValue("@NeuronId", user.NeuronId is null ? DBNull.Value : user.NeuronId);
+        command.Parameters.AddWithValue("@NeuronId", string.IsNullOrEmpty(user.NeuronId) ? DBNull.Value : user.NeuronId);
+        command.Parameters.AddWithValue("@Active", user.Active is null ? DBNull.Value : user.Active);
+
+        command.Parameters.AddWithValue("@UserId", user.UserId);
+
+        await command.ExecuteNonQueryAsync();
     }
 }

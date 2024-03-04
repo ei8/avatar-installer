@@ -6,7 +6,8 @@
     xmlns:models="clr-namespace:ei8.Avatar.Installer.Domain.Model.DTO;assembly=Domain.Model"
     xmlns:viewmodels="clr-namespace:Maui.ViewModels"
     Title="NeuronPermitDetailsPage"
-    x:DataType="viewmodels:NeuronPermitDetailsViewModel">
+    x:DataType="viewmodels:NeuronPermitDetailsViewModel"
+    Shell.TabBarIsVisible="False">
     <Grid RowDefinitions="*,Auto">
         <ScrollView Grid.Row="0">
             <StackLayout>
@@ -15,7 +16,10 @@
                         Grid.Column="0"
                         Text="Neuron ID: "
                         VerticalOptions="Center" />
-                    <Entry Grid.Column="1" Text="{Binding NeuronPermit.NeuronId}" />
+                    <Entry
+                        Grid.Column="1"
+                        IsReadOnly="True"
+                        Text="{Binding NeuronPermit.NeuronId}" />
                 </Grid>
                 <Grid Margin="10" ColumnDefinitions="Auto,*">
                     <Label
@@ -25,6 +29,7 @@
                     <Entry
                         Grid.Column="1"
                         HorizontalOptions="Fill"
+                        IsReadOnly="True"
                         Text="{Binding NeuronPermit.UserNeuronId}" />
                 </Grid>
                 <Grid Margin="10" ColumnDefinitions="Auto,*">
@@ -32,16 +37,25 @@
                         Grid.Column="0"
                         Text="Expiration Date: "
                         VerticalOptions="Center" />
-                    <Entry Grid.Column="1" Text="{Binding NeuronPermit.ExpirationDate}" />
+                    <Entry
+                        Grid.Column="1"
+                        Placeholder="NULL"
+                        Text="{Binding NeuronPermit.ExpirationDate}" />
                 </Grid>
             </StackLayout>
         </ScrollView>
         <Grid
             Grid.Row="1"
             Padding="10"
-            ColumnDefinitions="*">
+            ColumnDefinitions="*,*">
             <Button
+                Grid.Column="0"
                 Margin="0,0,5,0"
+                Command="{Binding CancelEditCommand}"
+                Text="Cancel" />
+            <Button
+                Grid.Column="1"
+                Margin="5,0,0,0"
                 Command="{Binding UpdateNeuronPermitCommand}"
                 Text="Update" />
         </Grid>

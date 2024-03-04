@@ -60,7 +60,6 @@ public static class MauiProgram
         //builder.Services.AddSingleton<EditAvatarPage>();
         //builder.Services.AddSingleton<EditAvatarViewModel>();
 
-        builder.Services.AddSingleton<IdentityAccessPage>();
         builder.Services.AddSingleton<IdentityAccessViewModel>();
 
         builder.Services.AddTransient<NeuronPermitsPage>();

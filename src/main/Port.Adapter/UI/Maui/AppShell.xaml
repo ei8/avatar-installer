@@ -32,21 +32,21 @@
                 Title="Neuron Permit"
                 ContentTemplate="{DataTemplate views:NeuronPermitsPage}"
                 Route="NeuronPermitPage"
-                Shell.FlyoutBehavior="Disabled" />
+                Shell.FlyoutBehavior="Flyout" />
         </Tab>
         <Tab Title="Region Permit">
             <ShellContent
                 Title="Region Permit"
                 ContentTemplate="{DataTemplate views:RegionPermitsPage}"
                 Route="RegionPermitsPage"
-                Shell.FlyoutBehavior="Disabled" />
+                Shell.FlyoutBehavior="Flyout" />
         </Tab>
         <Tab Title="Users">
             <ShellContent
                 Title="Users"
                 ContentTemplate="{DataTemplate views:UsersPage}"
                 Route="UsersPage"
-                Shell.FlyoutBehavior="Disabled" />
+                Shell.FlyoutBehavior="Flyout" />
         </Tab>
     </FlyoutItem>
 </Shell>

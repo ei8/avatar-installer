@@ -12,37 +12,56 @@
         <BackButtonBehavior Command="{Binding GoToHomeCommand}" />
     </Shell.BackButtonBehavior>
 
-    <ScrollView>
-        <StackLayout>
-            <Label Text="Neuron Permit" />
-            <CollectionView ItemsSource="{Binding NeuronPermits}">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="models:NeuronPermit">
-                        <Frame Padding="5">
-                            <Frame.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:NeuronPermitsViewModel}}, Path=GoToNeuronPermitDetailsCommand}" CommandParameter="{Binding .}" />
-                            </Frame.GestureRecognizers>
-                            <StackLayout>
-                                <HorizontalStackLayout>
-                                    <Label Text="UserNeuronId: " />
-                                    <Label Text=" " />
-                                    <Label Text="{Binding UserNeuronId}" />
-                                </HorizontalStackLayout>
-                                <HorizontalStackLayout>
-                                    <Label Text="NeuronId: " />
-                                    <Label Text=" " />
-                                    <Label Text="{Binding NeuronId}" />
-                                </HorizontalStackLayout>
-                                <HorizontalStackLayout>
-                                    <Label Text="Expiration Date: " />
-                                    <Label Text=" " />
-                                    <Label Text="{Binding ExpirationDate}" />
-                                </HorizontalStackLayout>
-                            </StackLayout>
-                        </Frame>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </StackLayout>
-    </ScrollView>
+    <Grid RowDefinitions="*,Auto">
+        <Grid Grid.Row="0" Padding="5">
+            <ScrollView>
+                <StackLayout>
+                    <CollectionView ItemsSource="{Binding NeuronPermits}">
+                        <CollectionView.Header>
+                            <Grid Padding="10" ColumnDefinitions="*,*,*">
+                                <Label
+                                    Grid.Column="0"
+                                    HorizontalTextAlignment="Center"
+                                    Text="User Neuron Id" />
+                                <Label
+                                    Grid.Column="1"
+                                    HorizontalTextAlignment="Center"
+                                    Text="Neuron Id" />
+                                <Label
+                                    Grid.Column="2"
+                                    HorizontalTextAlignment="Center"
+                                    Text="Expiration Date" />
+                            </Grid>
+                        </CollectionView.Header>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="models:NeuronPermit">
+                                <Frame Margin="2" Padding="5">
+                                    <Frame.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:NeuronPermitsViewModel}}, Path=GoToNeuronPermitDetailsCommand}" CommandParameter="{Binding .}" />
+                                    </Frame.GestureRecognizers>
+                                    <Grid Padding="10" ColumnDefinitions="*,*,*">
+                                        <Label
+                                            Grid.Column="0"
+                                            HorizontalTextAlignment="Center"
+                                            Text="{Binding UserNeuronId}" />
+                                        <Label
+                                            Grid.Column="1"
+                                            HorizontalTextAlignment="Center"
+                                            Text="{Binding NeuronId}" />
+                                        <Label
+                                            Grid.Column="2"
+                                            HorizontalTextAlignment="Center"
+                                            Text="{Binding ExpirationDate}" />
+                                    </Grid>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </StackLayout>
+            </ScrollView>
+        </Grid>
+        <Grid Grid.Row="1" Padding="10">
+            <Button Text="Add Neuron Permit" />
+        </Grid>
+    </Grid>
 </ContentPage>

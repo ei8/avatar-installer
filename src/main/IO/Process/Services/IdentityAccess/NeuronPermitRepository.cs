@@ -20,7 +20,8 @@ public class NeuronPermitRepository : INeuronPermitRepository
         using var connection = new SqliteConnection(connectionString);
         await connection.OpenAsync();
 
-        using var command = new SqliteCommand($"SELECT UserNeuronId, NeuronId, ExpirationDate FROM {tableName}", connection);
+        var query = $"SELECT UserNeuronId, NeuronId, ExpirationDate FROM {tableName}";
+        using var command = new SqliteCommand(query, connection);
         using var reader = await command.ExecuteReaderAsync();
 
         while (await reader.ReadAsync())
@@ -34,5 +35,24 @@ public class NeuronPermitRepository : INeuronPermitRepository
         }
 
         return neuronPermits;
+    }
+
+    public async Task UpdateNeuronPermitAsync(string access, NeuronPermit neuronPermit)
+    {
+        var connectionString = $@"Data Source=file:{Path.Combine(access, "identity-access.db")}";
+        var tableName = "NeuronPermit";
+
+        using var connection = new SqliteConnection(connectionString);
+        await connection.OpenAsync();
+
+        var query = $"UPDATE {tableName} SET ExpirationDate = @ExpirationDate WHERE UserNeuronId = @UserNeuronId AND NeuronId = @NeuronId";
+        using var command = new SqliteCommand(query, connection);
+
+        command.Parameters.AddWithValue("@ExpirationDate", string.IsNullOrEmpty(neuronPermit.ExpirationDate) ? DBNull.Value : neuronPermit.ExpirationDate);
+
+        command.Parameters.AddWithValue("@UserNeuronId", neuronPermit.UserNeuronId);
+        command.Parameters.AddWithValue("@NeuronId", neuronPermit.NeuronId);
+
+        await command.ExecuteNonQueryAsync();
     }
 }

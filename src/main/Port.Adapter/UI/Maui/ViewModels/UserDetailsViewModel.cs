@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using ei8.Avatar.Installer.Domain.Model.DTO;
 using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
+using ei8.Avatar.Installer.IO.Process.Services.IdentityAccess;
 using Maui.Services;
 using System;
 using System.Collections.Generic;
@@ -29,7 +30,8 @@ public partial class UserDetailsViewModel : EditAvatarViewModel
     [RelayCommand]
     private async Task UpdateUserAsync()
     {
-        bool isConfirmed = await Shell.Current.CurrentPage.DisplayAlert("Update User", "Are you sure you want to update this User",
+        if (User is null) return;
+        bool isConfirmed = await Shell.Current.CurrentPage.DisplayAlert("Update User", "Are you sure you want to update this User?",
                             "Yes", "No");
 
         if (!isConfirmed)
@@ -37,6 +39,9 @@ public partial class UserDetailsViewModel : EditAvatarViewModel
 
         try
         {
+            var workingDirectory = editAvatarSettings.WorkingDirectory;
+            await userRepository.UpdateUserAsync(workingDirectory, User!);
+
             await Shell.Current.CurrentPage.DisplayAlert("Success!",
                 $"User updated", "OK");
 

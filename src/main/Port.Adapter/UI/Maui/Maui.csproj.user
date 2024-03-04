@@ -18,9 +18,6 @@
     <MauiXaml Update="Views\HomePage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
-    <MauiXaml Update="Views\IdentityAccessPage.xaml">
-      <SubType>Designer</SubType>
-    </MauiXaml>
     <MauiXaml Update="Views\NeuronPermitDetailsPage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>

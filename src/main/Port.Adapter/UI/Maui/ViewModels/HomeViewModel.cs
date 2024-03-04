@@ -31,7 +31,7 @@ public partial class HomeViewModel : BaseViewModel
     [RelayCommand]
     private async Task GoToCreateAvatarAsync()
     {
-        await navigationService.NavigateToAsync($"//{nameof(CreateAvatarPage)}");
+        await navigationService.NavigateToAsync($"{nameof(CreateAvatarPage)}");
     }
 
     [RelayCommand]
@@ -112,7 +112,7 @@ public partial class HomeViewModel : BaseViewModel
 
             editAvatarSettings.WorkingDirectory = workingDirectory.Folder.Path;
             WorkingDirectory = editAvatarSettings.WorkingDirectory;
-            await navigationService.NavigateToAsync($"{nameof(IdentityAccessPage)}");
+            //await navigationService.NavigateToAsync($"{nameof(IdentityAccessPage)}");
         }
         catch (Exception ex)
         {

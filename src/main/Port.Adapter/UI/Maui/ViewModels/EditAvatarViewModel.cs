@@ -23,4 +23,10 @@ public partial class EditAvatarViewModel : BaseViewModel
     {
         await navigationService.NavigateToAsync($"//{nameof(HomePage)}");
     }
+
+    [RelayCommand]
+    private async Task CancelEditAsync()
+    {
+        await navigationService.NavigateToAsync("..");
+    }
 }

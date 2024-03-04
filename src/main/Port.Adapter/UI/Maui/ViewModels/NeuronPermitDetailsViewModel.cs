@@ -29,6 +29,7 @@ public partial class NeuronPermitDetailsViewModel : EditAvatarViewModel
     [RelayCommand]
     private async Task UpdateNeuronPermitAsync()
     {
+        if (NeuronPermit is null) return;
         bool isConfirmed = await Shell.Current.CurrentPage.DisplayAlert("Update Neuron Permit", "Are you sure you want to update this Neuron Permit",
                             "Yes", "No");
 
@@ -37,6 +38,9 @@ public partial class NeuronPermitDetailsViewModel : EditAvatarViewModel
 
         try
         {
+            var workingDirectory = editAvatarSettings.WorkingDirectory;
+            await neuronPermitRepository.UpdateNeuronPermitAsync(workingDirectory, NeuronPermit!);
+
             await Shell.Current.CurrentPage.DisplayAlert("Success!",
                 $"Neuron Permit updated", "OK");
 

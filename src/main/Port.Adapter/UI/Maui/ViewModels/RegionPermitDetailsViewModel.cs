@@ -29,6 +29,7 @@ public partial class RegionPermitDetailsViewModel : EditAvatarViewModel
     [RelayCommand]
     private async Task UpdateRegionPermitAsync()
     {
+        if (RegionPermit is null) return;
         bool isConfirmed = await Shell.Current.CurrentPage.DisplayAlert("Update Region Permit", "Are you sure you want to update this Region Permit",
                             "Yes", "No");
 
@@ -37,6 +38,9 @@ public partial class RegionPermitDetailsViewModel : EditAvatarViewModel
 
         try
         {
+            var workingDirectory = editAvatarSettings.WorkingDirectory;
+            await regionPermitRepository.UpdateRegionPermitAsync(workingDirectory, RegionPermit!);
+
             await Shell.Current.CurrentPage.DisplayAlert("Success!",
                 $"Region Permit updated", "OK");
 

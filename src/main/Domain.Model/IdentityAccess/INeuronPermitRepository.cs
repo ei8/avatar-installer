@@ -10,4 +10,5 @@ namespace ei8.Avatar.Installer.Domain.Model.IdentityAccess;
 public interface INeuronPermitRepository
 {
     Task<IEnumerable<NeuronPermit>> GetNeuronPermitsAsync(string connection);
+    Task UpdateNeuronPermitAsync(string access, NeuronPermit neuronPermit);
 }

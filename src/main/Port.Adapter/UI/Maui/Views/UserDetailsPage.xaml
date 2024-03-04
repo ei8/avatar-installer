@@ -6,7 +6,8 @@
     xmlns:models="clr-namespace:ei8.Avatar.Installer.Domain.Model.DTO;assembly=Domain.Model"
     xmlns:viewmodels="clr-namespace:Maui.ViewModels"
     Title="UserDetailsPage"
-    x:DataType="viewmodels:UserDetailsViewModel">
+    x:DataType="viewmodels:UserDetailsViewModel"
+    Shell.TabBarIsVisible="False">
     <Grid RowDefinitions="*,Auto">
         <ScrollView Grid.Row="0">
             <StackLayout>
@@ -15,7 +16,10 @@
                         Grid.Column="0"
                         Text="User ID: "
                         VerticalOptions="Center" />
-                    <Entry Grid.Column="1" Text="{Binding User.UserId}" />
+                    <Entry
+                        Grid.Column="1"
+                        IsReadOnly="True"
+                        Text="{Binding User.UserId}" />
                 </Grid>
                 <Grid Margin="10" ColumnDefinitions="Auto,*">
                     <Label
@@ -32,16 +36,26 @@
                         Grid.Column="0"
                         Text="Active: "
                         VerticalOptions="Center" />
-                    <Entry Grid.Column="1" Text="{Binding User.Active}" />
+                    <Entry
+                        Grid.Column="1"
+                        Keyboard="Numeric"
+                        Placeholder="NULL"
+                        Text="{Binding User.Active}" />
                 </Grid>
             </StackLayout>
         </ScrollView>
         <Grid
             Grid.Row="1"
             Padding="10"
-            ColumnDefinitions="*">
+            ColumnDefinitions="*,*">
             <Button
+                Grid.Column="0"
                 Margin="0,0,5,0"
+                Command="{Binding CancelEditCommand}"
+                Text="Cancel" />
+            <Button
+                Grid.Column="1"
+                Margin="5,0,0,0"
                 Command="{Binding UpdateUserCommand}"
                 Text="Update" />
         </Grid>
