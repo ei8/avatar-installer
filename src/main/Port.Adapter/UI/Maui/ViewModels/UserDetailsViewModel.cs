@@ -39,7 +39,7 @@ public partial class UserDetailsViewModel : EditAvatarViewModel
         try
         {
             var workingDirectory = editAvatarSettings.WorkingDirectory;
-            await userRepository.UpdateAsync(workingDirectory, User!);
+            await userRepository.UpdateAsync(User!);
 
             await Shell.Current.CurrentPage.DisplayAlert("Success!",
                 $"User updated", "OK");

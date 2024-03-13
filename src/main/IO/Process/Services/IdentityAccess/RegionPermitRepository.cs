@@ -18,7 +18,7 @@ public class RegionPermitRepository : IRegionPermitRepository
         this.avatarContextService = avatarContextService;
     }
 
-    public async Task<IEnumerable<RegionPermit>> GetAllAsync(string access)
+    public async Task<IEnumerable<RegionPermit>> GetAllAsync()
     {
         var id = avatarContextService.Avatar!.Id;
         var connectionString = $@"Data Source=file:{Path.Combine(id, "identity-access.db")}";
@@ -48,7 +48,7 @@ public class RegionPermitRepository : IRegionPermitRepository
         return regionPermits;
     }
 
-    public async Task UpdateAsync(string access, RegionPermit regionPermit)
+    public async Task UpdateAsync(RegionPermit regionPermit)
     {
         var id = avatarContextService.Avatar!.Id;
         var connectionString = $@"Data Source=file:{Path.Combine(id, "identity-access.db")}";

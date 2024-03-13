@@ -18,7 +18,7 @@ public class NeuronPermitRepository : INeuronPermitRepository
         this.avatarContextService = avatarContextService;
     }
 
-    public async Task<IEnumerable<NeuronPermit>> GetAllAsync(string access)
+    public async Task<IEnumerable<NeuronPermit>> GetAllAsync()
     {
         var id = avatarContextService.Avatar!.Id;
         var connectionString = $@"Data Source=file:{Path.Combine(id, "identity-access.db")}";
@@ -47,7 +47,7 @@ public class NeuronPermitRepository : INeuronPermitRepository
         return neuronPermits;
     }
 
-    public async Task UpdateAsync(string access, NeuronPermit neuronPermit)
+    public async Task UpdateAsync(NeuronPermit neuronPermit)
     {
         var id = avatarContextService.Avatar!.Id;
         var connectionString = $@"Data Source=file:{Path.Combine(id, "identity-access.db")}";

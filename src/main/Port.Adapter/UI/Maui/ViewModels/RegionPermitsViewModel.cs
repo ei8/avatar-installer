@@ -38,7 +38,7 @@ public partial class RegionPermitsViewModel : EditAvatarViewModel
 
             RegionPermits.Clear();
             var workingDirectory = editAvatarSettings.WorkingDirectory;
-            var regionPermits = await RegionPermitRepository.GetAllAsync(workingDirectory);
+            var regionPermits = await RegionPermitRepository.GetAllAsync();
 
             foreach (var regionPermit in regionPermits)
             {

@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
-using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
 using Maui.Services;
 using Maui.Views;
 using System;
@@ -38,7 +37,7 @@ public partial class UsersViewModel : EditAvatarViewModel
 
             Users.Clear();
             var workingDirectory = editAvatarSettings.WorkingDirectory;
-            var users = await UserRepository.GetAllAsync(workingDirectory);
+            var users = await UserRepository.GetAllAsync();
 
             foreach (var user in users)
             {

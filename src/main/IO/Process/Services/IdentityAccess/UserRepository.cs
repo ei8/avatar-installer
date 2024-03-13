@@ -18,7 +18,7 @@ public class UserRepository : IUserRepository
         this.avatarContextService = avatarContextService;
     }
 
-    public async Task<IEnumerable<User>> GetAllAsync(string access)
+    public async Task<IEnumerable<User>> GetAllAsync()
     {
         var id = avatarContextService.Avatar!.Id;
         var connectionString = $@"Data Source=file:{Path.Combine(id, "identity-access.db")}";
@@ -46,7 +46,7 @@ public class UserRepository : IUserRepository
         return users;
     }
 
-    public async Task UpdateAsync(string access, User user)
+    public async Task UpdateAsync(User user)
     {
         var id = avatarContextService.Avatar!.Id;
         var connectionString = $@"Data Source=file:{Path.Combine(id, "identity-access.db")}";

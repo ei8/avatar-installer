@@ -39,7 +39,7 @@ public partial class NeuronPermitDetailsViewModel : EditAvatarViewModel
         try
         {
             var workingDirectory = editAvatarSettings.WorkingDirectory;
-            await neuronPermitRepository.UpdateAsync(workingDirectory, NeuronPermit!);
+            await neuronPermitRepository.UpdateAsync(NeuronPermit!);
 
             await Shell.Current.CurrentPage.DisplayAlert("Success!",
                 $"Neuron Permit updated", "OK");
