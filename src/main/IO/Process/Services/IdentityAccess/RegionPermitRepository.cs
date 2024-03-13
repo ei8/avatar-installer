@@ -11,7 +11,7 @@ namespace ei8.Avatar.Installer.IO.Process.Services.IdentityAccess;
 
 public class RegionPermitRepository : IRegionPermitRepository
 {
-    public async Task<IEnumerable<RegionPermit>> GetRegionPermitsAsync(string access)
+    public async Task<IEnumerable<RegionPermit>> GetAllAsync(string access)
     {
         var connectionString = $@"Data Source=file:{Path.Combine(access, "identity-access.db")}";
         var regionPermits = new List<RegionPermit>();
@@ -40,7 +40,7 @@ public class RegionPermitRepository : IRegionPermitRepository
         return regionPermits;
     }
 
-    public async Task UpdateRegionPermitAsync(string access, RegionPermit regionPermit)
+    public async Task UpdateAsync(string access, RegionPermit regionPermit)
     {
         var connectionString = $@"Data Source=file:{Path.Combine(access, "identity-access.db")}";
         var tableName = "RegionPermit";

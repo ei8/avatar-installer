@@ -38,7 +38,7 @@ public partial class NeuronPermitsViewModel : EditAvatarViewModel
 
             NeuronPermits.Clear();
             var workingDirectory = editAvatarSettings.WorkingDirectory;
-            var neuronPermits = await neuronPermitRepository.GetNeuronPermitsAsync(workingDirectory);
+            var neuronPermits = await neuronPermitRepository.GetAllAsync(workingDirectory);
 
             foreach (var neuronPermit in neuronPermits)
             {

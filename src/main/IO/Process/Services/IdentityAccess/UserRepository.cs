@@ -11,7 +11,7 @@ namespace ei8.Avatar.Installer.IO.Process.Services.IdentityAccess;
 
 public class UserRepository : IUserRepository
 {
-    public async Task<IEnumerable<User>> GetUsersAsync(string access)
+    public async Task<IEnumerable<User>> GetAllAsync(string access)
     {
         var connectionString = $@"Data Source=file:{Path.Combine(access, "identity-access.db")}";
         var users = new List<User>();
@@ -38,7 +38,7 @@ public class UserRepository : IUserRepository
         return users;
     }
 
-    public async Task UpdateUserAsync(string access, User user)
+    public async Task UpdateAsync(string access, User user)
     {
         var connectionString = $@"Data Source=file:{Path.Combine(access, "identity-access.db")}";
         var tableName = "User";

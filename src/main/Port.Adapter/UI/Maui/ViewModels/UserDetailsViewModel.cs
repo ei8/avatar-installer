@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
-using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
 using ei8.Avatar.Installer.IO.Process.Services.IdentityAccess;
 using Maui.Services;
 using System;
@@ -40,7 +39,7 @@ public partial class UserDetailsViewModel : EditAvatarViewModel
         try
         {
             var workingDirectory = editAvatarSettings.WorkingDirectory;
-            await userRepository.UpdateUserAsync(workingDirectory, User!);
+            await userRepository.UpdateAsync(workingDirectory, User!);
 
             await Shell.Current.CurrentPage.DisplayAlert("Success!",
                 $"User updated", "OK");

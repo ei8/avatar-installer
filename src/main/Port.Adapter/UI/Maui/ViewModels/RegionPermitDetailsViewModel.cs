@@ -39,7 +39,7 @@ public partial class RegionPermitDetailsViewModel : EditAvatarViewModel
         try
         {
             var workingDirectory = editAvatarSettings.WorkingDirectory;
-            await regionPermitRepository.UpdateRegionPermitAsync(workingDirectory, RegionPermit!);
+            await regionPermitRepository.UpdateAsync(workingDirectory, RegionPermit!);
 
             await Shell.Current.CurrentPage.DisplayAlert("Success!",
                 $"Region Permit updated", "OK");

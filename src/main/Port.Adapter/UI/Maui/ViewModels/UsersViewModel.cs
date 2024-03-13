@@ -38,7 +38,7 @@ public partial class UsersViewModel : EditAvatarViewModel
 
             Users.Clear();
             var workingDirectory = editAvatarSettings.WorkingDirectory;
-            var users = await UserRepository.GetUsersAsync(workingDirectory);
+            var users = await UserRepository.GetAllAsync(workingDirectory);
 
             foreach (var user in users)
             {

@@ -16,7 +16,7 @@ public class NeuronPermitRepository : INeuronPermitRepository
     //{
 
     //}
-    public async Task<IEnumerable<NeuronPermit>> GetNeuronPermitsAsync(string access)
+    public async Task<IEnumerable<NeuronPermit>> GetAllAsync(string access)
     {
         var connectionString = $@"Data Source=file:{Path.Combine(access, "identity-access.db")}";
         var neuronPermits = new List<NeuronPermit>();
@@ -44,7 +44,7 @@ public class NeuronPermitRepository : INeuronPermitRepository
         return neuronPermits;
     }
 
-    public async Task UpdateNeuronPermitAsync(string access, NeuronPermit neuronPermit)
+    public async Task UpdateAsync(string access, NeuronPermit neuronPermit)
     {
         var connectionString = $@"Data Source=file:{Path.Combine(access, "identity-access.db")}";
         var tableName = "NeuronPermit";

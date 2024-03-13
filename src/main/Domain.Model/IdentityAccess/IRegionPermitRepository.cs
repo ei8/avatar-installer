@@ -9,6 +9,6 @@ namespace ei8.Avatar.Installer.Domain.Model.IdentityAccess;
 
 public interface IRegionPermitRepository
 {
-    Task<IEnumerable<RegionPermit>> GetRegionPermitsAsync(string access);
-    Task UpdateRegionPermitAsync(string access, RegionPermit regionPermit);
+    Task<IEnumerable<RegionPermit>> GetAllAsync(string access);
+    Task UpdateAsync(string access, RegionPermit regionPermit);
 }
