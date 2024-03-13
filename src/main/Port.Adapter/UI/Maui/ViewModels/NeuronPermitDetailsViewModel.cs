@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using ei8.Avatar.Installer.Domain.Model.DTO;
+using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
 using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
 using Maui.Services;
 using System;

@@ -1,4 +1,4 @@
-﻿using ei8.Avatar.Installer.Domain.Model.DTO;
+﻿using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
 using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
 using Microsoft.Data.Sqlite;
 using System;
@@ -25,10 +25,12 @@ public class UserRepository : IUserRepository
 
         while (await reader.ReadAsync())
         {
-            var user = new User(
-                reader.IsDBNull(0) ? string.Empty : reader.GetString(0),
-                reader.IsDBNull(1) ? string.Empty : reader.GetString(1),
-                reader.IsDBNull(2) ? null : reader.GetInt32(2));
+            var user = new User
+            {
+                UserId = reader.IsDBNull(0) ? string.Empty : reader.GetString(0),
+                NeuronId = reader.IsDBNull(1) ? string.Empty : reader.GetString(1),
+                Active = reader.IsDBNull(2) ? null : reader.GetInt32(2)
+            };
 
             users.Add(user);
         }

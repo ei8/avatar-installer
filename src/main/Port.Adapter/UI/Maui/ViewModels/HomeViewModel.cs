@@ -2,6 +2,8 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ei8.Avatar.Installer.Application.Avatar;
+using ei8.Avatar.Installer.Domain.Model;
+using ei8.Avatar.Installer.Domain.Model.Avatars;
 using Maui.Services;
 using Maui.Views;
 using System;
@@ -16,9 +18,12 @@ namespace Maui.ViewModels;
 public partial class HomeViewModel : BaseViewModel
 {
     private readonly EditAvatarSettings editAvatarSettings;
+    private readonly IAvatarContextService avatarContextService;
+    private readonly IAvatarRepository avatarRepository;
 
     public HomeViewModel(EditAvatarSettings editAvatarSettings, INavigationService navigationService)
         : base(navigationService)
+        // inject iavatarcontextservice
     {
         Title = "Avatar Installer";
 
@@ -63,6 +68,7 @@ public partial class HomeViewModel : BaseViewModel
             }
 
             editAvatarSettings.WorkingDirectory = workingDirectory.Folder.Path;
+            //this.avatarContextService.Avatar = await this.avatarRepository.GetByAsync(workingDirectory.Folder.Path);
             await navigationService.NavigateToAsync($"//IdentityAccessPage");
         }
         catch (Exception ex)

@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Maui;
 using ei8.Avatar.Installer.Application.Avatar;
 using ei8.Avatar.Installer.Application.Settings;
+using ei8.Avatar.Installer.Domain.Model;
 using ei8.Avatar.Installer.Domain.Model.Avatars;
 using ei8.Avatar.Installer.Domain.Model.Configuration;
 using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
@@ -86,6 +87,9 @@ public static class MauiProgram
                 .AddScoped<IAvatarServerMapperService, AvatarServerMapperService>()
                 .AddScoped<IAvatarApplicationService, AvatarApplicationService>();
         builder.Services.AddAutoMapper(typeof(AvatarAutoMapperProfile));
+
+
+        //builder.Services.AddSingleton<IAvatarContextService, class>();
 
         builder.Services.AddSingleton<INeuronPermitRepository, NeuronPermitRepository>();
         builder.Services.AddSingleton<IRegionPermitRepository, RegionPermitRepository>();

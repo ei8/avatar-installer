@@ -1,4 +1,4 @@
-﻿using ei8.Avatar.Installer.Domain.Model.DTO;
+﻿using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +9,9 @@ namespace ei8.Avatar.Installer.Domain.Model.IdentityAccess;
 
 public interface INeuronPermitRepository
 {
-    Task<IEnumerable<NeuronPermit>> GetNeuronPermitsAsync(string connection);
-    Task UpdateNeuronPermitAsync(string access, NeuronPermit neuronPermit);
+    Task<IEnumerable<NeuronPermit>> GetNeuronPermitsAsync(string id);
+    //Task<IEnumerable<NeuronPermit>> GetAllAsync();
+
+    Task UpdateNeuronPermitAsync(string id, NeuronPermit neuronPermit);
+    //Task UpdateAsync(NeuronPermit neuronPermit);
 }

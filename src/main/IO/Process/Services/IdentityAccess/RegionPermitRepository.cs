@@ -1,4 +1,4 @@
-﻿using ei8.Avatar.Installer.Domain.Model.DTO;
+﻿using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
 using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
 using Microsoft.Data.Sqlite;
 using System;
@@ -25,12 +25,14 @@ public class RegionPermitRepository : IRegionPermitRepository
 
         while (await reader.ReadAsync())
         {
-            var regionPermit = new RegionPermit(
-                 reader.IsDBNull(0) ? 0 : reader.GetInt32(0),
-                 reader.IsDBNull(1) ? null : reader.GetString(1),
-                 reader.IsDBNull(2) ? null : reader.GetString(2),
-                 reader.IsDBNull(3) ? null : reader.GetInt32(3),
-                 reader.IsDBNull(4) ? null : reader.GetInt32(4));
+            var regionPermit = new RegionPermit
+            {
+                SequenceId = reader.IsDBNull(0) ? 0 : reader.GetInt32(0),
+                UserNeuronId = reader.IsDBNull(1) ? null : reader.GetString(1),
+                RegionNeuronId = reader.IsDBNull(2) ? null : reader.GetString(2),
+                WriteLevel = reader.IsDBNull(3) ? null : reader.GetInt32(3),
+                ReadLevel = reader.IsDBNull(4) ? null : reader.GetInt32(4)
+            };
 
             regionPermits.Add(regionPermit);
         }

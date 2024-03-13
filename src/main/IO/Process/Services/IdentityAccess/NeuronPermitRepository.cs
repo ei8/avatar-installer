@@ -1,4 +1,5 @@
-﻿using ei8.Avatar.Installer.Domain.Model.DTO;
+﻿using ei8.Avatar.Installer.Domain.Model;
+using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
 using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
 using Microsoft.Data.Sqlite;
 using System;
@@ -11,6 +12,10 @@ namespace ei8.Avatar.Installer.IO.Process.Services.IdentityAccess;
 
 public class NeuronPermitRepository : INeuronPermitRepository
 {
+    //public NeuronPermitRepository(IAvatarContextService avatarContextService)
+    //{
+
+    //}
     public async Task<IEnumerable<NeuronPermit>> GetNeuronPermitsAsync(string access)
     {
         var connectionString = $@"Data Source=file:{Path.Combine(access, "identity-access.db")}";
@@ -26,10 +31,12 @@ public class NeuronPermitRepository : INeuronPermitRepository
 
         while (await reader.ReadAsync())
         {
-            var neuronPermit = new NeuronPermit(
-                 reader.IsDBNull(0) ? string.Empty : reader.GetString(0),
-                 reader.IsDBNull(1) ? string.Empty : reader.GetString(1),
-                 reader.IsDBNull(2) ? string.Empty : reader.GetString(2));
+            var neuronPermit = new NeuronPermit
+            {
+                UserNeuronId = reader.IsDBNull(0) ? string.Empty : reader.GetString(0),
+                NeuronId = reader.IsDBNull(1) ? string.Empty : reader.GetString(1),
+                ExpirationDate = reader.IsDBNull(2) ? string.Empty : reader.GetString(2)
+            };
 
             neuronPermits.Add(neuronPermit);
         }
