@@ -17,18 +17,16 @@ namespace Maui.ViewModels;
 
 public partial class HomeViewModel : BaseViewModel
 {
-    private readonly EditAvatarSettings editAvatarSettings;
     private readonly IAvatarContextService avatarContextService;
     private readonly IAvatarRepository avatarRepository;
 
-    public HomeViewModel(IAvatarRepository avatarRepository, IAvatarContextService avatarContextService, EditAvatarSettings editAvatarSettings, INavigationService navigationService)
+    public HomeViewModel(IAvatarRepository avatarRepository, IAvatarContextService avatarContextService, INavigationService navigationService)
         : base(navigationService)
     {
         Title = "Avatar Installer";
 
         this.avatarContextService = avatarContextService;
         this.avatarRepository = avatarRepository;
-        this.editAvatarSettings = editAvatarSettings;
     }
 
     [RelayCommand]
@@ -68,7 +66,6 @@ public partial class HomeViewModel : BaseViewModel
                 }
             }
 
-            editAvatarSettings.WorkingDirectory = workingDirectory.Folder.Path;
             avatarContextService.Avatar = await avatarRepository.GetByAsync(workingDirectory.Folder.Path);
             await navigationService.NavigateToAsync($"//IdentityAccessPage");
         }

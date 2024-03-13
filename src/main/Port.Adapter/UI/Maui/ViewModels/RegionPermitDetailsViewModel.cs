@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
-using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
 using Maui.Services;
 using System;
 using System.Collections.Generic;
@@ -17,8 +16,8 @@ public partial class RegionPermitDetailsViewModel : EditAvatarViewModel
 {
     private readonly IRegionPermitRepository regionPermitRepository;
 
-    public RegionPermitDetailsViewModel(EditAvatarSettings editAvatarSettings, INavigationService navigationService, IRegionPermitRepository regionPermitRepository)
-        : base(editAvatarSettings, navigationService)
+    public RegionPermitDetailsViewModel(INavigationService navigationService, IRegionPermitRepository regionPermitRepository)
+        : base(navigationService)
     {
         this.regionPermitRepository = regionPermitRepository;
     }
@@ -38,7 +37,6 @@ public partial class RegionPermitDetailsViewModel : EditAvatarViewModel
 
         try
         {
-            var workingDirectory = editAvatarSettings.WorkingDirectory;
             await regionPermitRepository.UpdateAsync(RegionPermit!);
 
             await Shell.Current.CurrentPage.DisplayAlert("Success!",

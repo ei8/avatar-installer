@@ -11,11 +11,8 @@ namespace Maui.ViewModels;
 
 public partial class EditAvatarViewModel : BaseViewModel
 {
-    protected readonly EditAvatarSettings editAvatarSettings;
-
-    public EditAvatarViewModel(EditAvatarSettings editAvatarSettings, INavigationService navigationService) : base(navigationService)
+    public EditAvatarViewModel(INavigationService navigationService) : base(navigationService)
     {
-        this.editAvatarSettings = editAvatarSettings;
     }
 
     [RelayCommand]

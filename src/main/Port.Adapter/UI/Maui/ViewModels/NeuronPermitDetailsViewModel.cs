@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
-using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
 using Maui.Services;
 using System;
 using System.Collections.Generic;
@@ -17,8 +16,8 @@ public partial class NeuronPermitDetailsViewModel : EditAvatarViewModel
 {
     private readonly INeuronPermitRepository neuronPermitRepository;
 
-    public NeuronPermitDetailsViewModel(EditAvatarSettings editAvatarSettings, INavigationService navigationService, INeuronPermitRepository neuronPermitRepository)
-        : base(editAvatarSettings, navigationService)
+    public NeuronPermitDetailsViewModel(INavigationService navigationService, INeuronPermitRepository neuronPermitRepository)
+        : base(navigationService)
     {
         this.neuronPermitRepository = neuronPermitRepository;
     }
@@ -38,7 +37,6 @@ public partial class NeuronPermitDetailsViewModel : EditAvatarViewModel
 
         try
         {
-            var workingDirectory = editAvatarSettings.WorkingDirectory;
             await neuronPermitRepository.UpdateAsync(NeuronPermit!);
 
             await Shell.Current.CurrentPage.DisplayAlert("Success!",

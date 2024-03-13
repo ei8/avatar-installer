@@ -17,8 +17,8 @@ public partial class UserDetailsViewModel : EditAvatarViewModel
 {
     private readonly IUserRepository userRepository;
 
-    public UserDetailsViewModel(EditAvatarSettings editAvatarSettings, INavigationService navigationService, IUserRepository userRepository)
-        : base(editAvatarSettings, navigationService)
+    public UserDetailsViewModel(INavigationService navigationService, IUserRepository userRepository)
+        : base(navigationService)
     {
         this.userRepository = userRepository;
     }
@@ -38,7 +38,6 @@ public partial class UserDetailsViewModel : EditAvatarViewModel
 
         try
         {
-            var workingDirectory = editAvatarSettings.WorkingDirectory;
             await userRepository.UpdateAsync(User!);
 
             await Shell.Current.CurrentPage.DisplayAlert("Success!",

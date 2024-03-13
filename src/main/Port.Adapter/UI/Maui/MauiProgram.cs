@@ -76,8 +76,6 @@ public static class MauiProgram
 
         builder.Services.AddSingleton<INavigationService, NavigationService>();
 
-        builder.Services.AddSingleton<EditAvatarSettings>();
-
         builder.Services.AddScoped<ISettingsService, SettingsService>()
                 .AddScoped<ITemplateService, GithubTemplateService>()
                 .AddScoped<IConfigurationRepository, JsonConfigurationRepository>()

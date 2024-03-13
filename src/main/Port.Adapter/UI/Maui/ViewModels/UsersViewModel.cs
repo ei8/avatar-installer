@@ -18,8 +18,8 @@ public partial class UsersViewModel : EditAvatarViewModel
     public ObservableCollection<User> Users { get; set; } = [];
     private readonly IUserRepository UserRepository;
 
-    public UsersViewModel(EditAvatarSettings editAvatarSettings, INavigationService navigationService, IUserRepository UserRepository)
-        : base(editAvatarSettings, navigationService)
+    public UsersViewModel(INavigationService navigationService, IUserRepository UserRepository)
+        : base(navigationService)
     {
         Title = "Neuron Permit";
         this.UserRepository = UserRepository;
@@ -36,7 +36,6 @@ public partial class UsersViewModel : EditAvatarViewModel
             IsBusy = true;
 
             Users.Clear();
-            var workingDirectory = editAvatarSettings.WorkingDirectory;
             var users = await UserRepository.GetAllAsync();
 
             foreach (var user in users)

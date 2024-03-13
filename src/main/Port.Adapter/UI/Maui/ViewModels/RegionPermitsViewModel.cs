@@ -19,8 +19,8 @@ public partial class RegionPermitsViewModel : EditAvatarViewModel
     public ObservableCollection<RegionPermit> RegionPermits { get; set; } = [];
     private readonly IRegionPermitRepository RegionPermitRepository;
 
-    public RegionPermitsViewModel(EditAvatarSettings editAvatarSettings, INavigationService navigationService, IRegionPermitRepository RegionPermitRepository)
-        : base(editAvatarSettings, navigationService)
+    public RegionPermitsViewModel(INavigationService navigationService, IRegionPermitRepository RegionPermitRepository)
+        : base(navigationService)
     {
         Title = "Neuron Permit";
         this.RegionPermitRepository = RegionPermitRepository;
@@ -37,7 +37,6 @@ public partial class RegionPermitsViewModel : EditAvatarViewModel
             IsBusy = true;
 
             RegionPermits.Clear();
-            var workingDirectory = editAvatarSettings.WorkingDirectory;
             var regionPermits = await RegionPermitRepository.GetAllAsync();
 
             foreach (var regionPermit in regionPermits)
