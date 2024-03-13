@@ -1,4 +1,4 @@
-﻿using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
+﻿using ei8.Avatar.Installer.Domain.Model;
 using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
 using Microsoft.Data.Sqlite;
 using System;
@@ -11,9 +11,17 @@ namespace ei8.Avatar.Installer.IO.Process.Services.IdentityAccess;
 
 public class UserRepository : IUserRepository
 {
+    private readonly IAvatarContextService avatarContextService;
+
+    public UserRepository(IAvatarContextService avatarContextService)
+    {
+        this.avatarContextService = avatarContextService;
+    }
+
     public async Task<IEnumerable<User>> GetAllAsync(string access)
     {
-        var connectionString = $@"Data Source=file:{Path.Combine(access, "identity-access.db")}";
+        var id = avatarContextService.Avatar!.Id;
+        var connectionString = $@"Data Source=file:{Path.Combine(id, "identity-access.db")}";
         var users = new List<User>();
         var tableName = "User";
 
@@ -40,7 +48,8 @@ public class UserRepository : IUserRepository
 
     public async Task UpdateAsync(string access, User user)
     {
-        var connectionString = $@"Data Source=file:{Path.Combine(access, "identity-access.db")}";
+        var id = avatarContextService.Avatar!.Id;
+        var connectionString = $@"Data Source=file:{Path.Combine(id, "identity-access.db")}";
         var tableName = "User";
 
         using var connection = new SqliteConnection(connectionString);

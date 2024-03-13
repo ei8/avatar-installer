@@ -1,6 +1,5 @@
 ﻿using ei8.Avatar.Installer.Domain.Model;
 using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
-using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
 using Microsoft.Data.Sqlite;
 using System;
 using System.Collections.Generic;
@@ -12,13 +11,17 @@ namespace ei8.Avatar.Installer.IO.Process.Services.IdentityAccess;
 
 public class NeuronPermitRepository : INeuronPermitRepository
 {
-    //public NeuronPermitRepository(IAvatarContextService avatarContextService)
-    //{
+    private readonly IAvatarContextService avatarContextService;
 
-    //}
+    public NeuronPermitRepository(IAvatarContextService avatarContextService)
+    {
+        this.avatarContextService = avatarContextService;
+    }
+
     public async Task<IEnumerable<NeuronPermit>> GetAllAsync(string access)
     {
-        var connectionString = $@"Data Source=file:{Path.Combine(access, "identity-access.db")}";
+        var id = avatarContextService.Avatar!.Id;
+        var connectionString = $@"Data Source=file:{Path.Combine(id, "identity-access.db")}";
         var neuronPermits = new List<NeuronPermit>();
         var tableName = "NeuronPermit";
 
@@ -46,7 +49,8 @@ public class NeuronPermitRepository : INeuronPermitRepository
 
     public async Task UpdateAsync(string access, NeuronPermit neuronPermit)
     {
-        var connectionString = $@"Data Source=file:{Path.Combine(access, "identity-access.db")}";
+        var id = avatarContextService.Avatar!.Id;
+        var connectionString = $@"Data Source=file:{Path.Combine(id, "identity-access.db")}";
         var tableName = "NeuronPermit";
 
         using var connection = new SqliteConnection(connectionString);

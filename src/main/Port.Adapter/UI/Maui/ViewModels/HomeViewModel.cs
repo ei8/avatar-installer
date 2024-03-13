@@ -21,12 +21,13 @@ public partial class HomeViewModel : BaseViewModel
     private readonly IAvatarContextService avatarContextService;
     private readonly IAvatarRepository avatarRepository;
 
-    public HomeViewModel(EditAvatarSettings editAvatarSettings, INavigationService navigationService)
+    public HomeViewModel(IAvatarRepository avatarRepository, IAvatarContextService avatarContextService, EditAvatarSettings editAvatarSettings, INavigationService navigationService)
         : base(navigationService)
-        // inject iavatarcontextservice
     {
         Title = "Avatar Installer";
 
+        this.avatarContextService = avatarContextService;
+        this.avatarRepository = avatarRepository;
         this.editAvatarSettings = editAvatarSettings;
     }
 
@@ -68,7 +69,7 @@ public partial class HomeViewModel : BaseViewModel
             }
 
             editAvatarSettings.WorkingDirectory = workingDirectory.Folder.Path;
-            //this.avatarContextService.Avatar = await this.avatarRepository.GetByAsync(workingDirectory.Folder.Path);
+            avatarContextService.Avatar = await avatarRepository.GetByAsync(workingDirectory.Folder.Path);
             await navigationService.NavigateToAsync($"//IdentityAccessPage");
         }
         catch (Exception ex)

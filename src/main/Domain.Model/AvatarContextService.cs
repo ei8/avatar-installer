@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ei8.Avatar.Installer.Domain.Model;
 
-public interface IAvatarContextService
+public class AvatarContextService : IAvatarContextService
 {
-    AvatarItem? Avatar { get; set; }
+    public AvatarItem? Avatar { get; set; }
 }

@@ -88,8 +88,7 @@ public static class MauiProgram
                 .AddScoped<IAvatarApplicationService, AvatarApplicationService>();
         builder.Services.AddAutoMapper(typeof(AvatarAutoMapperProfile));
 
-
-        //builder.Services.AddSingleton<IAvatarContextService, class>();
+        builder.Services.AddSingleton<IAvatarContextService, AvatarContextService>();
 
         builder.Services.AddSingleton<INeuronPermitRepository, NeuronPermitRepository>();
         builder.Services.AddSingleton<IRegionPermitRepository, RegionPermitRepository>();

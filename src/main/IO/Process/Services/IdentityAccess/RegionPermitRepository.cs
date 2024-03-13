@@ -1,4 +1,4 @@
-﻿using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
+﻿using ei8.Avatar.Installer.Domain.Model;
 using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
 using Microsoft.Data.Sqlite;
 using System;
@@ -11,9 +11,17 @@ namespace ei8.Avatar.Installer.IO.Process.Services.IdentityAccess;
 
 public class RegionPermitRepository : IRegionPermitRepository
 {
+    private readonly IAvatarContextService avatarContextService;
+
+    public RegionPermitRepository(IAvatarContextService avatarContextService)
+    {
+        this.avatarContextService = avatarContextService;
+    }
+
     public async Task<IEnumerable<RegionPermit>> GetAllAsync(string access)
     {
-        var connectionString = $@"Data Source=file:{Path.Combine(access, "identity-access.db")}";
+        var id = avatarContextService.Avatar!.Id;
+        var connectionString = $@"Data Source=file:{Path.Combine(id, "identity-access.db")}";
         var regionPermits = new List<RegionPermit>();
         var tableName = "RegionPermit";
 
@@ -42,7 +50,8 @@ public class RegionPermitRepository : IRegionPermitRepository
 
     public async Task UpdateAsync(string access, RegionPermit regionPermit)
     {
-        var connectionString = $@"Data Source=file:{Path.Combine(access, "identity-access.db")}";
+        var id = avatarContextService.Avatar!.Id;
+        var connectionString = $@"Data Source=file:{Path.Combine(id, "identity-access.db")}";
         var tableName = "RegionPermit";
 
         using var connection = new SqliteConnection(connectionString);
