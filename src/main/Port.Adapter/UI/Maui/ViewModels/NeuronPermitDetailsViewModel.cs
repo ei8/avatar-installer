@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using ei8.Avatar.Installer.Application.IdentityAccess;
 using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
 using Maui.Services;
 using System;
@@ -14,12 +15,12 @@ namespace Maui.ViewModels;
 [QueryProperty("NeuronPermit", "NeuronPermit")]
 public partial class NeuronPermitDetailsViewModel : EditAvatarViewModel
 {
-    private readonly INeuronPermitRepository neuronPermitRepository;
+    private readonly INeuronPermitApplicationService neuronPermitApplicationService;
 
-    public NeuronPermitDetailsViewModel(INavigationService navigationService, INeuronPermitRepository neuronPermitRepository)
+    public NeuronPermitDetailsViewModel(INavigationService navigationService, INeuronPermitApplicationService neuronPermitApplicationService)
         : base(navigationService)
     {
-        this.neuronPermitRepository = neuronPermitRepository;
+        this.neuronPermitApplicationService = neuronPermitApplicationService;
     }
 
     [ObservableProperty]
@@ -28,7 +29,7 @@ public partial class NeuronPermitDetailsViewModel : EditAvatarViewModel
     [RelayCommand]
     private async Task UpdateNeuronPermitAsync()
     {
-        if (NeuronPermit is null) return;
+        if (this.NeuronPermit is null) return;
         bool isConfirmed = await Shell.Current.CurrentPage.DisplayAlert("Update Neuron Permit", "Are you sure you want to update this Neuron Permit",
                             "Yes", "No");
 
@@ -37,12 +38,12 @@ public partial class NeuronPermitDetailsViewModel : EditAvatarViewModel
 
         try
         {
-            await neuronPermitRepository.UpdateAsync(NeuronPermit!);
+            await this.neuronPermitApplicationService.UpdateAsync(NeuronPermit!);
 
             await Shell.Current.CurrentPage.DisplayAlert("Success!",
                 $"Neuron Permit updated", "OK");
 
-            await navigationService.NavigateToAsync("..");
+            await this.navigationService.NavigateToAsync("..");
         }
         catch (Exception ex)
         {

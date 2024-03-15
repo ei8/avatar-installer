@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using ei8.Avatar.Installer.Application.IdentityAccess;
 using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
 using Maui.Services;
 using Maui.Views;
@@ -16,13 +17,13 @@ namespace Maui.ViewModels;
 public partial class UsersViewModel : EditAvatarViewModel
 {
     public ObservableCollection<User> Users { get; set; } = [];
-    private readonly IUserRepository UserRepository;
+    private readonly IUserApplicationService userApplicationService;
 
-    public UsersViewModel(INavigationService navigationService, IUserRepository UserRepository)
+    public UsersViewModel(INavigationService navigationService, IUserApplicationService userApplicationService)
         : base(navigationService)
     {
         Title = "Neuron Permit";
-        this.UserRepository = UserRepository;
+        this.userApplicationService = userApplicationService;
     }
 
     [RelayCommand]
@@ -35,12 +36,12 @@ public partial class UsersViewModel : EditAvatarViewModel
         {
             IsBusy = true;
 
-            Users.Clear();
-            var users = await UserRepository.GetAllAsync();
+            this.Users.Clear();
+            var users = await this.userApplicationService.GetAllAsync();
 
             foreach (var user in users)
             {
-                Users.Add(user);
+                this.Users.Add(user);
             }
         }
         catch (Exception ex)
@@ -60,7 +61,7 @@ public partial class UsersViewModel : EditAvatarViewModel
         if (user is null)
             return;
 
-        await navigationService.NavigateToAsync($"{nameof(UserDetailsPage)}",
+        await this.navigationService.NavigateToAsync($"{nameof(UserDetailsPage)}",
             new Dictionary<string, object>
             {
                 { "User", user }

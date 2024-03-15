@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
+using ei8.Avatar.Installer.Application.IdentityAccess;
 using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
 using Maui.Services;
 using Maui.Views;
@@ -17,13 +17,13 @@ namespace Maui.ViewModels;
 public partial class RegionPermitsViewModel : EditAvatarViewModel
 {
     public ObservableCollection<RegionPermit> RegionPermits { get; set; } = [];
-    private readonly IRegionPermitRepository RegionPermitRepository;
+    private readonly IRegionPermitApplicationService regionPermitApplicationService;
 
-    public RegionPermitsViewModel(INavigationService navigationService, IRegionPermitRepository RegionPermitRepository)
+    public RegionPermitsViewModel(INavigationService navigationService, IRegionPermitApplicationService regionPermitApplicationService)
         : base(navigationService)
     {
         Title = "Neuron Permit";
-        this.RegionPermitRepository = RegionPermitRepository;
+        this.regionPermitApplicationService = regionPermitApplicationService;
     }
 
     [RelayCommand]
@@ -36,12 +36,12 @@ public partial class RegionPermitsViewModel : EditAvatarViewModel
         {
             IsBusy = true;
 
-            RegionPermits.Clear();
-            var regionPermits = await RegionPermitRepository.GetAllAsync();
+            this.RegionPermits.Clear();
+            var regionPermits = await regionPermitApplicationService.GetAllAsync();
 
             foreach (var regionPermit in regionPermits)
             {
-                RegionPermits.Add(regionPermit);
+                this.RegionPermits.Add(regionPermit);
             }
         }
         catch (Exception ex)
@@ -61,7 +61,7 @@ public partial class RegionPermitsViewModel : EditAvatarViewModel
         if (regionPermit is null)
             return;
 
-        await navigationService.NavigateToAsync($"{nameof(RegionPermitDetailsPage)}",
+        await this.navigationService.NavigateToAsync($"{nameof(RegionPermitDetailsPage)}",
             new Dictionary<string, object>
             {
                 { "RegionPermit", regionPermit }

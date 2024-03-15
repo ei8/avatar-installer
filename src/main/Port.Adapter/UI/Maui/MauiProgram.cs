@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Maui;
 using ei8.Avatar.Installer.Application.Avatar;
+using ei8.Avatar.Installer.Application.IdentityAccess;
 using ei8.Avatar.Installer.Application.Settings;
 using ei8.Avatar.Installer.Domain.Model;
 using ei8.Avatar.Installer.Domain.Model.Avatars;
@@ -91,6 +92,10 @@ public static class MauiProgram
         builder.Services.AddSingleton<INeuronPermitRepository, NeuronPermitRepository>();
         builder.Services.AddSingleton<IRegionPermitRepository, RegionPermitRepository>();
         builder.Services.AddSingleton<IUserRepository, UserRepository>();
+
+        builder.Services.AddSingleton<INeuronPermitApplicationService, NeuronPermitApplicationService>();
+        builder.Services.AddSingleton<IRegionPermitApplicationService, RegionPermitApplicationService>();
+        builder.Services.AddSingleton<IUserApplicationService, UserApplicationService>();
 
         return builder.Build();
     }

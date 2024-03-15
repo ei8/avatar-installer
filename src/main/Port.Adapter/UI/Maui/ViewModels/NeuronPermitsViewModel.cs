@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using ei8.Avatar.Installer.Application.IdentityAccess;
 using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
 using Maui.Services;
 using Maui.Views;
@@ -11,18 +12,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+//namespace ei8.Avatar.Installer.Port.Adapter.UI.Maui.ViewModels;
 namespace Maui.ViewModels;
 
 public partial class NeuronPermitsViewModel : EditAvatarViewModel
 {
     public ObservableCollection<NeuronPermit> NeuronPermits { get; set; } = [];
-    private readonly INeuronPermitRepository neuronPermitRepository;
+    private readonly INeuronPermitApplicationService neuronPermitApplicationService;
 
-    public NeuronPermitsViewModel(INavigationService navigationService, INeuronPermitRepository neuronPermitRepository)
+    public NeuronPermitsViewModel(INeuronPermitApplicationService neuronPermitApplicationService, INavigationService navigationService)
         : base(navigationService)
     {
         Title = "Neuron Permit";
-        this.neuronPermitRepository = neuronPermitRepository;
+        this.neuronPermitApplicationService = neuronPermitApplicationService;
     }
 
     [RelayCommand]
@@ -35,12 +37,12 @@ public partial class NeuronPermitsViewModel : EditAvatarViewModel
         {
             IsBusy = true;
 
-            NeuronPermits.Clear();
-            var neuronPermits = await neuronPermitRepository.GetAllAsync();
+            this.NeuronPermits.Clear();
+            var neuronPermits = await this.neuronPermitApplicationService.GetAllAsync();
 
             foreach (var neuronPermit in neuronPermits)
             {
-                NeuronPermits.Add(neuronPermit);
+                this.NeuronPermits.Add(neuronPermit);
             }
         }
         catch (Exception ex)
@@ -60,7 +62,7 @@ public partial class NeuronPermitsViewModel : EditAvatarViewModel
         if (neuronPermit is null)
             return;
 
-        await navigationService.NavigateToAsync($"{nameof(NeuronPermitDetailsPage)}",
+        await this.navigationService.NavigateToAsync($"{nameof(NeuronPermitDetailsPage)}",
             new Dictionary<string, object>
             {
                 { "NeuronPermit", neuronPermit }

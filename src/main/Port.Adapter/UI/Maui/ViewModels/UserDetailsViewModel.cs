@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using ei8.Avatar.Installer.Application.IdentityAccess;
 using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
 using ei8.Avatar.Installer.IO.Process.Services.IdentityAccess;
 using Maui.Services;
@@ -15,12 +16,12 @@ namespace Maui.ViewModels;
 [QueryProperty("User", "User")]
 public partial class UserDetailsViewModel : EditAvatarViewModel
 {
-    private readonly IUserRepository userRepository;
+    private readonly IUserApplicationService userApplicationService;
 
-    public UserDetailsViewModel(INavigationService navigationService, IUserRepository userRepository)
+    public UserDetailsViewModel(INavigationService navigationService, IUserApplicationService userApplicationService)
         : base(navigationService)
     {
-        this.userRepository = userRepository;
+        this.userApplicationService = userApplicationService;
     }
 
     [ObservableProperty]
@@ -38,12 +39,12 @@ public partial class UserDetailsViewModel : EditAvatarViewModel
 
         try
         {
-            await userRepository.UpdateAsync(User!);
+            await this.userApplicationService.UpdateAsync(User!);
 
             await Shell.Current.CurrentPage.DisplayAlert("Success!",
                 $"User updated", "OK");
 
-            await navigationService.NavigateToAsync("..");
+            await this.navigationService.NavigateToAsync("..");
         }
         catch (Exception ex)
         {
