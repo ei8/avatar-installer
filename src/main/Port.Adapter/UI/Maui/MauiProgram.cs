@@ -13,7 +13,7 @@ using ei8.Avatar.Installer.IO.Process.Services.IdentityAccess;
 using ei8.Avatar.Installer.IO.Process.Services.Settings;
 using ei8.Avatar.Installer.IO.Process.Services.Template;
 using ei8.Avatar.Installer.Port.Adapter.UI.Maui.ViewModels;
-using Maui.Views;
+using ei8.Avatar.Installer.Port.Adapter.UI.Maui.Views;
 using MetroLog.MicrosoftExtensions;
 using Microsoft.Extensions.Logging;
 

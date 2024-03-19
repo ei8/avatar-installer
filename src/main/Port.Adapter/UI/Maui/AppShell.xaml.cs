@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Maui.Storage;
 using CommunityToolkit.Mvvm.Input;
-using Maui.Views;
+using ei8.Avatar.Installer.Port.Adapter.UI.Maui.Views;
 
 namespace Maui;
 

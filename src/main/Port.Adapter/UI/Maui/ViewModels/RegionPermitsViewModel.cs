@@ -2,7 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using ei8.Avatar.Installer.Application.IdentityAccess;
 using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
-using Maui.Views;
+using ei8.Avatar.Installer.Port.Adapter.UI.Maui.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

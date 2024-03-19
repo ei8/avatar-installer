@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ei8.Avatar.Installer.Application.Avatar;
-using Maui.Views;
+using ei8.Avatar.Installer.Port.Adapter.UI.Maui.Views;
 using MetroLog.Maui;
 using System;
 using System.Collections.Generic;

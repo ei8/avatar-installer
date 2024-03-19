@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
-    x:Class="Maui.Views.NeuronPermitDetailsPage"
+    x:Class="ei8.Avatar.Installer.Port.Adapter.UI.Maui.Views.NeuronPermitDetailsPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:models="clr-namespace:ei8.Avatar.Installer.Domain.Model.DTO;assembly=Domain.Model"
     xmlns:viewmodels="clr-namespace:ei8.Avatar.Installer.Port.Adapter.UI.Maui.ViewModels"
     Title="NeuronPermitDetailsPage"
     x:DataType="viewmodels:NeuronPermitDetailsViewModel"

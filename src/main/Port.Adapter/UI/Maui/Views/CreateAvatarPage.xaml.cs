@@ -1,6 +1,6 @@
 using ei8.Avatar.Installer.Port.Adapter.UI.Maui.ViewModels;
 
-namespace Maui.Views;
+namespace ei8.Avatar.Installer.Port.Adapter.UI.Maui.Views;
 
 public partial class CreateAvatarPage : ContentPage
 {
