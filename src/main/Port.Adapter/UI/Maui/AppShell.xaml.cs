@@ -2,7 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using ei8.Avatar.Installer.Port.Adapter.UI.Maui.Views;
 
-namespace Maui;
+namespace ei8.Avatar.Installer.Port.Adapter.UI.Maui;
 
 public partial class AppShell : Shell
 {

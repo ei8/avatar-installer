@@ -1,7 +1,7 @@
 ﻿using ObjCRuntime;
 using UIKit;
 
-namespace Maui.Platforms.MacCatalyst;
+namespace ei8.Avatar.Installer.Port.Adapter.UI.Maui.Platforms.MacCatalyst;
 public class Program
 {
     // This is the main entry point of the application.

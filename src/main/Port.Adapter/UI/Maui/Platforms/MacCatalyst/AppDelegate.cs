@@ -1,6 +1,6 @@
 ﻿using Foundation;
 
-namespace Maui.Platforms.MacCatalyst;
+namespace ei8.Avatar.Installer.Port.Adapter.UI.Maui.Platforms.MacCatalyst;
 [Register("AppDelegate")]
 public class AppDelegate : MauiUIApplicationDelegate
 {

@@ -2,7 +2,7 @@ using Microsoft.Maui;
 using Microsoft.Maui.Hosting;
 using System;
 
-namespace Maui;
+namespace ei8.Avatar.Installer.Port.Adapter.UI.Maui;
 
 internal class Program : MauiApplication
 {

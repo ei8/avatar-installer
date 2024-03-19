@@ -1,7 +1,7 @@
 ﻿
-namespace Maui;
+namespace ei8.Avatar.Installer.Port.Adapter.UI.Maui;
 
-public partial class App : Application
+public partial class App : Microsoft.Maui.Controls.Application
 {
     public App()
     {

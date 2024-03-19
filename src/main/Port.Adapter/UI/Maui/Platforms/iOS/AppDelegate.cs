@@ -1,6 +1,6 @@
 ﻿using Foundation;
 
-namespace Maui.Platforms.iOS;
+namespace ei8.Avatar.Installer.Port.Adapter.UI.Maui.Platforms.iOS;
 [Register("AppDelegate")]
 public class AppDelegate : MauiUIApplicationDelegate
 {

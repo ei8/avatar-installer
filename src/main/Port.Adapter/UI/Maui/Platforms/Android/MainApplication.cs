@@ -1,7 +1,7 @@
 ﻿using Android.App;
 using Android.Runtime;
 
-namespace Maui.Platforms.Android;
+namespace ei8.Avatar.Installer.Port.Adapter.UI.Maui.Platforms.Android;
 [Application]
 public class MainApplication : MauiApplication
 {

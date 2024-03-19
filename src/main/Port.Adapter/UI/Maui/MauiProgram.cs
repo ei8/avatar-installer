@@ -17,7 +17,7 @@ using ei8.Avatar.Installer.Port.Adapter.UI.Maui.Views;
 using MetroLog.MicrosoftExtensions;
 using Microsoft.Extensions.Logging;
 
-namespace Maui;
+namespace ei8.Avatar.Installer.Port.Adapter.UI.Maui;
 
 public static class MauiProgram
 {
