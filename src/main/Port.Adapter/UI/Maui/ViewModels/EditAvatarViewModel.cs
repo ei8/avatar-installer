@@ -1,5 +1,4 @@
 ﻿using CommunityToolkit.Mvvm.Input;
-using Maui.Services;
 using Maui.Views;
 using System;
 using System.Collections.Generic;
@@ -11,13 +10,13 @@ namespace Maui.ViewModels;
 
 public partial class EditAvatarViewModel : BaseViewModel
 {
-    public EditAvatarViewModel(INavigationService navigationService) : base(navigationService)
+    public EditAvatarViewModel() 
     {
     }
 
     [RelayCommand]
     private async Task CancelEditAsync()
     {
-        await navigationService.NavigateToAsync("..");
+        await Shell.Current.GoToAsync("..");
     }
 }

@@ -2,7 +2,6 @@
 using CommunityToolkit.Mvvm.Input;
 using ei8.Avatar.Installer.Application.IdentityAccess;
 using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
-using Maui.Services;
 using Maui.Views;
 using System;
 using System.Collections.Generic;
@@ -19,8 +18,7 @@ public partial class RegionPermitsViewModel : EditAvatarViewModel
     public ObservableCollection<RegionPermit> RegionPermits { get; set; } = [];
     private readonly IRegionPermitApplicationService regionPermitApplicationService;
 
-    public RegionPermitsViewModel(INavigationService navigationService, IRegionPermitApplicationService regionPermitApplicationService)
-        : base(navigationService)
+    public RegionPermitsViewModel(IRegionPermitApplicationService regionPermitApplicationService)
     {
         Title = "Neuron Permit";
         this.regionPermitApplicationService = regionPermitApplicationService;
@@ -61,7 +59,7 @@ public partial class RegionPermitsViewModel : EditAvatarViewModel
         if (regionPermit is null)
             return;
 
-        await this.navigationService.NavigateToAsync($"{nameof(RegionPermitDetailsPage)}",
+        await Shell.Current.GoToAsync($"{nameof(RegionPermitDetailsPage)}",
             new Dictionary<string, object>
             {
                 { "RegionPermit", regionPermit }

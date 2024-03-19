@@ -4,7 +4,6 @@ using CommunityToolkit.Mvvm.Input;
 using ei8.Avatar.Installer.Application.Avatar;
 using ei8.Avatar.Installer.Domain.Model;
 using ei8.Avatar.Installer.Domain.Model.Avatars;
-using Maui.Services;
 using Maui.Views;
 using System;
 using System.Collections.Generic;
@@ -20,8 +19,7 @@ public partial class HomeViewModel : BaseViewModel
     private readonly IAvatarContextService avatarContextService;
     private readonly IAvatarRepository avatarRepository;
 
-    public HomeViewModel(IAvatarRepository avatarRepository, IAvatarContextService avatarContextService, INavigationService navigationService)
-        : base(navigationService)
+    public HomeViewModel(IAvatarRepository avatarRepository, IAvatarContextService avatarContextService)
     {
         Title = "Avatar Installer";
 
@@ -32,7 +30,7 @@ public partial class HomeViewModel : BaseViewModel
     [RelayCommand]
     private async Task GoToCreateAvatarAsync()
     {
-        await navigationService.NavigateToAsync($"{nameof(CreateAvatarPage)}");
+        await Shell.Current.GoToAsync($"{nameof(CreateAvatarPage)}");
     }
 
     [RelayCommand]
@@ -67,7 +65,7 @@ public partial class HomeViewModel : BaseViewModel
             }
 
             avatarContextService.Avatar = await avatarRepository.GetByAsync(workingDirectory.Folder.Path);
-            await navigationService.NavigateToAsync($"//IdentityAccessPage");
+            await Shell.Current.GoToAsync($"//IdentityAccessPage");
         }
         catch (Exception ex)
         {

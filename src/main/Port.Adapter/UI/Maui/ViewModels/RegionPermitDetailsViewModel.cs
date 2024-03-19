@@ -2,7 +2,6 @@
 using CommunityToolkit.Mvvm.Input;
 using ei8.Avatar.Installer.Application.IdentityAccess;
 using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
-using Maui.Services;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -17,8 +16,7 @@ public partial class RegionPermitDetailsViewModel : EditAvatarViewModel
 {
     private readonly IRegionPermitApplicationService regionPermitApplicationService;
 
-    public RegionPermitDetailsViewModel(INavigationService navigationService, IRegionPermitApplicationService regionPermitApplicationService)
-        : base(navigationService)
+    public RegionPermitDetailsViewModel(IRegionPermitApplicationService regionPermitApplicationService)
     {
         this.regionPermitApplicationService = regionPermitApplicationService;
     }
@@ -43,7 +41,7 @@ public partial class RegionPermitDetailsViewModel : EditAvatarViewModel
             await Shell.Current.CurrentPage.DisplayAlert("Success!",
                 $"Region Permit updated", "OK");
 
-            await this.navigationService.NavigateToAsync("..");
+            await Shell.Current.GoToAsync("..");
         }
         catch (Exception ex)
         {

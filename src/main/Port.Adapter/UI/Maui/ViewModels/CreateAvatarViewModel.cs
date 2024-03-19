@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ei8.Avatar.Installer.Application.Avatar;
-using Maui.Services;
 using Maui.Views;
 using MetroLog.Maui;
 using System;
@@ -18,8 +17,7 @@ public partial class CreateAvatarViewModel : BaseViewModel
     private readonly LogController logController = new();
     private readonly IAvatarApplicationService avatarApplicationService;
 
-    public CreateAvatarViewModel(INavigationService navigationService, IAvatarApplicationService avatarApplicationService) 
-        : base(navigationService)
+    public CreateAvatarViewModel(IAvatarApplicationService avatarApplicationService) 
     {
         Title = "Create Avatar";
         this.avatarApplicationService = avatarApplicationService;

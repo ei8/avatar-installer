@@ -2,7 +2,6 @@
 using CommunityToolkit.Mvvm.Input;
 using ei8.Avatar.Installer.Application.IdentityAccess;
 using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
-using Maui.Services;
 using Maui.Views;
 using System;
 using System.Collections.Generic;
@@ -19,8 +18,7 @@ public partial class UsersViewModel : EditAvatarViewModel
     public ObservableCollection<User> Users { get; set; } = [];
     private readonly IUserApplicationService userApplicationService;
 
-    public UsersViewModel(INavigationService navigationService, IUserApplicationService userApplicationService)
-        : base(navigationService)
+    public UsersViewModel(IUserApplicationService userApplicationService)
     {
         Title = "Neuron Permit";
         this.userApplicationService = userApplicationService;
@@ -61,7 +59,7 @@ public partial class UsersViewModel : EditAvatarViewModel
         if (user is null)
             return;
 
-        await this.navigationService.NavigateToAsync($"{nameof(UserDetailsPage)}",
+        await Shell.Current.GoToAsync($"{nameof(UserDetailsPage)}",
             new Dictionary<string, object>
             {
                 { "User", user }

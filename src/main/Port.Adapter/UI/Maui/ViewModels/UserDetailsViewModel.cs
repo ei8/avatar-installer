@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using ei8.Avatar.Installer.Application.IdentityAccess;
 using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
 using ei8.Avatar.Installer.IO.Process.Services.IdentityAccess;
-using Maui.Services;
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -18,8 +18,7 @@ public partial class UserDetailsViewModel : EditAvatarViewModel
 {
     private readonly IUserApplicationService userApplicationService;
 
-    public UserDetailsViewModel(INavigationService navigationService, IUserApplicationService userApplicationService)
-        : base(navigationService)
+    public UserDetailsViewModel(IUserApplicationService userApplicationService)
     {
         this.userApplicationService = userApplicationService;
     }
@@ -44,7 +43,7 @@ public partial class UserDetailsViewModel : EditAvatarViewModel
             await Shell.Current.CurrentPage.DisplayAlert("Success!",
                 $"User updated", "OK");
 
-            await this.navigationService.NavigateToAsync("..");
+            await Shell.Current.GoToAsync("..");
         }
         catch (Exception ex)
         {

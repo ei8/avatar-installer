@@ -12,7 +12,6 @@ using ei8.Avatar.Installer.IO.Process.Services.Avatars;
 using ei8.Avatar.Installer.IO.Process.Services.IdentityAccess;
 using ei8.Avatar.Installer.IO.Process.Services.Settings;
 using ei8.Avatar.Installer.IO.Process.Services.Template;
-using Maui.Services;
 using Maui.ViewModels;
 using Maui.Views;
 using MetroLog.MicrosoftExtensions;
@@ -74,8 +73,6 @@ public static class MauiProgram
         builder.Services.AddTransient<UsersViewModel>();
         builder.Services.AddTransient<UserDetailsViewModel>();
         #endregion
-
-        builder.Services.AddSingleton<INavigationService, NavigationService>();
 
         builder.Services.AddScoped<ISettingsService, SettingsService>()
                 .AddScoped<ITemplateService, GithubTemplateService>()

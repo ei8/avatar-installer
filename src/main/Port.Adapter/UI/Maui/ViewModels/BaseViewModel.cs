@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Maui.Services;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,11 +11,8 @@ namespace Maui.ViewModels;
 
 public partial class BaseViewModel : ObservableObject
 {
-    protected readonly INavigationService navigationService;
-
-    public BaseViewModel(INavigationService navigationService)
+    public BaseViewModel()
     {
-        this.navigationService = navigationService;
     }
 
     [ObservableProperty]
