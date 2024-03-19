@@ -3,7 +3,6 @@ using CommunityToolkit.Mvvm.Input;
 using ei8.Avatar.Installer.Application.IdentityAccess;
 using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
 using ei8.Avatar.Installer.IO.Process.Services.IdentityAccess;
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Maui.ViewModels;
+namespace ei8.Avatar.Installer.Port.Adapter.UI.Maui.ViewModels;
 
 [QueryProperty("User", "User")]
 public partial class UserDetailsViewModel : EditAvatarViewModel

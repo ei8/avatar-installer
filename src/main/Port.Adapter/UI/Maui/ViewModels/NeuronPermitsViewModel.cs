@@ -12,7 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 //namespace ei8.Avatar.Installer.Port.Adapter.UI.Maui.ViewModels;
-namespace Maui.ViewModels;
+namespace ei8.Avatar.Installer.Port.Adapter.UI.Maui.ViewModels;
 
 public partial class NeuronPermitsViewModel : EditAvatarViewModel
 {

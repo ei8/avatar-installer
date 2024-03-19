@@ -1,4 +1,4 @@
-using Maui.ViewModels;
+using ei8.Avatar.Installer.Port.Adapter.UI.Maui.ViewModels;
 
 namespace Maui.Views;
 
