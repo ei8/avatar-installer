@@ -4,6 +4,7 @@ using ei8.Avatar.Installer.Application.IdentityAccess;
 using ei8.Avatar.Installer.Common;
 using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
 using ei8.Avatar.Installer.Port.Adapter.UI.Maui.Views;
+using neurUL.Common.Domain.Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -21,18 +22,20 @@ public partial class UsersViewModel : EditAvatarViewModel
 
     public UsersViewModel(IUserApplicationService userApplicationService)
     {
+        AssertionConcern.AssertArgumentNotNull(userApplicationService, nameof(userApplicationService));
+
         this.userApplicationService = userApplicationService;
     }
 
     [RelayCommand]
     private async Task GetUsersAsync()
     {
-        if (IsBusy)
+        if (this.IsBusy)
             return;
 
         try
         {
-            IsBusy = true;
+            this.IsBusy = true;
 
             this.Users.Clear();
             var users = await this.userApplicationService.GetAllAsync();
@@ -49,15 +52,14 @@ public partial class UsersViewModel : EditAvatarViewModel
         }
         finally
         {
-            IsBusy = false;
+            this.IsBusy = false;
         }
     }
 
     [RelayCommand]
     private async Task GoToUserDetailsAsync(User user)
     {
-        if (user is null)
-            return;
+        AssertionConcern.AssertArgumentNotNull(user, nameof(user));
 
         await Shell.Current.GoToAsync($"{nameof(UserDetailsPage)}",
             new Dictionary<string, object>

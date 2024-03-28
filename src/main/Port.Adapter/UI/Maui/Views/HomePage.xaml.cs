@@ -13,9 +13,4 @@ public partial class HomePage : ContentPage
 		this.viewModel = viewModel;
 		BindingContext = this.viewModel;
 	}
-
-    protected override void OnNavigatedTo(NavigatedToEventArgs args)
-    {
-        base.OnNavigatedTo(args);
-    }
 }

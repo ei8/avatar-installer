@@ -1,6 +1,7 @@
 ﻿using ei8.Avatar.Installer.Domain.Model;
 using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
 using Microsoft.Data.Sqlite;
+using neurUL.Common.Domain.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,8 @@ public class NeuronPermitRepository : INeuronPermitRepository
 
     public NeuronPermitRepository(IAvatarContextService avatarContextService)
     {
+        AssertionConcern.AssertArgumentNotNull(avatarContextService, nameof(avatarContextService));
+
         this.avatarContextService = avatarContextService;
     }
 
@@ -49,6 +52,8 @@ public class NeuronPermitRepository : INeuronPermitRepository
 
     public async Task UpdateAsync(NeuronPermit neuronPermit)
     {
+        AssertionConcern.AssertArgumentNotNull(neuronPermit, nameof(neuronPermit));
+
         var id = avatarContextService.Avatar!.Id;
         var connectionString = $@"Data Source=file:{Path.Combine(id, "identity-access.db")}";
         var tableName = "NeuronPermit";

@@ -1,6 +1,7 @@
 ﻿using ei8.Avatar.Installer.Domain.Model;
 using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
 using Microsoft.Data.Sqlite;
+using neurUL.Common.Domain.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,8 @@ public class UserRepository : IUserRepository
 
     public UserRepository(IAvatarContextService avatarContextService)
     {
+        AssertionConcern.AssertArgumentNotNull(avatarContextService, nameof(avatarContextService));
+
         this.avatarContextService = avatarContextService;
     }
 
@@ -48,6 +51,8 @@ public class UserRepository : IUserRepository
 
     public async Task UpdateAsync(User user)
     {
+        AssertionConcern.AssertArgumentNotNull(user, nameof(user));
+
         var id = avatarContextService.Avatar!.Id;
         var connectionString = $@"Data Source=file:{Path.Combine(id, "identity-access.db")}";
         var tableName = "User";

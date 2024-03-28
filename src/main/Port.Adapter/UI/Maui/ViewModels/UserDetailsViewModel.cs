@@ -4,6 +4,7 @@ using ei8.Avatar.Installer.Application.IdentityAccess;
 using ei8.Avatar.Installer.Common;
 using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
 using ei8.Avatar.Installer.IO.Process.Services.IdentityAccess;
+using neurUL.Common.Domain.Model;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -20,17 +21,19 @@ public partial class UserDetailsViewModel : EditAvatarViewModel
 
     public UserDetailsViewModel(IUserApplicationService userApplicationService)
     {
+        AssertionConcern.AssertArgumentNotNull(userApplicationService, nameof(userApplicationService));
+
         this.userApplicationService = userApplicationService;
     }
 
     [ObservableProperty]
-    private User? user;
+    private User user;
 
     [RelayCommand]
     private async Task UpdateUserAsync()
     {
-        if (User is null) return;
-        bool isConfirmed = await Shell.Current.CurrentPage.DisplayAlert("Update User", "Are you sure you want to update this User?",
+        if (this.User is null) return;
+        bool isConfirmed = await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Update, "Are you sure you want to update this User?",
                             Constants.Prompts.Yes, Constants.Prompts.No);
 
         if (!isConfirmed)
@@ -38,7 +41,7 @@ public partial class UserDetailsViewModel : EditAvatarViewModel
 
         try
         {
-            await this.userApplicationService.UpdateAsync(User!);
+            await this.userApplicationService.UpdateAsync(User);
 
             await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Success,
                 $"User updated", Constants.Prompts.Ok);

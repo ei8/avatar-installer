@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using ei8.Avatar.Installer.Application.IdentityAccess;
 using ei8.Avatar.Installer.Common;
 using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
+using neurUL.Common.Domain.Model;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -19,17 +20,19 @@ public partial class RegionPermitDetailsViewModel : EditAvatarViewModel
 
     public RegionPermitDetailsViewModel(IRegionPermitApplicationService regionPermitApplicationService)
     {
+        AssertionConcern.AssertArgumentNotNull(regionPermitApplicationService, nameof(regionPermitApplicationService));
+
         this.regionPermitApplicationService = regionPermitApplicationService;
     }
 
     [ObservableProperty]
-    private RegionPermit? regionPermit;
+    private RegionPermit regionPermit;
 
     [RelayCommand]
     private async Task UpdateRegionPermitAsync()
     {
         if (this.RegionPermit is null) return;
-        bool isConfirmed = await Shell.Current.CurrentPage.DisplayAlert("Update Region Permit", "Are you sure you want to update this Region Permit",
+        bool isConfirmed = await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Update, "Are you sure you want to update this Region Permit",
                             Constants.Prompts.Yes, Constants.Prompts.No);
 
         if (!isConfirmed)
@@ -37,7 +40,7 @@ public partial class RegionPermitDetailsViewModel : EditAvatarViewModel
 
         try
         {
-            await this.regionPermitApplicationService.UpdateAsync(RegionPermit!);
+            await this.regionPermitApplicationService.UpdateAsync(RegionPermit);
 
             await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Success,
                 "Region Permit updated", Constants.Prompts.Ok);

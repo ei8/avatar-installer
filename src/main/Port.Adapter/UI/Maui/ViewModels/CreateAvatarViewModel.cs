@@ -5,6 +5,7 @@ using ei8.Avatar.Installer.Application.Avatar;
 using ei8.Avatar.Installer.Common;
 using ei8.Avatar.Installer.Port.Adapter.UI.Maui.Views;
 using MetroLog.Maui;
+using neurUL.Common.Domain.Model;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -22,6 +23,9 @@ public partial class CreateAvatarViewModel : BaseViewModel
 
     public CreateAvatarViewModel(IAvatarApplicationService avatarApplicationService, IProgressService progressService) 
     {
+        AssertionConcern.AssertArgumentNotNull(avatarApplicationService, nameof(avatarApplicationService));
+        AssertionConcern.AssertArgumentNotNull(progressService, nameof(progressService));
+
         this.avatarApplicationService = avatarApplicationService;
         this.progressService = progressService;
 
@@ -57,7 +61,7 @@ public partial class CreateAvatarViewModel : BaseViewModel
         if (IsBusy)
             return;
 
-        IsBusy = true;
+        this.IsBusy = true;
 
         try
         {
@@ -89,17 +93,17 @@ public partial class CreateAvatarViewModel : BaseViewModel
         }
         finally
         {
-            IsBusy = false;
+            this.IsBusy = false;
         }
     }
 
     [RelayCommand]
     private async Task CreateAvatarAsync()
     {
-        if (IsBusy)
+        if (this.IsBusy)
             return;
 
-        IsBusy = true;
+        this.IsBusy = true;
 
         try
         {
@@ -125,7 +129,7 @@ public partial class CreateAvatarViewModel : BaseViewModel
             logList!.Reverse();
             EditorLogs = string.Join(Environment.NewLine, logList);
 
-            IsBusy = false;
+            this.IsBusy = false;
         }
     }
 }

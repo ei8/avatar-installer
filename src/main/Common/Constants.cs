@@ -36,6 +36,7 @@
             public const string Success = "Success";
             public const string Error = "Error";
             public const string Invalid = "Invalid";
+            public const string Update = "Update";
         }
 
         public sealed class Prompts

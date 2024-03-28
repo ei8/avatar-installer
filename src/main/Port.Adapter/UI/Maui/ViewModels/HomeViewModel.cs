@@ -6,6 +6,7 @@ using ei8.Avatar.Installer.Common;
 using ei8.Avatar.Installer.Domain.Model;
 using ei8.Avatar.Installer.Domain.Model.Avatars;
 using ei8.Avatar.Installer.Port.Adapter.UI.Maui.Views;
+using neurUL.Common.Domain.Model;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -22,6 +23,9 @@ public partial class HomeViewModel : BaseViewModel
 
     public HomeViewModel(IAvatarRepository avatarRepository, IAvatarContextService avatarContextService)
     {
+        AssertionConcern.AssertArgumentNotNull(avatarRepository, nameof(avatarRepository));
+        AssertionConcern.AssertArgumentNotNull(avatarContextService, nameof(avatarContextService));
+
         this.avatarContextService = avatarContextService;
         this.avatarRepository = avatarRepository;
     }
@@ -35,10 +39,10 @@ public partial class HomeViewModel : BaseViewModel
     [RelayCommand]
     private async Task GoToEditAvatarAsync()
     {
-        if (IsBusy)
+        if (this.IsBusy)
             return;
 
-        IsBusy = true;
+        this.IsBusy = true;
 
         try
         {
@@ -65,7 +69,7 @@ public partial class HomeViewModel : BaseViewModel
                 }
             }
 
-            avatarContextService.Avatar = await avatarRepository.GetByAsync(workingDirectory.Folder.Path);
+            this.avatarContextService.Avatar = await this.avatarRepository.GetByAsync(workingDirectory.Folder.Path);
             await Shell.Current.GoToAsync($"//IdentityAccessPage");
         }
         catch (Exception ex)
@@ -75,7 +79,7 @@ public partial class HomeViewModel : BaseViewModel
         }
         finally
         {
-            IsBusy = false;
+            this.IsBusy = false;
         }
     }
 }

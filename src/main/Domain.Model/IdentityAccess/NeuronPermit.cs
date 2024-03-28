@@ -10,5 +10,5 @@ public class NeuronPermit
 {
     public string UserNeuronId { get; set; } = string.Empty;
     public string NeuronId { get; set; } = string.Empty;
-    public string? ExpirationDate { get; set; }
+    public string ExpirationDate { get; set; }
 }

@@ -1,4 +1,5 @@
 ﻿using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
+using neurUL.Common.Domain.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,8 @@ public class UserApplicationService : IUserApplicationService
 
     public UserApplicationService(IUserRepository userRepository)
     {
+        AssertionConcern.AssertArgumentNotNull(userRepository, nameof(userRepository));
+
         this.userRepository = userRepository;
     }
 
@@ -23,6 +26,8 @@ public class UserApplicationService : IUserApplicationService
 
     public async Task UpdateAsync(User user)
     {
+        AssertionConcern.AssertArgumentNotNull(user, nameof(user));
+
         await this.userRepository.UpdateAsync(user);
     }
 }

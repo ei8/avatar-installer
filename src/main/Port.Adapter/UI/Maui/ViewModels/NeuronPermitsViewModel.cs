@@ -4,6 +4,7 @@ using ei8.Avatar.Installer.Application.IdentityAccess;
 using ei8.Avatar.Installer.Common;
 using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
 using ei8.Avatar.Installer.Port.Adapter.UI.Maui.Views;
+using neurUL.Common.Domain.Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -21,18 +22,20 @@ public partial class NeuronPermitsViewModel : EditAvatarViewModel
 
     public NeuronPermitsViewModel(INeuronPermitApplicationService neuronPermitApplicationService)
     {
+        AssertionConcern.AssertArgumentNotNull(neuronPermitApplicationService, nameof(neuronPermitApplicationService));
+
         this.neuronPermitApplicationService = neuronPermitApplicationService;
     }
 
     [RelayCommand]
     private async Task GetNeuronPermitsAsync()
     {
-        if (IsBusy)
+        if (this.IsBusy)
             return;
 
         try
         {
-            IsBusy = true;
+            this.IsBusy = true;
 
             this.NeuronPermits.Clear();
             var neuronPermits = await this.neuronPermitApplicationService.GetAllAsync();
@@ -49,15 +52,14 @@ public partial class NeuronPermitsViewModel : EditAvatarViewModel
         }
         finally
         {
-            IsBusy = false;
+            this.IsBusy = false;
         }
     }
 
     [RelayCommand]
     private async Task GoToNeuronPermitDetailsAsync(NeuronPermit neuronPermit)
     {
-        if (neuronPermit is null)
-            return;
+        AssertionConcern.AssertArgumentNotNull(neuronPermit, nameof(neuronPermit));
 
         await Shell.Current.GoToAsync($"{nameof(NeuronPermitDetailsPage)}",
             new Dictionary<string, object>

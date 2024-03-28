@@ -1,4 +1,5 @@
 ﻿using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
+using neurUL.Common.Domain.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,8 @@ public class NeuronPermitApplicationService : INeuronPermitApplicationService
 
     public NeuronPermitApplicationService(INeuronPermitRepository neuronPermitRepository)
     {
+        AssertionConcern.AssertArgumentNotNull(neuronPermitRepository, nameof(neuronPermitRepository));
+
         this.neuronPermitRepository = neuronPermitRepository;
     }
 
@@ -22,6 +25,8 @@ public class NeuronPermitApplicationService : INeuronPermitApplicationService
 
     public async Task UpdateAsync(NeuronPermit neuronPermit)
     {
+        AssertionConcern.AssertArgumentNotNull(neuronPermit, nameof(neuronPermit));
+
         await this.neuronPermitRepository.UpdateAsync(neuronPermit);
     }
 }

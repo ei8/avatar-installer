@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using ei8.Avatar.Installer.Application.IdentityAccess;
 using ei8.Avatar.Installer.Common;
 using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
+using neurUL.Common.Domain.Model;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -19,17 +20,19 @@ public partial class NeuronPermitDetailsViewModel : EditAvatarViewModel
 
     public NeuronPermitDetailsViewModel(INeuronPermitApplicationService neuronPermitApplicationService)
     {
+        AssertionConcern.AssertArgumentNotNull(neuronPermitApplicationService, nameof(neuronPermitApplicationService));
+
         this.neuronPermitApplicationService = neuronPermitApplicationService;
     }
 
     [ObservableProperty]
-    private NeuronPermit? neuronPermit;
+    private NeuronPermit neuronPermit;
 
     [RelayCommand]
     private async Task UpdateNeuronPermitAsync()
     {
         if (this.NeuronPermit is null) return;
-        bool isConfirmed = await Shell.Current.CurrentPage.DisplayAlert("Update Neuron Permit", "Are you sure you want to update this Neuron Permit",
+        bool isConfirmed = await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Update, "Are you sure you want to update this Neuron Permit",
                             Constants.Prompts.Yes, Constants.Prompts.No);
 
         if (!isConfirmed)
@@ -37,7 +40,7 @@ public partial class NeuronPermitDetailsViewModel : EditAvatarViewModel
 
         try
         {
-            await this.neuronPermitApplicationService.UpdateAsync(NeuronPermit!);
+            await this.neuronPermitApplicationService.UpdateAsync(NeuronPermit);
 
             await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Success,
                 $"Neuron Permit updated", Constants.Prompts.Ok);

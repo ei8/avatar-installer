@@ -4,6 +4,7 @@ using ei8.Avatar.Installer.Domain.Model.Mapping;
 using ei8.Avatar.Installer.Domain.Model.Template;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using neurUL.Common.Domain.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,11 +40,10 @@ namespace ei8.Avatar.Installer.Application.Avatar
 
         public async Task CreateAvatarAsync(string id)
         {
+            AssertionConcern.AssertArgumentNotNull(id, nameof(id));
+
             this.progressService.Reset();
             this.progressService.Update(0.1, "Creating Avatar...");
-
-            if (string.IsNullOrEmpty(id))
-                id = ".";
 
             var configObject = await configurationRepository.GetByAsync(id);
 

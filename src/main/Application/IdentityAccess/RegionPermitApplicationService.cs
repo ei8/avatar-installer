@@ -1,4 +1,5 @@
 ﻿using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
+using neurUL.Common.Domain.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,8 @@ public class RegionPermitApplicationService : IRegionPermitApplicationService
 
     public RegionPermitApplicationService(IRegionPermitRepository regionPermitRepository)
     {
+        AssertionConcern.AssertArgumentNotNull(regionPermitRepository, nameof(regionPermitRepository));
+        
         this.regionPermitRepository = regionPermitRepository;
     }
 
@@ -22,6 +25,8 @@ public class RegionPermitApplicationService : IRegionPermitApplicationService
 
     public async Task UpdateAsync(RegionPermit regionPermit)
     {
+        AssertionConcern.AssertArgumentNotNull(regionPermit, nameof(regionPermit));
+
         await this.regionPermitRepository.UpdateAsync(regionPermit);
     }
 }

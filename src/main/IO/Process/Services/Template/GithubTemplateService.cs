@@ -3,6 +3,7 @@ using ei8.Avatar.Installer.Common;
 using ei8.Avatar.Installer.Domain.Model.Template;
 using LibGit2Sharp;
 using Microsoft.Extensions.Logging;
+using neurUL.Common.Domain.Model;
 
 namespace ei8.Avatar.Installer.IO.Process.Services.Template
 {
@@ -20,6 +21,8 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Template
 
         public void DownloadTemplate(string destinationPath)
         {
+            AssertionConcern.AssertArgumentNotNull(destinationPath, nameof(destinationPath));
+
             // .NET Maui doesn't have environment variables so the url is hardcoded
             var templateDownloadUrl = settingsService.TemplateDownloadUrl ?? Constants.Urls.DefaultTemplateDownloadUrl;
 

@@ -9,5 +9,5 @@ namespace ei8.Avatar.Installer.Domain.Model;
 
 public interface IAvatarContextService
 {
-    AvatarItem? Avatar { get; set; }
+    AvatarItem Avatar { get; set; }
 }
