@@ -13,6 +13,34 @@
             public const string AutoLockCmd = "autolock.cmd";
         }
 
+        public sealed class Databases
+        {
+            public const string AvatarDb = "avatar.db";
+            public const string d23Db = "d23.db";
+            public const string EventsDb = "events.db";
+            public const string IdentityAccessDb = "identity-access.db";
+            public const string SubscriptionsDb = "subscriptions.db";
+        }
+
+        public sealed class Statuses
+        {
+            public const string Cancelled = "Cancelled!";
+            public const string Success = "Success!";
+            public const string Error = "Error!";
+        }
+
+        public sealed class Prompts
+        {
+            public const string Ok = "Ok";
+            public const string Yes = "Yes";
+            public const string No = "No";
+        }
+
+        public sealed class Urls
+        {
+            public const string DefaultTemplateDownloadUrl = "https://github.com/ei8/avatar-template.git";
+        }
+
         public sealed class BatchFileTemplates
         {
             public const string StartTraefikBat = @"traefik_windows-amd64.exe -c {0}";
@@ -25,7 +53,7 @@
                                                       "@echo Loop-starting ... \n" +
                                                      @"FOR /L %%N IN () DO call ""start - ei8.site.bat""";
 
-            public const string AutoLockCmd =  "timeout /t 10\n" +
+            public const string AutoLockCmd = "timeout /t 10\n" +
                                                "rundll32.exe user32.dll,LockWorkStation";
         }
     }

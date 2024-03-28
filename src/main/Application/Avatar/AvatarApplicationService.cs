@@ -12,30 +12,23 @@ using System.Threading.Tasks;
 
 namespace ei8.Avatar.Installer.Application.Avatar
 {
-    public delegate void EventHandler();
-
     public class AvatarApplicationService : IAvatarApplicationService
     {
-        public event EventHandler OnCreateAvatar;
-        public event EventHandler OnGettingAvatar;
-        public event EventHandler OnConfiguringAvatar;
-        public event EventHandler OnAvatarMapping;
-        public event EventHandler OnAvatarSaving;
-        public event EventHandler OnAvatarCreated;
+        private readonly IConfigurationRepository configurationRepository;
+        private readonly IProgressService progressService;
+        private readonly ILogger<AvatarApplicationService> logger;
+        private readonly IAvatarRepository avatarRepository;
+        private readonly IAvatarMapperService avatarMapperService;
+        private readonly ITemplateService templateService;
+        private readonly IAvatarServerRepository avatarServerRepository;
+        private readonly IAvatarServerMapperService avatarServerMapperService;
 
-        private IConfigurationRepository configurationRepository;
-        private ILogger<AvatarApplicationService> logger;
-        private IAvatarRepository avatarRepository;
-        private IAvatarMapperService avatarMapperService;
-        private ITemplateService templateService;
-        private IAvatarServerRepository avatarServerRepository;
-        private IAvatarServerMapperService avatarServerMapperService;
-
-        public AvatarApplicationService(IConfigurationRepository configurationRepository,
+        public AvatarApplicationService(IConfigurationRepository configurationRepository, IProgressService progressService,
             ILogger<AvatarApplicationService> logger, IAvatarRepository avatarRepository, IAvatarMapperService avatarMapperService,
             ITemplateService templateService, IAvatarServerRepository avatarServerRepository, IAvatarServerMapperService avatarServerMapperService)
         {
             this.configurationRepository = configurationRepository;
+            this.progressService = progressService;
             this.logger = logger;
             this.avatarRepository = avatarRepository;
             this.avatarMapperService = avatarMapperService;
@@ -46,14 +39,15 @@ namespace ei8.Avatar.Installer.Application.Avatar
 
         public async Task CreateAvatarAsync(string id)
         {
-            OnCreateAvatar?.Invoke();
+            this.progressService.Reset();
+            this.progressService.Update(0.1, "Creating Avatar...");
 
             if (string.IsNullOrEmpty(id))
                 id = ".";
 
             var configObject = await configurationRepository.GetByAsync(id);
 
-            OnConfiguringAvatar?.Invoke();
+            this.progressService.Update(0.3, "Configuring Avatar...");
             foreach (var item in configObject.Avatars)
             {
                 logger.LogInformation("Setting up avatar {itemName}", item.Name);
@@ -72,14 +66,14 @@ namespace ei8.Avatar.Installer.Application.Avatar
                 await avatarRepository.SaveAsync(mappedAvatar);
             }
 
-            OnAvatarMapping?.Invoke();
+            this.progressService.Update(0.5, "Mapping Avatar...");
             var avatarServer = await avatarServerRepository.GetByAsync(configObject.Destination);
             var mappedAvatarServer = avatarServerMapperService.Apply(configObject, avatarServer);
 
-            OnAvatarSaving?.Invoke();
+            this.progressService.Update(0.8, "Saving Avatar...");
             await avatarServerRepository.SaveAsync(mappedAvatarServer);
 
-            OnAvatarCreated?.Invoke();
+            this.progressService.Update(1.0, "Finished Creating Avatar!");
         }
     }
 }

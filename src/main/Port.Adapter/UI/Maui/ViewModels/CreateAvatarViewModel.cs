@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using ei8.Avatar.Installer.Application;
 using ei8.Avatar.Installer.Application.Avatar;
 using ei8.Avatar.Installer.Port.Adapter.UI.Maui.Views;
 using MetroLog.Maui;
@@ -16,21 +17,26 @@ public partial class CreateAvatarViewModel : BaseViewModel
 {
     private readonly LogController logController = new();
     private readonly IAvatarApplicationService avatarApplicationService;
+    private readonly IProgressService progressService;
 
-    public CreateAvatarViewModel(IAvatarApplicationService avatarApplicationService) 
+    public CreateAvatarViewModel(IAvatarApplicationService avatarApplicationService, IProgressService progressService) 
     {
         Title = "Create Avatar";
         this.avatarApplicationService = avatarApplicationService;
+        this.progressService = progressService;
 
-        avatarApplicationService.OnCreateAvatar += () => { CreationProgress = 0.1; LoadingText = "Creating Avatar..."; };
-        avatarApplicationService.OnConfiguringAvatar += () => { CreationProgress = 0.3; LoadingText = "Configuring Avatars..."; };
-        avatarApplicationService.OnAvatarMapping += () => { CreationProgress = 0.5; LoadingText = "Mapping Avatar Server..."; };
-        avatarApplicationService.OnAvatarSaving += () => { CreationProgress = 0.8; LoadingText = "Saving Avatar..."; };
-        avatarApplicationService.OnAvatarCreated += () =>
-        {
-            CreationProgress = 1;
-            LoadingText = "Finished!";
-        };
+        this.progressService.ProgressChanged += ProgressService_ProgressChanged;
+        this.progressService.DescriptionChanged += ProgressService_DescriptionChanged;
+    }
+
+    private void ProgressService_DescriptionChanged(object? sender, EventArgs e)
+    {
+        this.LoadingText = this.progressService.Description;
+    }
+
+    private void ProgressService_ProgressChanged(object? sender, EventArgs e)
+    {
+        this.CreationProgress = this.progressService.Progress;
     }
 
     [ObservableProperty]
