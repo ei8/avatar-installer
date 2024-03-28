@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ei8.Avatar.Installer.Application.IdentityAccess;
+using ei8.Avatar.Installer.Common;
 using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
 using ei8.Avatar.Installer.Port.Adapter.UI.Maui.Views;
 using System;
@@ -20,7 +21,6 @@ public partial class RegionPermitsViewModel : EditAvatarViewModel
 
     public RegionPermitsViewModel(IRegionPermitApplicationService regionPermitApplicationService)
     {
-        Title = "Neuron Permit";
         this.regionPermitApplicationService = regionPermitApplicationService;
     }
 
@@ -45,7 +45,7 @@ public partial class RegionPermitsViewModel : EditAvatarViewModel
         catch (Exception ex)
         {
             Debug.WriteLine(ex);
-            await Shell.Current.DisplayAlert("Error!", $"Unable to get Region Permits: {ex.Message}", "OK");
+            await Shell.Current.DisplayAlert(Constants.Statuses.Error, $"Unable to get Region Permits: {ex.Message}", Constants.Prompts.Ok);
         }
         finally
         {

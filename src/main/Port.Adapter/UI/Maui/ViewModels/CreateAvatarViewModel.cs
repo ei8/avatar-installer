@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using ei8.Avatar.Installer.Application;
 using ei8.Avatar.Installer.Application.Avatar;
+using ei8.Avatar.Installer.Common;
 using ei8.Avatar.Installer.Port.Adapter.UI.Maui.Views;
 using MetroLog.Maui;
 using System;
@@ -21,7 +22,6 @@ public partial class CreateAvatarViewModel : BaseViewModel
 
     public CreateAvatarViewModel(IAvatarApplicationService avatarApplicationService, IProgressService progressService) 
     {
-        Title = "Create Avatar";
         this.avatarApplicationService = avatarApplicationService;
         this.progressService = progressService;
 
@@ -68,15 +68,15 @@ public partial class CreateAvatarViewModel : BaseViewModel
 
             if (configFile is null)
             {
-                await Shell.Current.CurrentPage.DisplayAlert("Cancelled!",
-                    $"Creating Avatar cancelled", "OK");
+                await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Success,
+                    $"Creating Avatar cancelled", Constants.Prompts.Ok);
                 return;
             }
 
             if (!configFile.FileName.EndsWith("json", StringComparison.OrdinalIgnoreCase))
             {
-                await Shell.Current.CurrentPage.DisplayAlert("Invalid File!",
-                    $"Configuration must be a a json file", "OK");
+                await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Invalid,
+                    $"Configuration must be a a json file", Constants.Prompts.Ok);
                 return;
             }
 
@@ -85,7 +85,7 @@ public partial class CreateAvatarViewModel : BaseViewModel
         catch (Exception ex)
         {
             Debug.WriteLine(ex);
-            await Shell.Current.DisplayAlert("Choosing config file", ex.ToString(), "OK");
+            await Shell.Current.DisplayAlert(Constants.Statuses.Error, ex.ToString(), Constants.Prompts.Ok);
         }
         finally
         {
@@ -107,17 +107,17 @@ public partial class CreateAvatarViewModel : BaseViewModel
 
             if (string.IsNullOrEmpty(ConfigPath))
             {
-                await Shell.Current.DisplayAlert("No Configuration!", "Please choose config file", "OK");
+                await Shell.Current.DisplayAlert(Constants.Statuses.Invalid, "Please choose config file", Constants.Prompts.Ok);
                 return;
             }
 
             await avatarApplicationService.CreateAvatarAsync(ConfigPath);
-            await Shell.Current.DisplayAlert("Success!", "Avatar Installed", "OK");
+            await Shell.Current.DisplayAlert(Constants.Statuses.Success, "Avatar Installed", Constants.Prompts.Ok);
         }
         catch (Exception ex)
         {
             Debug.WriteLine(ex);
-            await Shell.Current.DisplayAlert("Error Installing Avatar!", ex.ToString(), "OK");
+            await Shell.Current.DisplayAlert(Constants.Statuses.Error, ex.ToString(), Constants.Prompts.Ok);
         }
         finally
         {

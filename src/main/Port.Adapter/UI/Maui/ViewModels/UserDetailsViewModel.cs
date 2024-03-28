@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ei8.Avatar.Installer.Application.IdentityAccess;
+using ei8.Avatar.Installer.Common;
 using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
 using ei8.Avatar.Installer.IO.Process.Services.IdentityAccess;
 using System;
@@ -30,7 +31,7 @@ public partial class UserDetailsViewModel : EditAvatarViewModel
     {
         if (User is null) return;
         bool isConfirmed = await Shell.Current.CurrentPage.DisplayAlert("Update User", "Are you sure you want to update this User?",
-                            "Yes", "No");
+                            Constants.Prompts.Yes, Constants.Prompts.No);
 
         if (!isConfirmed)
             return;
@@ -39,8 +40,8 @@ public partial class UserDetailsViewModel : EditAvatarViewModel
         {
             await this.userApplicationService.UpdateAsync(User!);
 
-            await Shell.Current.CurrentPage.DisplayAlert("Success!",
-                $"User updated", "OK");
+            await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Success,
+                $"User updated", Constants.Prompts.Ok);
 
             await Shell.Current.GoToAsync("..");
         }
@@ -48,8 +49,8 @@ public partial class UserDetailsViewModel : EditAvatarViewModel
         {
             Debug.WriteLine(ex);
 
-            await Shell.Current.CurrentPage.DisplayAlert("Error!",
-                $"Unable to update User: {ex.Message}", "OK");
+            await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Error,
+                $"Unable to update User: {ex.Message}", Constants.Prompts.Ok);
         }
     }
 }

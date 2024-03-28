@@ -22,11 +22,20 @@
             public const string SubscriptionsDb = "subscriptions.db";
         }
 
+        public sealed class Titles
+        {
+            public const string AvatarInstaller = "Avatar Installer";
+            public const string NeuronPermit = "Neuron Permit";
+            public const string RegionPermit = "Region Permit";
+            public const string User = "User";
+        }
+
         public sealed class Statuses
         {
-            public const string Cancelled = "Cancelled!";
-            public const string Success = "Success!";
-            public const string Error = "Error!";
+            public const string Cancelled = "Cancelled";
+            public const string Success = "Success";
+            public const string Error = "Error";
+            public const string Invalid = "Invalid";
         }
 
         public sealed class Prompts

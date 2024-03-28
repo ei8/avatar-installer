@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ei8.Avatar.Installer.Application.Avatar;
+using ei8.Avatar.Installer.Common;
 using ei8.Avatar.Installer.Domain.Model;
 using ei8.Avatar.Installer.Domain.Model.Avatars;
 using ei8.Avatar.Installer.Port.Adapter.UI.Maui.Views;
@@ -21,8 +22,6 @@ public partial class HomeViewModel : BaseViewModel
 
     public HomeViewModel(IAvatarRepository avatarRepository, IAvatarContextService avatarContextService)
     {
-        Title = "Avatar Installer";
-
         this.avatarContextService = avatarContextService;
         this.avatarRepository = avatarRepository;
     }
@@ -47,11 +46,13 @@ public partial class HomeViewModel : BaseViewModel
 
             if (workingDirectory.Folder is null)
             {
-                await Shell.Current.CurrentPage.DisplayAlert("Cancelled!", $"Editing avatar cancelled", "OK");
+                await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Cancelled, 
+                    $"Editing avatar cancelled", Constants.Prompts.Ok);
                 return;
             }
 
-            string[] requiredFiles = ["avatar.db", "d23.db", "events.db", "identity-access.db", "subscriptions.db"];
+            string[] requiredFiles = [Constants.Databases.AvatarDb, Constants.Databases.d23Db, Constants.Databases.EventsDb, 
+                Constants.Databases.IdentityAccessDb, Constants.Databases.SubscriptionsDb];
 
             foreach (var file in requiredFiles)
             {
@@ -59,7 +60,7 @@ public partial class HomeViewModel : BaseViewModel
 
                 if (!File.Exists(filePath))
                 {
-                    await Shell.Current.DisplayAlert("Incomplete files!", $"{file} does not exists", "OK");
+                    await Shell.Current.DisplayAlert(Constants.Statuses.Invalid, $"{file} does not exists", Constants.Prompts.Ok);
                     return;
                 }
             }
@@ -70,7 +71,7 @@ public partial class HomeViewModel : BaseViewModel
         catch (Exception ex)
         {
             Debug.WriteLine(ex);
-            await Shell.Current.DisplayAlert("Error!", ex.ToString(), "OK");
+            await Shell.Current.DisplayAlert(Constants.Statuses.Error, ex.ToString(), Constants.Prompts.Ok);
         }
         finally
         {

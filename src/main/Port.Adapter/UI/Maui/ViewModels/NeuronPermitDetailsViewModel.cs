@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ei8.Avatar.Installer.Application.IdentityAccess;
+using ei8.Avatar.Installer.Common;
 using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
 using System;
 using System.Collections.Generic;
@@ -29,7 +30,7 @@ public partial class NeuronPermitDetailsViewModel : EditAvatarViewModel
     {
         if (this.NeuronPermit is null) return;
         bool isConfirmed = await Shell.Current.CurrentPage.DisplayAlert("Update Neuron Permit", "Are you sure you want to update this Neuron Permit",
-                            "Yes", "No");
+                            Constants.Prompts.Yes, Constants.Prompts.No);
 
         if (!isConfirmed)
             return;
@@ -38,8 +39,8 @@ public partial class NeuronPermitDetailsViewModel : EditAvatarViewModel
         {
             await this.neuronPermitApplicationService.UpdateAsync(NeuronPermit!);
 
-            await Shell.Current.CurrentPage.DisplayAlert("Success!",
-                $"Neuron Permit updated", "OK");
+            await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Success,
+                $"Neuron Permit updated", Constants.Prompts.Ok);
 
             await Shell.Current.GoToAsync("..");
         }
@@ -47,8 +48,8 @@ public partial class NeuronPermitDetailsViewModel : EditAvatarViewModel
         {
             Debug.WriteLine(ex);
 
-            await Shell.Current.CurrentPage.DisplayAlert("Error!",
-                $"Unable to update Neuron Permit: {ex.Message}", "OK");
+            await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Error,
+                $"Unable to update Neuron Permit: {ex.Message}", Constants.Prompts.Ok);
         }
     }
 }

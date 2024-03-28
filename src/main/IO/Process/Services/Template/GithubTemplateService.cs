@@ -1,4 +1,5 @@
 ﻿using ei8.Avatar.Installer.Application.Settings;
+using ei8.Avatar.Installer.Common;
 using ei8.Avatar.Installer.Domain.Model.Template;
 using LibGit2Sharp;
 using Microsoft.Extensions.Logging;
@@ -20,7 +21,7 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Template
         public void DownloadTemplate(string destinationPath)
         {
             // .NET Maui doesn't have environment variables so the url is hardcoded
-            var templateDownloadUrl = settingsService.TemplateDownloadUrl ?? "https://github.com/ei8/avatar-template.git";
+            var templateDownloadUrl = settingsService.TemplateDownloadUrl ?? Constants.Urls.DefaultTemplateDownloadUrl;
 
             Repository.Clone(templateDownloadUrl, destinationPath, new CloneOptions()
             {
