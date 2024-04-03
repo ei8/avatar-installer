@@ -32,8 +32,10 @@ public partial class NeuronPermitDetailsViewModel : EditAvatarViewModel
     private async Task UpdateNeuronPermitAsync()
     {
         if (this.NeuronPermit is null) return;
-        bool isConfirmed = await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Update, Constants.NeuronPermit.ConfirmUpdate,
-                            Constants.Prompts.Yes, Constants.Prompts.No);
+
+        bool isConfirmed = await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Update, 
+            string.Format(Constants.Messages.ConfirmUpdate, Constants.Titles.NeuronPermit), 
+            Constants.Prompts.Yes, Constants.Prompts.No);
 
         if (!isConfirmed)
             return;
@@ -43,7 +45,7 @@ public partial class NeuronPermitDetailsViewModel : EditAvatarViewModel
             await this.neuronPermitApplicationService.UpdateAsync(NeuronPermit);
 
             await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Success,
-                Constants.NeuronPermit.Updated, Constants.Prompts.Ok);
+                string.Format(Constants.Messages.Updated, Constants.Titles.NeuronPermit), Constants.Prompts.Ok);
 
             await Shell.Current.GoToAsync("..");
         }
@@ -52,7 +54,8 @@ public partial class NeuronPermitDetailsViewModel : EditAvatarViewModel
             Debug.WriteLine(ex);
 
             await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Error,
-                $"{Constants.NeuronPermit.UpdateError}: {ex.Message}", Constants.Prompts.Ok);
+                $"{string.Format(Constants.Messages.UpdateError, Constants.Titles.NeuronPermit)}: {ex.Message}", 
+                Constants.Prompts.Ok);
         }
     }
 }

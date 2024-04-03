@@ -33,8 +33,9 @@ public partial class UserDetailsViewModel : EditAvatarViewModel
     private async Task UpdateUserAsync()
     {
         if (this.User is null) return;
-        bool isConfirmed = await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Update, Constants.User.ConfirmUpdate,
-                            Constants.Prompts.Yes, Constants.Prompts.No);
+        bool isConfirmed = await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Update, 
+            string.Format(Constants.Messages.ConfirmUpdate, Constants.Titles.User),
+            Constants.Prompts.Yes, Constants.Prompts.No);
 
         if (!isConfirmed)
             return;
@@ -44,7 +45,8 @@ public partial class UserDetailsViewModel : EditAvatarViewModel
             await this.userApplicationService.UpdateAsync(User);
 
             await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Success,
-                Constants.User.Updated, Constants.Prompts.Ok);
+                string.Format(Constants.Messages.Updated, Constants.Titles.User), 
+                Constants.Prompts.Ok);
 
             await Shell.Current.GoToAsync("..");
         }
@@ -53,7 +55,8 @@ public partial class UserDetailsViewModel : EditAvatarViewModel
             Debug.WriteLine(ex);
 
             await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Error,
-                $"Unable to update User: {ex.Message}", Constants.Prompts.Ok);
+                $"{string.Format(Constants.Messages.UpdateError, Constants.Titles.User)}: {ex.Message}", 
+                Constants.Prompts.Ok);
         }
     }
 }
