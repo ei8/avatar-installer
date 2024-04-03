@@ -48,7 +48,7 @@ public partial class UsersViewModel : EditAvatarViewModel
         catch (Exception ex)
         {
             Debug.WriteLine(ex);
-            await Shell.Current.DisplayAlert(Constants.Statuses.Error, $"Unable to get Users: {ex.Message}", Constants.Prompts.Ok);
+            await Shell.Current.DisplayAlert(Constants.Statuses.Error, $"{Constants.User.GetListError}: {ex.Message}", Constants.Prompts.Ok);
         }
         finally
         {

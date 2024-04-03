@@ -51,7 +51,7 @@ public partial class HomeViewModel : BaseViewModel
             if (workingDirectory.Folder is null)
             {
                 await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Cancelled, 
-                    $"Editing avatar cancelled", Constants.Prompts.Ok);
+                    Constants.Messages.EditingCancelled, Constants.Prompts.Ok);
                 return;
             }
 

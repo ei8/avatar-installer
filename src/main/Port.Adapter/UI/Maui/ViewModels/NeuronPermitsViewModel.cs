@@ -48,7 +48,7 @@ public partial class NeuronPermitsViewModel : EditAvatarViewModel
         catch (Exception ex)
         {
             Debug.WriteLine(ex);
-            await Shell.Current.DisplayAlert(Constants.Statuses.Error, $"Unable to get NeuronPermits: {ex.Message}", Constants.Prompts.Ok);
+            await Shell.Current.DisplayAlert(Constants.Statuses.Error, $"{Constants.NeuronPermit.GetListError}: {ex.Message}", Constants.Prompts.Ok);
         }
         finally
         {

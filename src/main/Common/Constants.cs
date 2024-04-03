@@ -46,6 +46,38 @@
             public const string No = "No";
         }
 
+        public sealed class Messages
+        {
+            public const string InvalidConfig = "Configuration must be a json file";
+            public const string ChooseConfig = "Please choose a configuration file";
+            public const string AvatarInstalled = "Avatar has been successfully installed";
+            public const string EditingCancelled = "Editing avatar cancelled";
+
+        }
+        public sealed class NeuronPermit
+        {
+            public const string ConfirmUpdate = "Are you sure you want to update this Neuron Permit?";
+            public const string Updated = "Neuron Permit updated";
+            public const string UpdateError = "Unable to update Neuron Permit";
+            public const string GetListError = "Unable to get Neuron Permits";
+        }
+
+        public sealed class RegionPermit
+        {
+            public const string ConfirmUpdate = "Are you sure you want to update this Region Permit?";
+            public const string Updated = "Region Permit updated";
+            public const string UpdateError = "Unable to update Region Permit";
+            public const string GetListError = "Unable to get Region Permits";
+        }
+
+        public sealed class User
+        {
+            public const string ConfirmUpdate = "Are you sure you want to update this User?";
+            public const string Updated = "User updated";
+            public const string UpdateError = "Unable to update User";
+            public const string GetListError = "Unable to get Users";
+        }
+
         public sealed class Urls
         {
             public const string DefaultTemplateDownloadUrl = "https://github.com/ei8/avatar-template.git";

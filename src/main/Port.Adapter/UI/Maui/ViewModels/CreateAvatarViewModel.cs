@@ -33,12 +33,12 @@ public partial class CreateAvatarViewModel : BaseViewModel
         this.progressService.DescriptionChanged += ProgressService_DescriptionChanged;
     }
 
-    private void ProgressService_DescriptionChanged(object? sender, EventArgs e)
+    private void ProgressService_DescriptionChanged(object sender, EventArgs e)
     {
         this.LoadingText = this.progressService.Description;
     }
 
-    private void ProgressService_ProgressChanged(object? sender, EventArgs e)
+    private void ProgressService_ProgressChanged(object sender, EventArgs e)
     {
         this.CreationProgress = this.progressService.Progress;
     }
@@ -67,20 +67,20 @@ public partial class CreateAvatarViewModel : BaseViewModel
         {
             var configFile = await FilePicker.PickAsync(new PickOptions
             {
-                PickerTitle = "Choose a config file"
+                PickerTitle = Constants.Messages.ChooseConfig
             });
 
             if (configFile is null)
             {
-                await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Success,
-                    $"Creating Avatar cancelled", Constants.Prompts.Ok);
+                await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Cancelled,
+                    Constants.Messages.ChooseConfig, Constants.Prompts.Ok);
                 return;
             }
 
             if (!configFile.FileName.EndsWith("json", StringComparison.OrdinalIgnoreCase))
             {
                 await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Invalid,
-                    $"Configuration must be a a json file", Constants.Prompts.Ok);
+                    Constants.Messages.InvalidConfig, Constants.Prompts.Ok);
                 return;
             }
 
@@ -111,12 +111,12 @@ public partial class CreateAvatarViewModel : BaseViewModel
 
             if (string.IsNullOrEmpty(ConfigPath))
             {
-                await Shell.Current.DisplayAlert(Constants.Statuses.Invalid, "Please choose config file", Constants.Prompts.Ok);
+                await Shell.Current.DisplayAlert(Constants.Statuses.Invalid, Constants.Messages.ChooseConfig, Constants.Prompts.Ok);
                 return;
             }
 
             await avatarApplicationService.CreateAvatarAsync(ConfigPath);
-            await Shell.Current.DisplayAlert(Constants.Statuses.Success, "Avatar Installed", Constants.Prompts.Ok);
+            await Shell.Current.DisplayAlert(Constants.Statuses.Success, Constants.Messages.AvatarInstalled, Constants.Prompts.Ok);
         }
         catch (Exception ex)
         {

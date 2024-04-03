@@ -48,7 +48,7 @@ public partial class RegionPermitsViewModel : EditAvatarViewModel
         catch (Exception ex)
         {
             Debug.WriteLine(ex);
-            await Shell.Current.DisplayAlert(Constants.Statuses.Error, $"Unable to get Region Permits: {ex.Message}", Constants.Prompts.Ok);
+            await Shell.Current.DisplayAlert(Constants.Statuses.Error, $"{Constants.RegionPermit.GetListError}: {ex.Message}", Constants.Prompts.Ok);
         }
         finally
         {

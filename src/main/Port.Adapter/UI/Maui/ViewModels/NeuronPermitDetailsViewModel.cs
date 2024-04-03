@@ -32,7 +32,7 @@ public partial class NeuronPermitDetailsViewModel : EditAvatarViewModel
     private async Task UpdateNeuronPermitAsync()
     {
         if (this.NeuronPermit is null) return;
-        bool isConfirmed = await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Update, "Are you sure you want to update this Neuron Permit",
+        bool isConfirmed = await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Update, Constants.NeuronPermit.ConfirmUpdate,
                             Constants.Prompts.Yes, Constants.Prompts.No);
 
         if (!isConfirmed)
@@ -43,7 +43,7 @@ public partial class NeuronPermitDetailsViewModel : EditAvatarViewModel
             await this.neuronPermitApplicationService.UpdateAsync(NeuronPermit);
 
             await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Success,
-                $"Neuron Permit updated", Constants.Prompts.Ok);
+                Constants.NeuronPermit.Updated, Constants.Prompts.Ok);
 
             await Shell.Current.GoToAsync("..");
         }
@@ -52,7 +52,7 @@ public partial class NeuronPermitDetailsViewModel : EditAvatarViewModel
             Debug.WriteLine(ex);
 
             await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Error,
-                $"Unable to update Neuron Permit: {ex.Message}", Constants.Prompts.Ok);
+                $"{Constants.NeuronPermit.UpdateError}: {ex.Message}", Constants.Prompts.Ok);
         }
     }
 }

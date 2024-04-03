@@ -32,7 +32,7 @@ public partial class RegionPermitDetailsViewModel : EditAvatarViewModel
     private async Task UpdateRegionPermitAsync()
     {
         if (this.RegionPermit is null) return;
-        bool isConfirmed = await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Update, "Are you sure you want to update this Region Permit",
+        bool isConfirmed = await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Update, Constants.RegionPermit.ConfirmUpdate,
                             Constants.Prompts.Yes, Constants.Prompts.No);
 
         if (!isConfirmed)
@@ -43,7 +43,7 @@ public partial class RegionPermitDetailsViewModel : EditAvatarViewModel
             await this.regionPermitApplicationService.UpdateAsync(RegionPermit);
 
             await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Success,
-                "Region Permit updated", Constants.Prompts.Ok);
+                Constants.RegionPermit.Updated, Constants.Prompts.Ok);
 
             await Shell.Current.GoToAsync("..");
         }
@@ -52,7 +52,7 @@ public partial class RegionPermitDetailsViewModel : EditAvatarViewModel
             Debug.WriteLine(ex);
 
             await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Error,
-                "Unable to update Region Permit: {ex.Message}", Constants.Prompts.Ok);
+                $"{Constants.RegionPermit.UpdateError}: {ex.Message}", Constants.Prompts.Ok);
         }
     }
 }

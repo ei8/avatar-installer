@@ -33,7 +33,7 @@ public partial class UserDetailsViewModel : EditAvatarViewModel
     private async Task UpdateUserAsync()
     {
         if (this.User is null) return;
-        bool isConfirmed = await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Update, "Are you sure you want to update this User?",
+        bool isConfirmed = await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Update, Constants.User.ConfirmUpdate,
                             Constants.Prompts.Yes, Constants.Prompts.No);
 
         if (!isConfirmed)
@@ -44,7 +44,7 @@ public partial class UserDetailsViewModel : EditAvatarViewModel
             await this.userApplicationService.UpdateAsync(User);
 
             await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Success,
-                $"User updated", Constants.Prompts.Ok);
+                Constants.User.Updated, Constants.Prompts.Ok);
 
             await Shell.Current.GoToAsync("..");
         }
