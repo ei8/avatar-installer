@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="ei8.Avatar.Installer.Port.Adapter.UI.Maui.Views.RegionPermitsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:models="clr-namespace:ei8.Avatar.Installer.Domain.Model.IdentityAccess;assembly=Domain.Model"
+    xmlns:viewmodels="clr-namespace:ei8.Avatar.Installer.Port.Adapter.UI.Maui.ViewModels"
+    Title="Region Permits"
+    x:DataType="viewmodels:RegionPermitsViewModel">
+
+    <Grid RowDefinitions="*,Auto">
+        <Grid Grid.Row="0" Padding="5">
+            <ScrollView>
+                <StackLayout>
+                    <CollectionView ItemsSource="{Binding RegionPermits}">
+                        <CollectionView.Header>
+                            <Grid Padding="10" ColumnDefinitions="*,*,*,*,*">
+                                <Label
+                                    Grid.Column="0"
+                                    HorizontalTextAlignment="Center"
+                                    Text="Sequence Id" />
+                                <Label
+                                    Grid.Column="1"
+                                    HorizontalTextAlignment="Center"
+                                    Text="User Neuron Id" />
+                                <Label
+                                    Grid.Column="2"
+                                    HorizontalTextAlignment="Center"
+                                    Text="Region Neuron Id" />
+                                <Label
+                                    Grid.Column="3"
+                                    HorizontalTextAlignment="Center"
+                                    Text="Write Level" />
+                                <Label
+                                    Grid.Column="4"
+                                    HorizontalTextAlignment="Center"
+                                    Text="Read Level" />
+                            </Grid>
+                        </CollectionView.Header>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="models:RegionPermit">
+                                <Frame Margin="2" Padding="5">
+                                    <Frame.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:RegionPermitsViewModel}}, Path=GoToRegionPermitDetailsCommand}" CommandParameter="{Binding .}" />
+                                    </Frame.GestureRecognizers>
+                                    <Grid Padding="10" ColumnDefinitions="*,*,*,*,*">
+                                        <Label
+                                            Grid.Column="0"
+                                            HorizontalTextAlignment="Center"
+                                            Text="{Binding SequenceId}" />
+                                        <Label
+                                            Grid.Column="1"
+                                            HorizontalTextAlignment="Center"
+                                            Text="{Binding UserNeuronId}" />
+                                        <Label
+                                            Grid.Column="2"
+                                            HorizontalTextAlignment="Center"
+                                            Text="{Binding RegionNeuronId}" />
+                                        <Label
+                                            Grid.Column="3"
+                                            HorizontalTextAlignment="Center"
+                                            Text="{Binding WriteLevel}" />
+                                        <Label
+                                            Grid.Column="4"
+                                            HorizontalTextAlignment="Center"
+                                            Text="{Binding ReadLevel}" />
+                                    </Grid>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </StackLayout>
+            </ScrollView>
+        </Grid>
+        <Grid Grid.Row="1" Padding="10">
+            <Button Text="Add Region Permit" />
+        </Grid>
+
+    </Grid>
+</ContentPage>

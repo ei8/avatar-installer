@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="ei8.Avatar.Installer.Port.Adapter.UI.Maui.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:ei8.Avatar.Installer.Port.Adapter.UI.Maui.Views"
+    Title="Avatar Installer"
+    Shell.FlyoutBehavior="Disabled"
+    Shell.FlyoutWidth="150"
+    Shell.NavBarIsVisible="False">
+
+    <FlyoutItem Title="Home">
+        <ShellContent
+            Title="Home"
+            ContentTemplate="{DataTemplate views:HomePage}"
+            Route="HomePage"
+            Shell.FlyoutBehavior="Disabled" />
+    </FlyoutItem>
+    <FlyoutItem Title="Create" FlyoutItemIsVisible="False">
+        <ShellContent
+            Title="Create Avatar"
+            ContentTemplate="{DataTemplate views:CreateAvatarPage}"
+            Route="CreateAvatarPage"
+            Shell.FlyoutBehavior="Disabled" />
+    </FlyoutItem>
+    <FlyoutItem
+        Title="Identity Access"
+        FlyoutItemIsVisible="False"
+        Route="IdentityAccessPage">
+        <Tab Title="Neuron Permit">
+            <ShellContent
+                Title="Neuron Permit"
+                ContentTemplate="{DataTemplate views:NeuronPermitsPage}"
+                Route="NeuronPermitPage"
+                Shell.FlyoutBehavior="Flyout" />
+        </Tab>
+        <Tab Title="Region Permit">
+            <ShellContent
+                Title="Region Permit"
+                ContentTemplate="{DataTemplate views:RegionPermitsPage}"
+                Route="RegionPermitsPage"
+                Shell.FlyoutBehavior="Flyout" />
+        </Tab>
+        <Tab Title="Users">
+            <ShellContent
+                Title="Users"
+                ContentTemplate="{DataTemplate views:UsersPage}"
+                Route="UsersPage"
+                Shell.FlyoutBehavior="Flyout" />
+        </Tab>
+    </FlyoutItem>
+</Shell>

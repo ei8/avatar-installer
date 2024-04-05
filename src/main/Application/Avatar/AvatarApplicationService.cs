@@ -4,6 +4,7 @@ using ei8.Avatar.Installer.Domain.Model.Mapping;
 using ei8.Avatar.Installer.Domain.Model.Template;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using neurUL.Common.Domain.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,21 +15,21 @@ namespace ei8.Avatar.Installer.Application.Avatar
 {
     public class AvatarApplicationService : IAvatarApplicationService
     {
-        private IConfigurationRepository configurationRepository;
-        private IConfiguration configuration;
-        private ILogger<AvatarApplicationService> logger;
-        private IAvatarRepository avatarRepository;
-        private IAvatarMapperService avatarMapperService;
-        private ITemplateService templateService;
-        private IAvatarServerRepository avatarServerRepository;
-        private IAvatarServerMapperService avatarServerMapperService;
+        private readonly IConfigurationRepository configurationRepository;
+        private readonly IProgressService progressService;
+        private readonly ILogger<AvatarApplicationService> logger;
+        private readonly IAvatarRepository avatarRepository;
+        private readonly IAvatarMapperService avatarMapperService;
+        private readonly ITemplateService templateService;
+        private readonly IAvatarServerRepository avatarServerRepository;
+        private readonly IAvatarServerMapperService avatarServerMapperService;
 
-        public AvatarApplicationService(IConfigurationRepository configurationRepository, IConfiguration configuration, 
-            ILogger<AvatarApplicationService> logger, IAvatarRepository avatarRepository, IAvatarMapperService avatarMapperService, 
+        public AvatarApplicationService(IConfigurationRepository configurationRepository, IProgressService progressService,
+            ILogger<AvatarApplicationService> logger, IAvatarRepository avatarRepository, IAvatarMapperService avatarMapperService,
             ITemplateService templateService, IAvatarServerRepository avatarServerRepository, IAvatarServerMapperService avatarServerMapperService)
         {
             this.configurationRepository = configurationRepository;
-            this.configuration = configuration;
+            this.progressService = progressService;
             this.logger = logger;
             this.avatarRepository = avatarRepository;
             this.avatarMapperService = avatarMapperService;
@@ -37,15 +38,16 @@ namespace ei8.Avatar.Installer.Application.Avatar
             this.avatarServerMapperService = avatarServerMapperService;
         }
 
-        public async Task CreateAvatarAsync()
+        public async Task CreateAvatarAsync(string id)
         {
-            var configPath = configuration.GetSection("config").Value;
+            AssertionConcern.AssertArgumentNotNull(id, nameof(id));
 
-            if (string.IsNullOrEmpty(configPath))
-                configPath = ".";
+            this.progressService.Reset();
+            this.progressService.Update(0.1, "Creating Avatar...");
 
-            var configObject = await configurationRepository.GetByAsync(configPath);
+            var configObject = await configurationRepository.GetByAsync(id);
 
+            this.progressService.Update(0.3, "Configuring Avatar...");
             foreach (var item in configObject.Avatars)
             {
                 logger.LogInformation("Setting up avatar {itemName}", item.Name);
@@ -64,10 +66,14 @@ namespace ei8.Avatar.Installer.Application.Avatar
                 await avatarRepository.SaveAsync(mappedAvatar);
             }
 
+            this.progressService.Update(0.5, "Mapping Avatar...");
             var avatarServer = await avatarServerRepository.GetByAsync(configObject.Destination);
             var mappedAvatarServer = avatarServerMapperService.Apply(configObject, avatarServer);
 
+            this.progressService.Update(0.8, "Saving Avatar...");
             await avatarServerRepository.SaveAsync(mappedAvatarServer);
+
+            this.progressService.Update(1.0, "Finished Creating Avatar!");
         }
     }
 }

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="ei8.Avatar.Installer.Port.Adapter.UI.Maui.Views.NeuronPermitDetailsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewmodels="clr-namespace:ei8.Avatar.Installer.Port.Adapter.UI.Maui.ViewModels"
+    Title="NeuronPermitDetailsPage"
+    x:DataType="viewmodels:NeuronPermitDetailsViewModel"
+    Shell.NavBarIsVisible="True"
+    Shell.TabBarIsVisible="False">
+
+    <Grid RowDefinitions="*,Auto">
+        <ScrollView Grid.Row="0">
+            <StackLayout>
+                <Grid Margin="10" ColumnDefinitions="Auto,*">
+                    <Label
+                        Grid.Column="0"
+                        Text="Neuron ID: "
+                        VerticalOptions="Center" />
+                    <Entry
+                        Grid.Column="1"
+                        IsReadOnly="True"
+                        Text="{Binding NeuronPermit.NeuronId}" />
+                </Grid>
+                <Grid Margin="10" ColumnDefinitions="Auto,*">
+                    <Label
+                        Grid.Column="0"
+                        Text="User Neuron ID: "
+                        VerticalOptions="Center" />
+                    <Entry
+                        Grid.Column="1"
+                        HorizontalOptions="Fill"
+                        IsReadOnly="True"
+                        Text="{Binding NeuronPermit.UserNeuronId}" />
+                </Grid>
+                <Grid Margin="10" ColumnDefinitions="Auto,*">
+                    <Label
+                        Grid.Column="0"
+                        Text="Expiration Date: "
+                        VerticalOptions="Center" />
+                    <Entry
+                        Grid.Column="1"
+                        Placeholder="NULL"
+                        Text="{Binding NeuronPermit.ExpirationDate}" />
+                </Grid>
+            </StackLayout>
+        </ScrollView>
+        <Grid
+            Grid.Row="1"
+            Padding="10"
+            ColumnDefinitions="*,*,*">
+            <Button
+                Grid.Column="0"
+                Margin="0,0,6,0"
+                Command="{Binding CancelEditCommand}"
+                Text="Cancel" />
+            <Button
+                Grid.Column="1"
+                Margin="3,0,3,0"
+                Command="{Binding UpdateNeuronPermitCommand}"
+                Text="Update" />
+            <Button
+                Grid.Column="2"
+                Margin="6,0,0,0"
+                Text="Delete" />
+
+        </Grid>
+    </Grid>
+</ContentPage>

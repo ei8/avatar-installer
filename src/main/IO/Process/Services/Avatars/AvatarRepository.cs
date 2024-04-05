@@ -2,6 +2,7 @@
 using ei8.Avatar.Installer.Domain.Model.Avatars;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Logging;
+using System.Reflection;
 
 namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
 {
@@ -150,6 +151,15 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
 
         private async Task CreateSqliteDatabasesAsync(AvatarItem avatarItem)
         {
+            // Save the original directory for later use
+            // Maui's current directory: "C:\\WINDOWS\\system32"
+            // CLI's current directory: "avatar-installer\\src\\main\\Port.Adapter\\UI\\CLI\\bin\\Debug\\net6.0"
+            var originalDirectory = Directory.GetCurrentDirectory();
+
+            // Get the directory where the compiled executable (.exe) is located to fix directory issues
+            var exeDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            Directory.SetCurrentDirectory(exeDirectory);
+
             foreach (var sqlFile in Directory.EnumerateFiles("./Avatars", "*.sql"))
             {
                 logger.LogInformation("Creating database for {sqlFile}", sqlFile);
@@ -171,7 +181,8 @@ INSERT OR REPLACE INTO ""Notification"" (""SequenceId"", ""Timestamp"", ""TypeNa
 VALUES
     (@SequenceId1, @Timestamp1, @TypeName1, @Id1, @Version1, @AuthorId1, @Data1),
     (@SequenceId2, @Timestamp2, @TypeName2, @Id2, @Version2, @AuthorId2, @Data2);
-COMMIT;";
+COMMIT;
+";
 
                     var guid = Guid.NewGuid();
 
@@ -220,6 +231,9 @@ COMMIT;";
                     await command.ExecuteNonQueryAsync();
                 }
             }
+
+            // Revert changes to current directory
+            Directory.SetCurrentDirectory(originalDirectory);
         }
     }
 }
