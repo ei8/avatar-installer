@@ -59,5 +59,37 @@ public partial class NeuronPermitDetailsViewModel : EditAvatarViewModel
                 Constants.Prompts.Ok);
         }
     }
+
+    [RelayCommand]
+    private async Task DeleteNeuronPermitAsync()
+    {
+        if (this.NeuronPermit is null) return;
+        
+        bool isConfirmed = await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Delete,
+            string.Format(Constants.Messages.Confirmation, Constants.Operations.Delete, Constants.Titles.NeuronPermit),
+            Constants.Prompts.Yes, Constants.Prompts.No);
+
+        if (!isConfirmed)
+            return;
+
+        try
+        {
+            await this.neuronPermitApplicationService.DeleteAsync(NeuronPermit);
+
+            await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Success,
+                string.Format(Constants.Messages.Success, Constants.Operations.Deleted, Constants.Titles.NeuronPermit),
+                Constants.Prompts.Ok);
+
+            await Shell.Current.GoToAsync("..");
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+
+            await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Error,
+                $"{string.Format(Constants.Messages.Error, Constants.Operations.Delete, Constants.Titles.NeuronPermit)}: {ex.Message}",
+                Constants.Prompts.Ok);
+        }
+    }
 }
 

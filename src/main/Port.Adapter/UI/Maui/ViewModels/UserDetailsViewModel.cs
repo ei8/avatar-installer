@@ -59,4 +59,36 @@ public partial class UserDetailsViewModel : EditAvatarViewModel
                 Constants.Prompts.Ok);
         }
     }
+
+    [RelayCommand]
+    private async Task DeleteUserAsync()
+    {
+        if (this.User is null) return;
+
+        bool isConfirmed = await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Delete,
+            string.Format(Constants.Messages.Confirmation, Constants.Operations.Delete, Constants.Titles.User),
+            Constants.Prompts.Yes, Constants.Prompts.No);
+
+        if (!isConfirmed)
+            return;
+
+        try
+        {
+            await this.userApplicationService.DeleteAsync(User);
+
+            await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Success,
+                string.Format(Constants.Messages.Success, Constants.Operations.Deleted, Constants.Titles.User),
+                Constants.Prompts.Ok);
+
+            await Shell.Current.GoToAsync("..");
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+
+            await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Error,
+                $"{string.Format(Constants.Messages.Error, Constants.Operations.Delete, Constants.Titles.User)}: {ex.Message}",
+                Constants.Prompts.Ok);
+        }
+    }
 }
