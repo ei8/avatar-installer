@@ -44,6 +44,7 @@
             public const string Error = "Error";
             public const string Invalid = "Invalid";
             public const string Update = "Update";
+            public const string Delete = "Delete";
         }
 
         public sealed class Prompts

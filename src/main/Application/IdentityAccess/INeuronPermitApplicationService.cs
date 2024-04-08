@@ -11,4 +11,5 @@ public interface INeuronPermitApplicationService
 {
     Task<IEnumerable<NeuronPermit>> GetAllAsync();
     Task UpdateAsync(NeuronPermit neuronPermit);
+    Task DeleteAsync(NeuronPermit neuronPermit);
 }

@@ -1,4 +1,5 @@
-﻿using ei8.Avatar.Installer.Domain.Model;
+﻿using ei8.Avatar.Installer.Common;
+using ei8.Avatar.Installer.Domain.Model;
 using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
 using Microsoft.Data.Sqlite;
 using neurUL.Common.Domain.Model;
@@ -21,17 +22,35 @@ public class UserRepository : IUserRepository
         this.avatarContextService = avatarContextService;
     }
 
-    public async Task<IEnumerable<User>> GetAllAsync()
+    public async Task DeleteAsync(User user)
     {
-        var id = avatarContextService.Avatar!.Id;
-        var connectionString = $@"Data Source=file:{Path.Combine(id, "identity-access.db")}";
-        var users = new List<User>();
-        var tableName = "User";
+        AssertionConcern.AssertArgumentNotNull(user, nameof(user));
+
+        var id = avatarContextService.Avatar.Id;
+        var connectionString = $@"Data Source=file:{Path.Combine(id, Constants.Databases.IdentityAccessDb)}";
 
         using var connection = new SqliteConnection(connectionString);
         await connection.OpenAsync();
 
-        using var command = new SqliteCommand($"SELECT UserId, NeuronId, Active FROM {tableName}", connection);
+        var query = $"DELETE FROM {Constants.TableNames.User} WHERE UserId = @UserId";
+        using var command = new SqliteCommand(query, connection);
+
+        command.Parameters.AddWithValue("@UserId", user.UserId);
+
+        await command.ExecuteNonQueryAsync();
+    }
+
+
+    public async Task<IEnumerable<User>> GetAllAsync()
+    {
+        var id = avatarContextService.Avatar.Id;
+        var connectionString = $@"Data Source=file:{Path.Combine(id, Constants.Databases.IdentityAccessDb)}";
+        var users = new List<User>();
+
+        using var connection = new SqliteConnection(connectionString);
+        await connection.OpenAsync();
+
+        using var command = new SqliteCommand($"SELECT UserId, NeuronId, Active FROM {Constants.TableNames.User}", connection);
         using var reader = await command.ExecuteReaderAsync();
 
         while (await reader.ReadAsync())
@@ -53,14 +72,13 @@ public class UserRepository : IUserRepository
     {
         AssertionConcern.AssertArgumentNotNull(user, nameof(user));
 
-        var id = avatarContextService.Avatar!.Id;
-        var connectionString = $@"Data Source=file:{Path.Combine(id, "identity-access.db")}";
-        var tableName = "User";
+        var id = avatarContextService.Avatar.Id;
+        var connectionString = $@"Data Source=file:{Path.Combine(id, Constants.Databases.IdentityAccessDb)}";
 
         using var connection = new SqliteConnection(connectionString);
         await connection.OpenAsync();
 
-        var query = $"UPDATE {tableName} SET NeuronId = @NeuronId, Active = @Active WHERE UserId = @UserId";
+        var query = $"UPDATE {Constants.TableNames.User} SET NeuronId = @NeuronId, Active = @Active WHERE UserId = @UserId";
         using var command = new SqliteCommand(query, connection);
 
         command.Parameters.AddWithValue("@NeuronId", user.NeuronId);
