@@ -49,7 +49,7 @@ public partial class UsersViewModel : EditAvatarViewModel
         {
             Debug.WriteLine(ex);
             await Shell.Current.DisplayAlert(Constants.Statuses.Error, 
-                $"{string.Format(Constants.Messages.GetError, Constants.Titles.User)}s: {ex.Message}", 
+                $"{string.Format(Constants.Messages.Error, Constants.Operations.Get, Constants.Titles.User)}s: {ex.Message}", 
                 Constants.Prompts.Ok);
         }
         finally

@@ -22,6 +22,13 @@
             public const string SubscriptionsDb = "subscriptions.db";
         }
 
+        public sealed class TableNames
+        {
+            public const string NeuronPermit = "NeuronPermit";
+            public const string RegionPermit = "RegionPermit";
+            public const string User = "User";
+        }
+
         public sealed class Titles
         {
             public const string AvatarInstaller = "Avatar Installer";
@@ -46,16 +53,26 @@
             public const string No = "No";
         }
 
+        public sealed class Operations
+        {
+            public const string Update = "update";
+            public const string Updated = "updated";
+            public const string Delete = "delete";
+            public const string Deleted = "deleted";
+            public const string Create = "create";
+            public const string Created = "created";
+            public const string Get = "get";
+        }
+
         public sealed class Messages
         {
             public const string InvalidConfig = "Configuration must be a json file";
             public const string ChooseConfig = "Please choose a configuration file";
             public const string AvatarInstalled = "Avatar has been successfully installed";
             public const string EditingCancelled = "Editing avatar cancelled";
-            public const string ConfirmUpdate = "Are you sure you want to update this {0}?";
-            public const string Updated = "{0} updated";
-            public const string UpdateError = "Unable to update {0}";
-            public const string GetError = "Unable to get {0}";
+            public const string Confirmation = "Are you sure you want to {0} this {1}?";
+            public const string Success = "Successfully {0} {1}";
+            public const string Error = "Unable to {0} {1}";
 
         }
 

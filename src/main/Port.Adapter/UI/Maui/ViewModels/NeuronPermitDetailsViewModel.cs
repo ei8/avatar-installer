@@ -33,8 +33,8 @@ public partial class NeuronPermitDetailsViewModel : EditAvatarViewModel
     {
         if (this.NeuronPermit is null) return;
 
-        bool isConfirmed = await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Update, 
-            string.Format(Constants.Messages.ConfirmUpdate, Constants.Titles.NeuronPermit), 
+        bool isConfirmed = await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Update,
+            string.Format(Constants.Messages.Confirmation, Constants.Operations.Update, Constants.Titles.NeuronPermit),
             Constants.Prompts.Yes, Constants.Prompts.No);
 
         if (!isConfirmed)
@@ -45,7 +45,8 @@ public partial class NeuronPermitDetailsViewModel : EditAvatarViewModel
             await this.neuronPermitApplicationService.UpdateAsync(NeuronPermit);
 
             await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Success,
-                string.Format(Constants.Messages.Updated, Constants.Titles.NeuronPermit), Constants.Prompts.Ok);
+                string.Format(Constants.Messages.Success, Constants.Operations.Updated, Constants.Titles.NeuronPermit),
+                Constants.Prompts.Ok);
 
             await Shell.Current.GoToAsync("..");
         }
@@ -54,7 +55,7 @@ public partial class NeuronPermitDetailsViewModel : EditAvatarViewModel
             Debug.WriteLine(ex);
 
             await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Error,
-                $"{string.Format(Constants.Messages.UpdateError, Constants.Titles.NeuronPermit)}: {ex.Message}", 
+                $"{string.Format(Constants.Messages.Error, Constants.Operations.Update, Constants.Titles.NeuronPermit)}: {ex.Message}",
                 Constants.Prompts.Ok);
         }
     }
