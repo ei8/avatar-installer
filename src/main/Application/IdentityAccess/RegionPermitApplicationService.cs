@@ -18,6 +18,13 @@ public class RegionPermitApplicationService : IRegionPermitApplicationService
         this.regionPermitRepository = regionPermitRepository;
     }
 
+    public async Task DeleteAsync(RegionPermit regionPermit)
+    {
+        AssertionConcern.AssertArgumentNotNull(regionPermit, nameof(regionPermit));
+
+        await this.regionPermitRepository.DeleteAsync(regionPermit);
+    }
+
     public async Task<IEnumerable<RegionPermit>> GetAllAsync()
     {
         return await this.regionPermitRepository.GetAllAsync();

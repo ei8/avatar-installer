@@ -19,6 +19,13 @@ public class UserApplicationService : IUserApplicationService
         this.userRepository = userRepository;
     }
 
+    public async Task DeleteAsync(User user)
+    {
+        AssertionConcern.AssertArgumentNotNull(user, nameof(user));
+
+        await this.userRepository.DeleteAsync(user);
+    }
+
     public async Task<IEnumerable<User>> GetAllAsync()
     {
         return await this.userRepository.GetAllAsync();

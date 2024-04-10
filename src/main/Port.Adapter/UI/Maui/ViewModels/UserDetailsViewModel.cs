@@ -33,8 +33,8 @@ public partial class UserDetailsViewModel : EditAvatarViewModel
     private async Task UpdateUserAsync()
     {
         if (this.User is null) return;
-        bool isConfirmed = await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Update, 
-            string.Format(Constants.Messages.ConfirmUpdate, Constants.Titles.User),
+        bool isConfirmed = await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Update,
+            string.Format(Constants.Messages.Confirmation, Constants.Operations.Update, Constants.Titles.User),
             Constants.Prompts.Yes, Constants.Prompts.No);
 
         if (!isConfirmed)
@@ -45,7 +45,7 @@ public partial class UserDetailsViewModel : EditAvatarViewModel
             await this.userApplicationService.UpdateAsync(User);
 
             await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Success,
-                string.Format(Constants.Messages.Updated, Constants.Titles.User), 
+                string.Format(Constants.Messages.Success, Constants.Operations.Updated, Constants.Titles.User),
                 Constants.Prompts.Ok);
 
             await Shell.Current.GoToAsync("..");
@@ -55,7 +55,39 @@ public partial class UserDetailsViewModel : EditAvatarViewModel
             Debug.WriteLine(ex);
 
             await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Error,
-                $"{string.Format(Constants.Messages.UpdateError, Constants.Titles.User)}: {ex.Message}", 
+                $"{string.Format(Constants.Messages.Error, Constants.Operations.Update, Constants.Titles.User)}: {ex.Message}",
+                Constants.Prompts.Ok);
+        }
+    }
+
+    [RelayCommand]
+    private async Task DeleteUserAsync()
+    {
+        if (this.User is null) return;
+
+        bool isConfirmed = await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Delete,
+            string.Format(Constants.Messages.Confirmation, Constants.Operations.Delete, Constants.Titles.User),
+            Constants.Prompts.Yes, Constants.Prompts.No);
+
+        if (!isConfirmed)
+            return;
+
+        try
+        {
+            await this.userApplicationService.DeleteAsync(User);
+
+            await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Success,
+                string.Format(Constants.Messages.Success, Constants.Operations.Deleted, Constants.Titles.User),
+                Constants.Prompts.Ok);
+
+            await Shell.Current.GoToAsync("..");
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+
+            await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Error,
+                $"{string.Format(Constants.Messages.Error, Constants.Operations.Delete, Constants.Titles.User)}: {ex.Message}",
                 Constants.Prompts.Ok);
         }
     }

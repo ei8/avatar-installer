@@ -1,10 +1,12 @@
-﻿using ei8.Avatar.Installer.Domain.Model;
+﻿using ei8.Avatar.Installer.Common;
+using ei8.Avatar.Installer.Domain.Model;
 using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
 using Microsoft.Data.Sqlite;
 using neurUL.Common.Domain.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,17 +23,35 @@ public class RegionPermitRepository : IRegionPermitRepository
         this.avatarContextService = avatarContextService;
     }
 
-    public async Task<IEnumerable<RegionPermit>> GetAllAsync()
+    public async Task DeleteAsync(RegionPermit regionPermit)
     {
-        var id = avatarContextService.Avatar!.Id;
-        var connectionString = $@"Data Source=file:{Path.Combine(id, "identity-access.db")}";
-        var regionPermits = new List<RegionPermit>();
-        var tableName = "RegionPermit";
+        AssertionConcern.AssertArgumentNotNull(regionPermit, nameof(regionPermit));
+
+        var id = avatarContextService.Avatar.Id;
+        var connectionString = $@"Data Source=file:{Path.Combine(id, Constants.Databases.IdentityAccessDb)}";
 
         using var connection = new SqliteConnection(connectionString);
         await connection.OpenAsync();
 
-        using var command = new SqliteCommand($"SELECT SequenceId, UserNeuronId, RegionNeuronId, WriteLevel, ReadLevel FROM {tableName}", connection);
+        var query = $"DELETE FROM {Constants.TableNames.RegionPermit} WHERE SequenceId = @SequenceId";
+        using var command = new SqliteCommand(query, connection);
+
+        command.Parameters.AddWithValue("@SequenceId", regionPermit.SequenceId);
+
+        await command.ExecuteNonQueryAsync();
+    }
+
+
+    public async Task<IEnumerable<RegionPermit>> GetAllAsync()
+    {
+        var id = avatarContextService.Avatar.Id;
+        var connectionString = $@"Data Source=file:{Path.Combine(id, Constants.Databases.IdentityAccessDb)}";
+        var regionPermits = new List<RegionPermit>();
+
+        using var connection = new SqliteConnection(connectionString);
+        await connection.OpenAsync();
+
+        using var command = new SqliteCommand($"SELECT SequenceId, UserNeuronId, RegionNeuronId, WriteLevel, ReadLevel FROM {Constants.TableNames.RegionPermit}", connection);
         using var reader = await command.ExecuteReaderAsync();
 
         while (await reader.ReadAsync())
@@ -55,14 +75,13 @@ public class RegionPermitRepository : IRegionPermitRepository
     {
         AssertionConcern.AssertArgumentNotNull(regionPermit, nameof(regionPermit));
 
-        var id = avatarContextService.Avatar!.Id;
-        var connectionString = $@"Data Source=file:{Path.Combine(id, "identity-access.db")}";
-        var tableName = "RegionPermit";
+        var id = avatarContextService.Avatar.Id;
+        var connectionString = $@"Data Source=file:{Path.Combine(id, Constants.Databases.IdentityAccessDb)}";
 
         using var connection = new SqliteConnection(connectionString);
         await connection.OpenAsync();
 
-        var query = $"UPDATE {tableName} SET UserNeuronId = @UserNeuronId, RegionNeuronId = @RegionNeuronId, WriteLevel = @WriteLevel, ReadLevel = @ReadLevel WHERE SequenceId = @SequenceId";
+        var query = $"UPDATE {Constants.TableNames.RegionPermit} SET UserNeuronId = @UserNeuronId, RegionNeuronId = @RegionNeuronId, WriteLevel = @WriteLevel, ReadLevel = @ReadLevel WHERE SequenceId = @SequenceId";
         using var command = new SqliteCommand(query, connection);
 
         command.Parameters.AddWithValue("@UserNeuronId", string.IsNullOrEmpty(regionPermit.UserNeuronId) ? DBNull.Value : regionPermit.UserNeuronId);

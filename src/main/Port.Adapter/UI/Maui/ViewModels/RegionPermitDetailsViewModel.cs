@@ -33,7 +33,7 @@ public partial class RegionPermitDetailsViewModel : EditAvatarViewModel
     {
         if (this.RegionPermit is null) return;
         bool isConfirmed = await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Update, 
-            string.Format(Constants.Messages.ConfirmUpdate, Constants.Titles.RegionPermit),
+            string.Format(Constants.Messages.Confirmation, Constants.Operations.Update, Constants.Titles.RegionPermit),
             Constants.Prompts.Yes, Constants.Prompts.No);
 
         if (!isConfirmed)
@@ -44,7 +44,7 @@ public partial class RegionPermitDetailsViewModel : EditAvatarViewModel
             await this.regionPermitApplicationService.UpdateAsync(RegionPermit);
 
             await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Success,
-                string.Format(Constants.Messages.Updated, Constants.Titles.RegionPermit), 
+                string.Format(Constants.Messages.Success, Constants.Operations.Updated, Constants.Titles.RegionPermit), 
                 Constants.Prompts.Ok);
 
             await Shell.Current.GoToAsync("..");
@@ -54,7 +54,39 @@ public partial class RegionPermitDetailsViewModel : EditAvatarViewModel
             Debug.WriteLine(ex);
 
             await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Error,
-                $"{string.Format(Constants.Messages.UpdateError, Constants.Titles.RegionPermit)}: {ex.Message}", 
+                $"{string.Format(Constants.Messages.Error, Constants.Operations.Update, Constants.Titles.RegionPermit)}: {ex.Message}", 
+                Constants.Prompts.Ok);
+        }
+    }
+
+    [RelayCommand]
+    private async Task DeleteRegionPermitAsync()
+    {
+        if (this.RegionPermit is null) return;
+
+        bool isConfirmed = await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Delete,
+            string.Format(Constants.Messages.Confirmation, Constants.Operations.Delete, Constants.Titles.RegionPermit),
+            Constants.Prompts.Yes, Constants.Prompts.No);
+
+        if (!isConfirmed)
+            return;
+
+        try
+        {
+            await this.regionPermitApplicationService.DeleteAsync(RegionPermit);
+
+            await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Success,
+                string.Format(Constants.Messages.Success, Constants.Operations.Deleted, Constants.Titles.RegionPermit),
+                Constants.Prompts.Ok);
+
+            await Shell.Current.GoToAsync("..");
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+
+            await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Error,
+                $"{string.Format(Constants.Messages.Error, Constants.Operations.Delete, Constants.Titles.RegionPermit)}: {ex.Message}",
                 Constants.Prompts.Ok);
         }
     }
