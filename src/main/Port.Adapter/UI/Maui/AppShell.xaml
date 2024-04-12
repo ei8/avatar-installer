@@ -5,11 +5,11 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:views="clr-namespace:ei8.Avatar.Installer.Port.Adapter.UI.Maui.Views"
     Title="Avatar Installer"
-    Shell.FlyoutBehavior="Disabled"
-    Shell.FlyoutWidth="150"
+    Shell.FlyoutBehavior="Locked"
+    Shell.FlyoutWidth="250"
     Shell.NavBarIsVisible="False">
 
-    <FlyoutItem Title="Home">
+    <FlyoutItem Title="Home" FlyoutItemIsVisible="False">
         <ShellContent
             Title="Home"
             ContentTemplate="{DataTemplate views:HomePage}"
@@ -25,28 +25,33 @@
     </FlyoutItem>
     <FlyoutItem
         Title="Identity Access"
-        FlyoutItemIsVisible="False"
+        FlyoutItemIsVisible="True"
         Route="IdentityAccessPage">
         <Tab Title="Neuron Permit">
             <ShellContent
                 Title="Neuron Permit"
                 ContentTemplate="{DataTemplate views:NeuronPermitsPage}"
-                Route="NeuronPermitPage"
-                Shell.FlyoutBehavior="Flyout" />
+                Route="NeuronPermitPage" />
         </Tab>
         <Tab Title="Region Permit">
             <ShellContent
                 Title="Region Permit"
                 ContentTemplate="{DataTemplate views:RegionPermitsPage}"
-                Route="RegionPermitsPage"
-                Shell.FlyoutBehavior="Flyout" />
+                Route="RegionPermitsPage" />
         </Tab>
         <Tab Title="Users">
             <ShellContent
                 Title="Users"
                 ContentTemplate="{DataTemplate views:UsersPage}"
-                Route="UsersPage"
-                Shell.FlyoutBehavior="Flyout" />
+                Route="UsersPage" />
         </Tab>
     </FlyoutItem>
+
+    <Shell.FlyoutFooter>
+        <Button
+            x:Name="ReturnToHome"
+            Margin="10"
+            Clicked="ReturnToHome_Clicked"
+            Text="Return to Home" />
+    </Shell.FlyoutFooter>
 </Shell>

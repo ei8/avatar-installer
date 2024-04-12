@@ -21,4 +21,9 @@ public partial class AppShell : Shell
 
         BindingContext = this;
     }
+
+    private void ReturnToHome_Clicked(object sender, EventArgs e)
+    {
+        Current.GoToAsync($"//{nameof(HomePage)}");
+    }
 }
