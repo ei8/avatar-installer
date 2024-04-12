@@ -12,4 +12,5 @@ public interface INeuronPermitRepository
     Task<IEnumerable<NeuronPermit>> GetAllAsync();
     Task UpdateAsync(NeuronPermit neuronPermit);
     Task DeleteAsync(NeuronPermit neuronPermit);
+    Task AddAsync(NeuronPermit neuronPermit);
 }

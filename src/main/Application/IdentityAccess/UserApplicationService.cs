@@ -19,6 +19,13 @@ public class UserApplicationService : IUserApplicationService
         this.userRepository = userRepository;
     }
 
+    public async Task AddAsync(User user)
+    {
+        AssertionConcern.AssertArgumentNotNull(user, nameof(user));
+
+        await this.userRepository.AddAsync(user);
+    }
+
     public async Task DeleteAsync(User user)
     {
         AssertionConcern.AssertArgumentNotNull(user, nameof(user));

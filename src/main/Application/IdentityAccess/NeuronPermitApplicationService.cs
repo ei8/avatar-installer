@@ -18,6 +18,13 @@ public class NeuronPermitApplicationService : INeuronPermitApplicationService
         this.neuronPermitRepository = neuronPermitRepository;
     }
 
+    public async Task AddAsync(NeuronPermit neuronPermit)
+    {
+        AssertionConcern.AssertArgumentNotNull(neuronPermit, nameof(neuronPermit));
+
+        await this.neuronPermitRepository.AddAsync(neuronPermit);
+    }
+
     public async Task DeleteAsync(NeuronPermit neuronPermit)
     {
         AssertionConcern.AssertArgumentNotNull(neuronPermit, nameof(neuronPermit));

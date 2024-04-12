@@ -22,6 +22,28 @@ public class NeuronPermitRepository : INeuronPermitRepository
         this.avatarContextService = avatarContextService;
     }
 
+    public async Task AddAsync(NeuronPermit neuronPermit)
+    {
+        AssertionConcern.AssertArgumentNotNull(neuronPermit, nameof(neuronPermit));
+
+        var id = avatarContextService.Avatar.Id;
+        var connectionString = $@"Data Source=file:{Path.Combine(id, Constants.Databases.IdentityAccessDb)}";
+
+        using var connection = new SqliteConnection(connectionString);
+        await connection.OpenAsync();
+
+        var query = $@"
+            INSERT INTO {Constants.TableNames.NeuronPermit} (UserNeuronId, NeuronId, ExpirationDate)
+            VALUES (@UserNeuronId, @NeuronId, @ExpirationDate)";
+        using var command = new SqliteCommand(query, connection);
+
+        command.Parameters.AddWithValue("@UserNeuronId", neuronPermit.UserNeuronId);
+        command.Parameters.AddWithValue("@NeuronId", neuronPermit.NeuronId);
+        command.Parameters.AddWithValue("@ExpirationDate", string.IsNullOrEmpty(neuronPermit.ExpirationDate) ? DBNull.Value : (object)neuronPermit.ExpirationDate);
+
+        await command.ExecuteNonQueryAsync();
+    }
+
     public async Task DeleteAsync(NeuronPermit neuronPermit)
     {
         AssertionConcern.AssertArgumentNotNull(neuronPermit, nameof(neuronPermit));

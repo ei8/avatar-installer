@@ -23,6 +23,29 @@ public class RegionPermitRepository : IRegionPermitRepository
         this.avatarContextService = avatarContextService;
     }
 
+    public async Task AddAsync(RegionPermit regionPermit)
+    {
+        AssertionConcern.AssertArgumentNotNull(regionPermit, nameof(regionPermit));
+
+        var id = avatarContextService.Avatar.Id;
+        var connectionString = $@"Data Source=file:{Path.Combine(id, Constants.Databases.IdentityAccessDb)}";
+
+        using var connection = new SqliteConnection(connectionString);
+        await connection.OpenAsync();
+
+        var query = $@"
+            INSERT INTO {Constants.TableNames.RegionPermit} (UserNeuronId, RegionNeuronId, WriteLevel, ReadLevel)
+            VALUES (@UserNeuronId, @RegionNeuronId, @WriteLevel, @ReadLevel)";
+        using var command = new SqliteCommand(query, connection);
+
+        command.Parameters.AddWithValue("@UserNeuronId", string.IsNullOrEmpty(regionPermit.UserNeuronId) ? DBNull.Value : regionPermit.UserNeuronId);
+        command.Parameters.AddWithValue("@RegionNeuronId", string.IsNullOrEmpty(regionPermit.RegionNeuronId) ? DBNull.Value : regionPermit.RegionNeuronId);
+        command.Parameters.AddWithValue("@WriteLevel", regionPermit.WriteLevel is null ? DBNull.Value : (object)regionPermit.WriteLevel);
+        command.Parameters.AddWithValue("@ReadLevel", regionPermit.ReadLevel is null ? DBNull.Value : (object)regionPermit.ReadLevel);
+
+        await command.ExecuteNonQueryAsync();
+    }
+
     public async Task DeleteAsync(RegionPermit regionPermit)
     {
         AssertionConcern.AssertArgumentNotNull(regionPermit, nameof(regionPermit));
@@ -40,7 +63,6 @@ public class RegionPermitRepository : IRegionPermitRepository
 
         await command.ExecuteNonQueryAsync();
     }
-
 
     public async Task<IEnumerable<RegionPermit>> GetAllAsync()
     {

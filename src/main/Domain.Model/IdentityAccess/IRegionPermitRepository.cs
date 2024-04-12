@@ -12,4 +12,5 @@ public interface IRegionPermitRepository
     Task<IEnumerable<RegionPermit>> GetAllAsync();
     Task UpdateAsync(RegionPermit regionPermit);
     Task DeleteAsync(RegionPermit regionPermit);
+    Task AddAsync(RegionPermit regionPermit);
 }

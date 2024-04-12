@@ -22,6 +22,28 @@ public class UserRepository : IUserRepository
         this.avatarContextService = avatarContextService;
     }
 
+    public async Task AddAsync(User user)
+    {
+        AssertionConcern.AssertArgumentNotNull(user, nameof(user));
+
+        var id = avatarContextService.Avatar.Id;
+        var connectionString = $@"Data Source=file:{Path.Combine(id, Constants.Databases.IdentityAccessDb)}";
+
+        using var connection = new SqliteConnection(connectionString);
+        await connection.OpenAsync();
+
+        var query = $@"
+            INSERT INTO {Constants.TableNames.User} (UserId, NeuronId, Active)
+            VALUES (@UserId, @NeuronId, @Active)";
+        using var command = new SqliteCommand(query, connection);
+
+        command.Parameters.AddWithValue("@UserId", user.UserId);
+        command.Parameters.AddWithValue("@NeuronId", user.NeuronId);
+        command.Parameters.AddWithValue("@Active", user.Active is null ? DBNull.Value : (object)user.Active);
+
+        await command.ExecuteNonQueryAsync();
+    }
+
     public async Task DeleteAsync(User user)
     {
         AssertionConcern.AssertArgumentNotNull(user, nameof(user));
@@ -39,7 +61,6 @@ public class UserRepository : IUserRepository
 
         await command.ExecuteNonQueryAsync();
     }
-
 
     public async Task<IEnumerable<User>> GetAllAsync()
     {
