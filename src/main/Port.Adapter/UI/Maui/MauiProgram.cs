@@ -58,10 +58,13 @@ public static class MauiProgram
         builder.Services.AddSingleton<CreateAvatarPage>();
         builder.Services.AddTransient<NeuronPermitsPage>();
         builder.Services.AddTransient<NeuronPermitDetailsPage>();
+        builder.Services.AddTransient<AddNeuronPermitPage>();
         builder.Services.AddTransient<RegionPermitsPage>();
         builder.Services.AddTransient<RegionPermitDetailsPage>();
+        builder.Services.AddTransient<AddRegionPermitPage>();
         builder.Services.AddTransient<UsersPage>();
         builder.Services.AddTransient<UserDetailsPage>();
+        builder.Services.AddTransient<AddUserPage>();
         #endregion
 
         #region Maui ViewModels
@@ -69,10 +72,13 @@ public static class MauiProgram
         builder.Services.AddSingleton<CreateAvatarViewModel>();
         builder.Services.AddTransient<NeuronPermitsViewModel>();
         builder.Services.AddTransient<NeuronPermitDetailsViewModel>();
+        builder.Services.AddTransient<AddNeuronPermitViewModel>();
         builder.Services.AddTransient<RegionPermitsViewModel>();
         builder.Services.AddTransient<RegionPermitDetailsViewModel>();
+        builder.Services.AddTransient<AddRegionPermitViewModel>();
         builder.Services.AddTransient<UsersViewModel>();
         builder.Services.AddTransient<UserDetailsViewModel>();
+        builder.Services.AddTransient<AddUserViewModel>();
         #endregion
 
         builder.Services.AddScoped<ISettingsService, SettingsService>()

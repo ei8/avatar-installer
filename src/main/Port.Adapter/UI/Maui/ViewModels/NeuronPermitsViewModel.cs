@@ -69,4 +69,10 @@ public partial class NeuronPermitsViewModel : EditAvatarViewModel
                 { "NeuronPermit", neuronPermit }
             });
     }
+    
+    [RelayCommand]
+    private async Task GoToAddNeuronPermitAsync()
+    {
+        await Shell.Current.GoToAsync($"{nameof(AddNeuronPermitPage)}");
+    }
 }

@@ -69,4 +69,10 @@ public partial class UsersViewModel : EditAvatarViewModel
                 { "User", user }
             });
     }
+
+    [RelayCommand]
+    private async Task GoToAddUserAsync()
+    {
+        await Shell.Current.GoToAsync($"{nameof(UserDetailsPage)}");
+    }
 }

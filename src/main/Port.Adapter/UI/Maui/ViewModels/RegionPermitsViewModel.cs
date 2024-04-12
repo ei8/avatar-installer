@@ -69,4 +69,10 @@ public partial class RegionPermitsViewModel : EditAvatarViewModel
                 { "RegionPermit", regionPermit }
             });
     }
+    
+    [RelayCommand]
+    private async Task GoToAddRegionPermitAsync()
+    {
+        await Shell.Current.GoToAsync($"{nameof(RegionPermitDetailsPage)}");
+    }
 }

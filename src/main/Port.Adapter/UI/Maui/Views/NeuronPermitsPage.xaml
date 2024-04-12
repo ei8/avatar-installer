@@ -57,7 +57,7 @@
             </ScrollView>
         </Grid>
         <Grid Grid.Row="1" Padding="10">
-            <Button Text="Add Neuron Permit" />
+            <Button Command="{Binding GoToAddNeuronPermitCommand}" Text="Add Neuron Permit" />
         </Grid>
     </Grid>
 </ContentPage>

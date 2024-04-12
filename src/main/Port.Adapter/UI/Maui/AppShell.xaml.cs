@@ -14,10 +14,13 @@ public partial class AppShell : Shell
         Routing.RegisterRoute(nameof(CreateAvatarPage), typeof(CreateAvatarPage));
         Routing.RegisterRoute(nameof(NeuronPermitsPage), typeof(NeuronPermitsPage));
         Routing.RegisterRoute(nameof(NeuronPermitDetailsPage), typeof(NeuronPermitDetailsPage));
+        Routing.RegisterRoute(nameof(AddNeuronPermitPage), typeof(AddNeuronPermitPage));
         Routing.RegisterRoute(nameof(RegionPermitsPage), typeof(RegionPermitsPage));
         Routing.RegisterRoute(nameof(RegionPermitDetailsPage), typeof(RegionPermitDetailsPage));
+        Routing.RegisterRoute(nameof(AddRegionPermitPage), typeof(AddRegionPermitPage));
         Routing.RegisterRoute(nameof(UsersPage), typeof(UsersPage));
         Routing.RegisterRoute(nameof(UserDetailsPage), typeof(UserDetailsPage));
+        Routing.RegisterRoute(nameof(AddUserPage), typeof(AddUserPage));
 
         BindingContext = this;
     }
