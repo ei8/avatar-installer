@@ -39,7 +39,7 @@ public class NeuronPermitRepository : INeuronPermitRepository
 
         command.Parameters.AddWithValue("@UserNeuronId", neuronPermit.UserNeuronId);
         command.Parameters.AddWithValue("@NeuronId", neuronPermit.NeuronId);
-        command.Parameters.AddWithValue("@ExpirationDate", string.IsNullOrEmpty(neuronPermit.ExpirationDate) ? DBNull.Value : (object)neuronPermit.ExpirationDate);
+        command.Parameters.AddWithValue("@ExpirationDate", string.IsNullOrEmpty(neuronPermit.ExpirationDate) ? DBNull.Value : neuronPermit.ExpirationDate);
 
         await command.ExecuteNonQueryAsync();
     }

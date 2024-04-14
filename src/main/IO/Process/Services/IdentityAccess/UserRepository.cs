@@ -39,7 +39,7 @@ public class UserRepository : IUserRepository
 
         command.Parameters.AddWithValue("@UserId", user.UserId);
         command.Parameters.AddWithValue("@NeuronId", user.NeuronId);
-        command.Parameters.AddWithValue("@Active", user.Active is null ? DBNull.Value : (object)user.Active);
+        command.Parameters.AddWithValue("@Active", user.Active is null ? DBNull.Value : user.Active);
 
         await command.ExecuteNonQueryAsync();
     }

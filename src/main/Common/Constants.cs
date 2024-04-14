@@ -45,6 +45,7 @@
             public const string Invalid = "Invalid";
             public const string Update = "Update";
             public const string Delete = "Delete";
+            public const string Add = "Add";
         }
 
         public sealed class Prompts
@@ -63,6 +64,8 @@
             public const string Create = "create";
             public const string Created = "created";
             public const string Get = "get";
+            public const string Add = "add";
+            public const string Added = "added";
         }
 
         public sealed class Messages
@@ -74,7 +77,7 @@
             public const string Confirmation = "Are you sure you want to {0} this {1}?";
             public const string Success = "Successfully {0} {1}";
             public const string Error = "Unable to {0} {1}";
-
+            public const string CantBeEmpty = "{0} cannot be empty";
         }
 
         public sealed class Urls

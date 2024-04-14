@@ -73,8 +73,7 @@
             </ScrollView>
         </Grid>
         <Grid Grid.Row="1" Padding="10">
-            <Button Text="Add Region Permit" />
+            <Button Command="{Binding GoToAddRegionPermitCommand}" Text="Add Region Permit" />
         </Grid>
-
     </Grid>
 </ContentPage>

@@ -73,6 +73,6 @@ public partial class UsersViewModel : EditAvatarViewModel
     [RelayCommand]
     private async Task GoToAddUserAsync()
     {
-        await Shell.Current.GoToAsync($"{nameof(UserDetailsPage)}");
+        await Shell.Current.GoToAsync($"{nameof(AddUserPage)}");
     }
 }

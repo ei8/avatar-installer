@@ -40,8 +40,8 @@ public class RegionPermitRepository : IRegionPermitRepository
 
         command.Parameters.AddWithValue("@UserNeuronId", string.IsNullOrEmpty(regionPermit.UserNeuronId) ? DBNull.Value : regionPermit.UserNeuronId);
         command.Parameters.AddWithValue("@RegionNeuronId", string.IsNullOrEmpty(regionPermit.RegionNeuronId) ? DBNull.Value : regionPermit.RegionNeuronId);
-        command.Parameters.AddWithValue("@WriteLevel", regionPermit.WriteLevel is null ? DBNull.Value : (object)regionPermit.WriteLevel);
-        command.Parameters.AddWithValue("@ReadLevel", regionPermit.ReadLevel is null ? DBNull.Value : (object)regionPermit.ReadLevel);
+        command.Parameters.AddWithValue("@WriteLevel", regionPermit.WriteLevel is null ? DBNull.Value : regionPermit.WriteLevel);
+        command.Parameters.AddWithValue("@ReadLevel", regionPermit.ReadLevel is null ? DBNull.Value : regionPermit.ReadLevel);
 
         await command.ExecuteNonQueryAsync();
     }

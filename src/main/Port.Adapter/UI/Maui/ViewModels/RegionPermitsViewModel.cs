@@ -48,8 +48,8 @@ public partial class RegionPermitsViewModel : EditAvatarViewModel
         catch (Exception ex)
         {
             Debug.WriteLine(ex);
-            await Shell.Current.DisplayAlert(Constants.Statuses.Error, 
-                $"{string.Format(Constants.Messages.Error, Constants.Operations.Get, Constants.Titles.RegionPermit)}s: {ex.Message}", 
+            await Shell.Current.DisplayAlert(Constants.Statuses.Error,
+                $"{string.Format(Constants.Messages.Error, Constants.Operations.Get, Constants.Titles.RegionPermit)}s: {ex.Message}",
                 Constants.Prompts.Ok);
         }
         finally
@@ -69,10 +69,10 @@ public partial class RegionPermitsViewModel : EditAvatarViewModel
                 { "RegionPermit", regionPermit }
             });
     }
-    
+
     [RelayCommand]
     private async Task GoToAddRegionPermitAsync()
     {
-        await Shell.Current.GoToAsync($"{nameof(RegionPermitDetailsPage)}");
+        await Shell.Current.GoToAsync($"{nameof(AddRegionPermitPage)}");
     }
 }
