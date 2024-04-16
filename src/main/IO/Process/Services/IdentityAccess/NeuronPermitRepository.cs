@@ -22,9 +22,10 @@ public class NeuronPermitRepository : INeuronPermitRepository
         this.avatarContextService = avatarContextService;
     }
 
-    public async Task AddAsync(NeuronPermit neuronPermit)
+    public async Task<NeuronPermit> GetByIdAsync(string userNeuronId, string neuronId)
     {
-        AssertionConcern.AssertArgumentNotNull(neuronPermit, nameof(neuronPermit));
+        AssertionConcern.AssertArgumentNotNull(userNeuronId, nameof(userNeuronId));
+        AssertionConcern.AssertArgumentNotNull(neuronId, nameof(neuronId));
 
         var id = avatarContextService.Avatar.Id;
         var connectionString = $@"Data Source=file:{Path.Combine(id, Constants.Databases.IdentityAccessDb)}";
@@ -32,35 +33,24 @@ public class NeuronPermitRepository : INeuronPermitRepository
         using var connection = new SqliteConnection(connectionString);
         await connection.OpenAsync();
 
-        var query = $@"
-            INSERT INTO {Constants.TableNames.NeuronPermit} (UserNeuronId, NeuronId, ExpirationDate)
-            VALUES (@UserNeuronId, @NeuronId, @ExpirationDate)";
+        var query = $"SELECT UserNeuronId, NeuronId, ExpirationDate FROM {Constants.TableNames.NeuronPermit} WHERE UserNeuronId = @UserNeuronId AND NeuronId = @NeuronId";
         using var command = new SqliteCommand(query, connection);
+        command.Parameters.AddWithValue("@UserNeuronId", userNeuronId);
+        command.Parameters.AddWithValue("@NeuronId", neuronId);
 
-        command.Parameters.AddWithValue("@UserNeuronId", neuronPermit.UserNeuronId);
-        command.Parameters.AddWithValue("@NeuronId", neuronPermit.NeuronId);
-        command.Parameters.AddWithValue("@ExpirationDate", string.IsNullOrEmpty(neuronPermit.ExpirationDate) ? DBNull.Value : neuronPermit.ExpirationDate);
+        using var reader = await command.ExecuteReaderAsync();
+        if (await reader.ReadAsync())
+        {
+            var neuronPermit = new NeuronPermit
+            {
+                UserNeuronId = reader.IsDBNull(0) ? string.Empty : reader.GetString(0),
+                NeuronId = reader.IsDBNull(1) ? string.Empty : reader.GetString(1),
+                ExpirationDate = reader.IsDBNull(2) ? string.Empty : reader.GetString(2)
+            };
+            return neuronPermit;
+        }
 
-        await command.ExecuteNonQueryAsync();
-    }
-
-    public async Task DeleteAsync(NeuronPermit neuronPermit)
-    {
-        AssertionConcern.AssertArgumentNotNull(neuronPermit, nameof(neuronPermit));
-
-        var id = avatarContextService.Avatar.Id;
-        var connectionString = $@"Data Source=file:{Path.Combine(id, Constants.Databases.IdentityAccessDb)}";
-
-        using var connection = new SqliteConnection(connectionString);
-        await connection.OpenAsync();
-
-        var query = $"DELETE FROM {Constants.TableNames.NeuronPermit} WHERE UserNeuronId = @UserNeuronId AND NeuronId = @NeuronId";
-        using var command = new SqliteCommand(query, connection);
-
-        command.Parameters.AddWithValue("@UserNeuronId", neuronPermit.UserNeuronId);
-        command.Parameters.AddWithValue("@NeuronId", neuronPermit.NeuronId);
-
-        await command.ExecuteNonQueryAsync();
+        return null;
     }
 
     public async Task<IEnumerable<NeuronPermit>> GetAllAsync()
@@ -91,7 +81,7 @@ public class NeuronPermitRepository : INeuronPermitRepository
         return neuronPermits;
     }
 
-    public async Task UpdateAsync(NeuronPermit neuronPermit)
+    public async Task RemoveAsync(NeuronPermit neuronPermit)
     {
         AssertionConcern.AssertArgumentNotNull(neuronPermit, nameof(neuronPermit));
 
@@ -101,13 +91,32 @@ public class NeuronPermitRepository : INeuronPermitRepository
         using var connection = new SqliteConnection(connectionString);
         await connection.OpenAsync();
 
-        var query = $"UPDATE {Constants.TableNames.NeuronPermit} SET ExpirationDate = @ExpirationDate WHERE UserNeuronId = @UserNeuronId AND NeuronId = @NeuronId";
+        var query = $"DELETE FROM {Constants.TableNames.NeuronPermit} WHERE UserNeuronId = @UserNeuronId AND NeuronId = @NeuronId";
         using var command = new SqliteCommand(query, connection);
-
-        command.Parameters.AddWithValue("@ExpirationDate", string.IsNullOrEmpty(neuronPermit.ExpirationDate) ? DBNull.Value : neuronPermit.ExpirationDate);
 
         command.Parameters.AddWithValue("@UserNeuronId", neuronPermit.UserNeuronId);
         command.Parameters.AddWithValue("@NeuronId", neuronPermit.NeuronId);
+
+        await command.ExecuteNonQueryAsync();
+    }
+    public async Task SaveAsync(NeuronPermit neuronPermit)
+    {
+        AssertionConcern.AssertArgumentNotNull(neuronPermit, nameof(neuronPermit));
+
+        var id = avatarContextService.Avatar.Id;
+        var connectionString = $@"Data Source=file:{Path.Combine(id, Constants.Databases.IdentityAccessDb)}";
+
+        using var connection = new SqliteConnection(connectionString);
+        await connection.OpenAsync();
+
+        var query = $@"
+        INSERT OR REPLACE INTO {Constants.TableNames.NeuronPermit} (UserNeuronId, NeuronId, ExpirationDate)
+        VALUES (@UserNeuronId, @NeuronId, @ExpirationDate)";
+        using var command = new SqliteCommand(query, connection);
+
+        command.Parameters.AddWithValue("@UserNeuronId", neuronPermit.UserNeuronId);
+        command.Parameters.AddWithValue("@NeuronId", neuronPermit.NeuronId);
+        command.Parameters.AddWithValue("@ExpirationDate", string.IsNullOrEmpty(neuronPermit.ExpirationDate) ? DBNull.Value : neuronPermit.ExpirationDate);
 
         await command.ExecuteNonQueryAsync();
     }

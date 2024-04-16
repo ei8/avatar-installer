@@ -43,8 +43,8 @@
             public const string Success = "Success";
             public const string Error = "Error";
             public const string Invalid = "Invalid";
-            public const string Update = "Update";
-            public const string Delete = "Delete";
+            public const string Save = "Save";
+            public const string Remove = "Remove";
             public const string Add = "Add";
         }
 
@@ -57,15 +57,16 @@
 
         public sealed class Operations
         {
-            public const string Update = "update";
-            public const string Updated = "updated";
-            public const string Delete = "delete";
-            public const string Deleted = "deleted";
             public const string Create = "create";
             public const string Created = "created";
             public const string Get = "get";
             public const string Add = "add";
             public const string Added = "added";
+            public const string Save = "save";
+            public const string Saved = "saved";
+            public const string Remove = "remove";
+            public const string Removed = "removed";
+            public const string Empty = "empty";
         }
 
         public sealed class Messages
@@ -78,6 +79,8 @@
             public const string Success = "Successfully {0} {1}";
             public const string Error = "Unable to {0} {1}";
             public const string CantBeEmpty = "{0} cannot be empty";
+            public const string CantBe = "{0} cannot be {1}";
+            public const string AlreadyExists = "{0} already exists";
         }
 
         public sealed class Urls

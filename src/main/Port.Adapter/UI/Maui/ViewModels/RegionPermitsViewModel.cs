@@ -59,20 +59,26 @@ public partial class RegionPermitsViewModel : EditAvatarViewModel
     }
 
     [RelayCommand]
-    private async Task GoToRegionPermitDetailsAsync(RegionPermit regionPermit)
+    private async Task EditRegionPermitAsync(RegionPermit regionPermit)
     {
         AssertionConcern.AssertArgumentNotNull(regionPermit, nameof(regionPermit));
 
         await Shell.Current.GoToAsync($"{nameof(RegionPermitDetailsPage)}",
             new Dictionary<string, object>
             {
-                { "RegionPermit", regionPermit }
+                { "RegionPermit", regionPermit },
+                { "Mode", Mode.Edit },
             });
     }
 
     [RelayCommand]
-    private async Task GoToAddRegionPermitAsync()
+    private async Task CreateRegionPermitAsync()
     {
-        await Shell.Current.GoToAsync($"{nameof(AddRegionPermitPage)}");
+        await Shell.Current.GoToAsync($"{nameof(RegionPermitDetailsPage)}",
+            new Dictionary<string, object>
+            {
+                { "RegionPermit", new RegionPermit() },
+                { "Mode", Mode.Create },
+            });
     }
 }

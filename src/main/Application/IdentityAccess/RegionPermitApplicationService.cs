@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ei8.Avatar.Installer.Application.IdentityAccess;
+
 public class RegionPermitApplicationService : IRegionPermitApplicationService
 {
     private readonly IRegionPermitRepository regionPermitRepository;
@@ -14,22 +15,8 @@ public class RegionPermitApplicationService : IRegionPermitApplicationService
     public RegionPermitApplicationService(IRegionPermitRepository regionPermitRepository)
     {
         AssertionConcern.AssertArgumentNotNull(regionPermitRepository, nameof(regionPermitRepository));
-        
+
         this.regionPermitRepository = regionPermitRepository;
-    }
-
-    public async Task AddAsync(RegionPermit regionPermit)
-    {
-        AssertionConcern.AssertArgumentNotNull(regionPermit, nameof(regionPermit));
-
-        await this.regionPermitRepository.AddAsync(regionPermit);
-    }
-
-    public async Task DeleteAsync(RegionPermit regionPermit)
-    {
-        AssertionConcern.AssertArgumentNotNull(regionPermit, nameof(regionPermit));
-
-        await this.regionPermitRepository.DeleteAsync(regionPermit);
     }
 
     public async Task<IEnumerable<RegionPermit>> GetAllAsync()
@@ -37,10 +24,17 @@ public class RegionPermitApplicationService : IRegionPermitApplicationService
         return await this.regionPermitRepository.GetAllAsync();
     }
 
-    public async Task UpdateAsync(RegionPermit regionPermit)
+    public async Task RemoveAsync(RegionPermit regionPermit)
     {
         AssertionConcern.AssertArgumentNotNull(regionPermit, nameof(regionPermit));
 
-        await this.regionPermitRepository.UpdateAsync(regionPermit);
+        await this.regionPermitRepository.RemoveAsync(regionPermit);
+    }
+
+    public async Task SaveAsync(RegionPermit regionPermit)
+    {
+        AssertionConcern.AssertArgumentNotNull(regionPermit, nameof(regionPermit));
+
+        await this.regionPermitRepository.SaveAsync(regionPermit);
     }
 }

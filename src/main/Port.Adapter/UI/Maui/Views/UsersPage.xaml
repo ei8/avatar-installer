@@ -33,7 +33,7 @@
                             <DataTemplate x:DataType="models:User">
                                 <Frame Margin="2" Padding="5">
                                     <Frame.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:UsersViewModel}}, Path=GoToUserDetailsCommand}" CommandParameter="{Binding .}" />
+                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:UsersViewModel}}, Path=EditUserCommand}" CommandParameter="{Binding .}" />
                                     </Frame.GestureRecognizers>
                                     <Grid Padding="10" ColumnDefinitions="*,*,*">
                                         <Label
@@ -57,7 +57,7 @@
             </ScrollView>
         </Grid>
         <Grid Grid.Row="1" Padding="10">
-            <Button Command="{Binding GoToAddUserCommand}" Text="Add User" />
+            <Button Command="{Binding CreateUserCommand}" Text="Create User" />
         </Grid>
     </Grid>
 </ContentPage>

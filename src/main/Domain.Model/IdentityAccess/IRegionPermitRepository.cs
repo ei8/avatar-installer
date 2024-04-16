@@ -10,7 +10,7 @@ namespace ei8.Avatar.Installer.Domain.Model.IdentityAccess;
 public interface IRegionPermitRepository
 {
     Task<IEnumerable<RegionPermit>> GetAllAsync();
-    Task UpdateAsync(RegionPermit regionPermit);
-    Task DeleteAsync(RegionPermit regionPermit);
-    Task AddAsync(RegionPermit regionPermit);
+    Task<RegionPermit> GetByIdAsync(int sequenceId);
+    Task RemoveAsync(RegionPermit regionPermit);
+    Task SaveAsync(RegionPermit regionPermit);
 }

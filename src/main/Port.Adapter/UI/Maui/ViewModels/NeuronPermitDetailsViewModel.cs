@@ -13,7 +13,8 @@ using System.Threading.Tasks;
 
 namespace ei8.Avatar.Installer.Port.Adapter.UI.Maui.ViewModels;
 
-[QueryProperty("NeuronPermit", "NeuronPermit")]
+[QueryProperty(nameof(NeuronPermit), "NeuronPermit")]
+[QueryProperty(nameof(Mode), "Mode")]
 public partial class NeuronPermitDetailsViewModel : EditAvatarViewModel
 {
     private readonly INeuronPermitApplicationService neuronPermitApplicationService;
@@ -28,13 +29,35 @@ public partial class NeuronPermitDetailsViewModel : EditAvatarViewModel
     [ObservableProperty]
     private NeuronPermit neuronPermit;
 
-    [RelayCommand]
-    private async Task UpdateNeuronPermitAsync()
-    {
-        if (this.NeuronPermit is null) return;
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsEditing))]
+    private Mode mode;
 
-        bool isConfirmed = await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Update,
-            string.Format(Constants.Messages.Confirmation, Constants.Operations.Update, Constants.Titles.NeuronPermit),
+    public bool IsEditing => this.Mode == Mode.Edit;
+
+    [RelayCommand]
+    private async Task SaveNeuronPermitAsync()
+    {
+        if (this.NeuronPermit is null || this.IsBusy) return;
+
+        if (string.IsNullOrEmpty(this.NeuronPermit.UserNeuronId))
+        {
+            await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Error,
+                string.Format(Constants.Messages.CantBe, nameof(NeuronPermit.UserNeuronId), Constants.Operations.Empty),
+                Constants.Prompts.Ok);
+            return;
+        }
+
+        if (string.IsNullOrEmpty(this.NeuronPermit.NeuronId))
+        {
+            await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Error,
+                string.Format(Constants.Messages.CantBe, nameof(NeuronPermit.NeuronId), Constants.Operations.Empty),
+                Constants.Prompts.Ok);
+            return;
+        }
+
+        bool isConfirmed = await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Remove,
+            string.Format(Constants.Messages.Confirmation, Constants.Operations.Remove, Constants.Titles.NeuronPermit),
             Constants.Prompts.Yes, Constants.Prompts.No);
 
         if (!isConfirmed)
@@ -42,10 +65,25 @@ public partial class NeuronPermitDetailsViewModel : EditAvatarViewModel
 
         try
         {
-            await this.neuronPermitApplicationService.UpdateAsync(NeuronPermit);
+            this.IsBusy = true;
+
+            if (this.Mode == Mode.Create)
+            {
+                var exists = await this.neuronPermitApplicationService.CheckIfExistsAsync(
+                    this.NeuronPermit.UserNeuronId, this.NeuronPermit.NeuronId);
+
+                if (exists)
+                {
+                    await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Error,
+                        string.Format(Constants.Messages.AlreadyExists, Constants.Titles.NeuronPermit),
+                        Constants.Prompts.Ok);
+                    return;
+                }
+            }
+            await this.neuronPermitApplicationService.SaveAsync(this.NeuronPermit);
 
             await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Success,
-                string.Format(Constants.Messages.Success, Constants.Operations.Updated, Constants.Titles.NeuronPermit),
+                string.Format(Constants.Messages.Success, Constants.Operations.Saved, Constants.Titles.NeuronPermit),
                 Constants.Prompts.Ok);
 
             await Shell.Current.GoToAsync("..");
@@ -55,18 +93,22 @@ public partial class NeuronPermitDetailsViewModel : EditAvatarViewModel
             Debug.WriteLine(ex);
 
             await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Error,
-                $"{string.Format(Constants.Messages.Error, Constants.Operations.Update, Constants.Titles.NeuronPermit)}: {ex.Message}",
+                $"{string.Format(Constants.Messages.Error, Constants.Operations.Save, Constants.Titles.NeuronPermit)}: {ex.Message}",
                 Constants.Prompts.Ok);
+        }
+        finally
+        {
+            this.IsBusy = false;
         }
     }
 
     [RelayCommand]
-    private async Task DeleteNeuronPermitAsync()
+    private async Task RemoveNeuronPermitAsync()
     {
-        if (this.NeuronPermit is null) return;
-        
-        bool isConfirmed = await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Delete,
-            string.Format(Constants.Messages.Confirmation, Constants.Operations.Delete, Constants.Titles.NeuronPermit),
+        if (this.NeuronPermit is null || this.IsBusy) return;
+
+        bool isConfirmed = await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Save,
+            string.Format(Constants.Messages.Confirmation, Constants.Operations.Save, Constants.Titles.NeuronPermit),
             Constants.Prompts.Yes, Constants.Prompts.No);
 
         if (!isConfirmed)
@@ -74,10 +116,12 @@ public partial class NeuronPermitDetailsViewModel : EditAvatarViewModel
 
         try
         {
-            await this.neuronPermitApplicationService.DeleteAsync(NeuronPermit);
+            this.IsBusy = true;
+            
+            await this.neuronPermitApplicationService.RemoveAsync(NeuronPermit);
 
             await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Success,
-                string.Format(Constants.Messages.Success, Constants.Operations.Deleted, Constants.Titles.NeuronPermit),
+                string.Format(Constants.Messages.Success, Constants.Operations.Removed, Constants.Titles.NeuronPermit),
                 Constants.Prompts.Ok);
 
             await Shell.Current.GoToAsync("..");
@@ -87,8 +131,12 @@ public partial class NeuronPermitDetailsViewModel : EditAvatarViewModel
             Debug.WriteLine(ex);
 
             await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Error,
-                $"{string.Format(Constants.Messages.Error, Constants.Operations.Delete, Constants.Titles.NeuronPermit)}: {ex.Message}",
+                $"{string.Format(Constants.Messages.Error, Constants.Operations.Remove, Constants.Titles.NeuronPermit)}: {ex.Message}",
                 Constants.Prompts.Ok);
+        }
+        finally
+        {
+            this.IsBusy = false;
         }
     }
 }

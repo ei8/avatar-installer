@@ -22,6 +22,36 @@ public class UserRepository : IUserRepository
         this.avatarContextService = avatarContextService;
     }
 
+    public async Task<User> GetByIdAsync(string userId)
+    {
+        AssertionConcern.AssertArgumentNotNull(userId, nameof(userId));
+
+        var id = avatarContextService.Avatar.Id;
+        var connectionString = $@"Data Source=file:{Path.Combine(id, Constants.Databases.IdentityAccessDb)}";
+
+        using var connection = new SqliteConnection(connectionString);
+        await connection.OpenAsync();
+
+        var query = $"SELECT UserId, NeuronId, Active FROM {Constants.TableNames.User} WHERE UserId = @UserId";
+        using var command = new SqliteCommand(query, connection);
+        command.Parameters.AddWithValue("@UserId", userId);
+
+        using var reader = await command.ExecuteReaderAsync();
+        if (await reader.ReadAsync())
+        {
+            var user = new User
+            {
+                UserId = reader.GetString(0),
+                NeuronId = reader.GetString(1),
+                Active = reader.IsDBNull(2) ? null : reader.GetInt32(2)
+            };
+            return user;
+        }
+
+        return null;
+    }
+
+
     public async Task AddAsync(User user)
     {
         AssertionConcern.AssertArgumentNotNull(user, nameof(user));
@@ -40,24 +70,6 @@ public class UserRepository : IUserRepository
         command.Parameters.AddWithValue("@UserId", user.UserId);
         command.Parameters.AddWithValue("@NeuronId", user.NeuronId);
         command.Parameters.AddWithValue("@Active", user.Active is null ? DBNull.Value : user.Active);
-
-        await command.ExecuteNonQueryAsync();
-    }
-
-    public async Task DeleteAsync(User user)
-    {
-        AssertionConcern.AssertArgumentNotNull(user, nameof(user));
-
-        var id = avatarContextService.Avatar.Id;
-        var connectionString = $@"Data Source=file:{Path.Combine(id, Constants.Databases.IdentityAccessDb)}";
-
-        using var connection = new SqliteConnection(connectionString);
-        await connection.OpenAsync();
-
-        var query = $"DELETE FROM {Constants.TableNames.User} WHERE UserId = @UserId";
-        using var command = new SqliteCommand(query, connection);
-
-        command.Parameters.AddWithValue("@UserId", user.UserId);
 
         await command.ExecuteNonQueryAsync();
     }
@@ -89,7 +101,7 @@ public class UserRepository : IUserRepository
         return users;
     }
 
-    public async Task UpdateAsync(User user)
+    public async Task RemoveAsync(User user)
     {
         AssertionConcern.AssertArgumentNotNull(user, nameof(user));
 
@@ -99,13 +111,32 @@ public class UserRepository : IUserRepository
         using var connection = new SqliteConnection(connectionString);
         await connection.OpenAsync();
 
-        var query = $"UPDATE {Constants.TableNames.User} SET NeuronId = @NeuronId, Active = @Active WHERE UserId = @UserId";
+        var query = $"DELETE FROM {Constants.TableNames.User} WHERE UserId = @UserId";
         using var command = new SqliteCommand(query, connection);
 
-        command.Parameters.AddWithValue("@NeuronId", user.NeuronId);
-        command.Parameters.AddWithValue("@Active", user.Active is null ? DBNull.Value : user.Active);
+        command.Parameters.AddWithValue("@UserId", user.UserId);
+
+        await command.ExecuteNonQueryAsync();
+    }
+
+    public async Task SaveAsync(User user)
+    {
+        AssertionConcern.AssertArgumentNotNull(user, nameof(user));
+
+        var id = avatarContextService.Avatar.Id;
+        var connectionString = $@"Data Source=file:{Path.Combine(id, Constants.Databases.IdentityAccessDb)}";
+
+        using var connection = new SqliteConnection(connectionString);
+        await connection.OpenAsync();
+
+        var query = $@"
+            INSERT OR REPLACE INTO {Constants.TableNames.User} (UserId, NeuronId, Active)
+            VALUES (@UserId, @NeuronId, @Active)";
+        using var command = new SqliteCommand(query, connection);
 
         command.Parameters.AddWithValue("@UserId", user.UserId);
+        command.Parameters.AddWithValue("@NeuronId", user.NeuronId);
+        command.Parameters.AddWithValue("@Active", user.Active is null ? DBNull.Value : (object)user.Active);
 
         await command.ExecuteNonQueryAsync();
     }

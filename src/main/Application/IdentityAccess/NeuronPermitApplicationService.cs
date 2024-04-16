@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ei8.Avatar.Installer.Application.IdentityAccess;
+
 public class NeuronPermitApplicationService : INeuronPermitApplicationService
 {
     private readonly INeuronPermitRepository neuronPermitRepository;
@@ -18,18 +19,13 @@ public class NeuronPermitApplicationService : INeuronPermitApplicationService
         this.neuronPermitRepository = neuronPermitRepository;
     }
 
-    public async Task AddAsync(NeuronPermit neuronPermit)
+    public async Task<bool> CheckIfExistsAsync(string userNeuronId, string neuronId)
     {
-        AssertionConcern.AssertArgumentNotNull(neuronPermit, nameof(neuronPermit));
+        AssertionConcern.AssertArgumentNotNull(neuronPermitRepository, nameof(neuronPermitRepository));
+        AssertionConcern.AssertArgumentNotNull(neuronPermitRepository, nameof(neuronPermitRepository));
 
-        await this.neuronPermitRepository.AddAsync(neuronPermit);
-    }
-
-    public async Task DeleteAsync(NeuronPermit neuronPermit)
-    {
-        AssertionConcern.AssertArgumentNotNull(neuronPermit, nameof(neuronPermit));
-
-        await this.neuronPermitRepository.DeleteAsync(neuronPermit);
+        var neuronPermit = await neuronPermitRepository.GetByIdAsync(userNeuronId, neuronId);
+        return neuronPermit is not null;
     }
 
     public async Task<IEnumerable<NeuronPermit>> GetAllAsync()
@@ -37,10 +33,17 @@ public class NeuronPermitApplicationService : INeuronPermitApplicationService
         return await this.neuronPermitRepository.GetAllAsync();
     }
 
-    public async Task UpdateAsync(NeuronPermit neuronPermit)
+    public async Task RemoveAsync(NeuronPermit neuronPermit)
     {
         AssertionConcern.AssertArgumentNotNull(neuronPermit, nameof(neuronPermit));
 
-        await this.neuronPermitRepository.UpdateAsync(neuronPermit);
+        await this.neuronPermitRepository.RemoveAsync(neuronPermit);
+    }
+
+    public async Task SaveAsync(NeuronPermit neuronPermit)
+    {
+        AssertionConcern.AssertArgumentNotNull(neuronPermit, nameof(neuronPermit));
+
+        await this.neuronPermitRepository.SaveAsync(neuronPermit);
     }
 }

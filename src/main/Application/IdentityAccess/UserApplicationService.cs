@@ -26,11 +26,12 @@ public class UserApplicationService : IUserApplicationService
         await this.userRepository.AddAsync(user);
     }
 
-    public async Task DeleteAsync(User user)
+    public async Task<bool> CheckIfExistsAsync(string userId)
     {
-        AssertionConcern.AssertArgumentNotNull(user, nameof(user));
+        AssertionConcern.AssertArgumentNotNull(userId, nameof(userId));
 
-        await this.userRepository.DeleteAsync(user);
+        var user = await userRepository.GetByIdAsync(userId);
+        return user is not null;
     }
 
     public async Task<IEnumerable<User>> GetAllAsync()
@@ -38,10 +39,17 @@ public class UserApplicationService : IUserApplicationService
         return await this.userRepository.GetAllAsync();
     }
 
-    public async Task UpdateAsync(User user)
+    public async Task RemoveAsync(User user)
     {
         AssertionConcern.AssertArgumentNotNull(user, nameof(user));
 
-        await this.userRepository.UpdateAsync(user);
+        await this.userRepository.RemoveAsync(user);
+    }
+
+    public async Task SaveAsync(User user)
+    {
+        AssertionConcern.AssertArgumentNotNull(user, nameof(user));
+
+        await this.userRepository.SaveAsync(user);
     }
 }

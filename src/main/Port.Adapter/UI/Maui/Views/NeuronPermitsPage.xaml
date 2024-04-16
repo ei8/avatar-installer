@@ -33,7 +33,7 @@
                             <DataTemplate x:DataType="models:NeuronPermit">
                                 <Frame Margin="2" Padding="5">
                                     <Frame.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:NeuronPermitsViewModel}}, Path=GoToNeuronPermitDetailsCommand}" CommandParameter="{Binding .}" />
+                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:NeuronPermitsViewModel}}, Path=EditNeuronPermitCommand}" CommandParameter="{Binding .}" />
                                     </Frame.GestureRecognizers>
                                     <Grid Padding="10" ColumnDefinitions="*,*,*">
                                         <Label
@@ -57,7 +57,7 @@
             </ScrollView>
         </Grid>
         <Grid Grid.Row="1" Padding="10">
-            <Button Command="{Binding GoToAddNeuronPermitCommand}" Text="Add Neuron Permit" />
+            <Button Command="{Binding CreateNeuronPermitCommand}" Text="Create Neuron Permit" />
         </Grid>
     </Grid>
 </ContentPage>
