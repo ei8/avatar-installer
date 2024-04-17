@@ -60,8 +60,6 @@
             public const string Create = "create";
             public const string Created = "created";
             public const string Get = "get";
-            public const string Add = "add";
-            public const string Added = "added";
             public const string Save = "save";
             public const string Saved = "saved";
             public const string Remove = "remove";
@@ -78,7 +76,6 @@
             public const string Confirmation = "Are you sure you want to {0} this {1}?";
             public const string Success = "Successfully {0} {1}";
             public const string Error = "Unable to {0} {1}";
-            public const string CantBeEmpty = "{0} cannot be empty";
             public const string CantBe = "{0} cannot be {1}";
             public const string AlreadyExists = "{0} already exists";
         }
