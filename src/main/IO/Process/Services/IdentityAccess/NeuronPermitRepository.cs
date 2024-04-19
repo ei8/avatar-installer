@@ -22,7 +22,7 @@ public class NeuronPermitRepository : INeuronPermitRepository
         this.avatarContextService = avatarContextService;
     }
 
-    public async Task<NeuronPermit> GetByIdAsync(string userNeuronId, string neuronId)
+    public async Task<NeuronPermit> GetByCompositeIdAsync(string userNeuronId, string neuronId)
     {
         AssertionConcern.AssertArgumentNotNull(userNeuronId, nameof(userNeuronId));
         AssertionConcern.AssertArgumentNotNull(neuronId, nameof(neuronId));
@@ -110,8 +110,8 @@ public class NeuronPermitRepository : INeuronPermitRepository
         await connection.OpenAsync();
 
         var query = $@"
-        INSERT OR REPLACE INTO {Constants.TableNames.NeuronPermit} (UserNeuronId, NeuronId, ExpirationDate)
-        VALUES (@UserNeuronId, @NeuronId, @ExpirationDate)";
+            INSERT OR REPLACE INTO {Constants.TableNames.NeuronPermit} (UserNeuronId, NeuronId, ExpirationDate)
+            VALUES (@UserNeuronId, @NeuronId, @ExpirationDate)";
         using var command = new SqliteCommand(query, connection);
 
         command.Parameters.AddWithValue("@UserNeuronId", neuronPermit.UserNeuronId);

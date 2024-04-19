@@ -56,8 +56,8 @@ public partial class NeuronPermitDetailsViewModel : EditAvatarViewModel
             return;
         }
 
-        bool isConfirmed = await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Remove,
-            string.Format(Constants.Messages.Confirmation, Constants.Operations.Remove, Constants.Titles.NeuronPermit),
+        bool isConfirmed = await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Save,
+            string.Format(Constants.Messages.Confirmation, Constants.Operations.Save, Constants.Titles.NeuronPermit),
             Constants.Prompts.Yes, Constants.Prompts.No);
 
         if (!isConfirmed)
@@ -67,20 +67,15 @@ public partial class NeuronPermitDetailsViewModel : EditAvatarViewModel
         {
             this.IsBusy = true;
 
-            if (this.Mode == Mode.Create)
+            switch (this.Mode)
             {
-                var exists = await this.neuronPermitApplicationService.CheckIfExistsAsync(
-                    this.NeuronPermit.UserNeuronId, this.NeuronPermit.NeuronId);
-
-                if (exists)
-                {
-                    await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Error,
-                        string.Format(Constants.Messages.AlreadyExists, Constants.Titles.NeuronPermit),
-                        Constants.Prompts.Ok);
-                    return;
-                }
+                case Mode.Create:
+                    await this.neuronPermitApplicationService.AddAsync(this.NeuronPermit);
+                    break;
+                case Mode.Edit:
+                    await this.neuronPermitApplicationService.SaveAsync(this.NeuronPermit);
+                    break;
             }
-            await this.neuronPermitApplicationService.SaveAsync(this.NeuronPermit);
 
             await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Success,
                 string.Format(Constants.Messages.Success, Constants.Operations.Saved, Constants.Titles.NeuronPermit),
@@ -107,7 +102,7 @@ public partial class NeuronPermitDetailsViewModel : EditAvatarViewModel
     {
         if (this.NeuronPermit is null || this.IsBusy) return;
 
-        bool isConfirmed = await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Save,
+        bool isConfirmed = await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Remove,
             string.Format(Constants.Messages.Confirmation, Constants.Operations.Remove, Constants.Titles.NeuronPermit),
             Constants.Prompts.Yes, Constants.Prompts.No);
 

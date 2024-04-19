@@ -51,7 +51,15 @@ public partial class RegionPermitDetailsViewModel : EditAvatarViewModel
         {
             this.IsBusy = true;
 
-            await this.regionPermitApplicationService.SaveAsync(this.RegionPermit);
+            switch (this.Mode)
+            {
+                case Mode.Create:
+                    await this.regionPermitApplicationService.AddAsync(this.RegionPermit);
+                    break;
+                case Mode.Edit:
+                    await this.regionPermitApplicationService.SaveAsync(this.RegionPermit);
+                    break;
+            }
 
             await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Success,
                 string.Format(Constants.Messages.Success, Constants.Operations.Saved, Constants.Titles.RegionPermit), 

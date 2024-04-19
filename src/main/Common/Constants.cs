@@ -77,6 +77,7 @@
             public const string Success = "Successfully {0} {1}";
             public const string Error = "Unable to {0} {1}";
             public const string CantBe = "{0} cannot be {1}";
+            public const string NotFound = "{0} not found";
             public const string AlreadyExists = "{0} already exists";
         }
 

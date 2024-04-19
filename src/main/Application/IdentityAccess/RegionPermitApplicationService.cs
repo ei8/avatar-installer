@@ -1,4 +1,5 @@
-﻿using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
+﻿using ei8.Avatar.Installer.Common;
+using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
 using neurUL.Common.Domain.Model;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,18 @@ public class RegionPermitApplicationService : IRegionPermitApplicationService
         this.regionPermitRepository = regionPermitRepository;
     }
 
+    public async Task AddAsync(RegionPermit regionPermit)
+    {
+        AssertionConcern.AssertArgumentNotNull(regionPermit, nameof(regionPermit));
+
+        var rp = await this.regionPermitRepository.GetByIdAsync(regionPermit.SequenceId);
+
+        if (rp is not null)
+            throw new InvalidOperationException(string.Format(Constants.Messages.AlreadyExists, Constants.Titles.RegionPermit));
+        else
+            await this.regionPermitRepository.SaveAsync(regionPermit);
+    }
+
     public async Task<IEnumerable<RegionPermit>> GetAllAsync()
     {
         return await this.regionPermitRepository.GetAllAsync();
@@ -35,6 +48,11 @@ public class RegionPermitApplicationService : IRegionPermitApplicationService
     {
         AssertionConcern.AssertArgumentNotNull(regionPermit, nameof(regionPermit));
 
-        await this.regionPermitRepository.SaveAsync(regionPermit);
+        var rp = await this.regionPermitRepository.GetByIdAsync(regionPermit.SequenceId);
+
+        if (rp is null)
+            throw new InvalidOperationException(string.Format(Constants.Messages.NotFound, Constants.TableNames.RegionPermit));
+        else
+            await this.regionPermitRepository.SaveAsync(regionPermit);
     }
 }

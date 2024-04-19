@@ -68,19 +68,15 @@ public partial class UserDetailsViewModel : EditAvatarViewModel
         {
             this.IsBusy = true;
 
-            if (this.Mode == Mode.Create)
+            switch (this.Mode)
             {
-                var exists = await this.userApplicationService.CheckIfExistsAsync(this.User.UserId);
-
-                if (exists)
-                {
-                    await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Error,
-                        string.Format(Constants.Messages.AlreadyExists, Constants.Titles.User),
-                        Constants.Prompts.Ok);
-                    return;
-                }
+                case Mode.Create:
+                    await this.userApplicationService.AddAsync(this.User);
+                    break;
+                case Mode.Edit:
+                    await this.userApplicationService.SaveAsync(this.User);
+                    break;
             }
-            await this.userApplicationService.SaveAsync(this.User);
 
             await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Success,
                 string.Format(Constants.Messages.Success, Constants.Operations.Saved, Constants.Titles.User),

@@ -9,7 +9,7 @@ namespace ei8.Avatar.Installer.Application.IdentityAccess;
 public interface IUserApplicationService
 {
     Task<IEnumerable<User>> GetAllAsync();
-    Task<bool> CheckIfExistsAsync(string userId);
+    Task AddAsync(User user);
     Task SaveAsync(User user);
     Task RemoveAsync(User user);
 }

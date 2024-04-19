@@ -10,7 +10,7 @@ namespace ei8.Avatar.Installer.Application.IdentityAccess;
 public interface INeuronPermitApplicationService
 {
     Task<IEnumerable<NeuronPermit>> GetAllAsync();
-    Task<bool> CheckIfExistsAsync(string userNeuronId, string neuronId);
+    Task AddAsync(NeuronPermit neuronPermit);
     Task SaveAsync(NeuronPermit neuronPermit);
     Task RemoveAsync(NeuronPermit neuronPermit);
 }

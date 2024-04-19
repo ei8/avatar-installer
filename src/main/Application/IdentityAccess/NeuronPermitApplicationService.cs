@@ -1,4 +1,5 @@
-﻿using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
+﻿using ei8.Avatar.Installer.Common;
+using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
 using neurUL.Common.Domain.Model;
 using System;
 using System.Collections.Generic;
@@ -19,13 +20,16 @@ public class NeuronPermitApplicationService : INeuronPermitApplicationService
         this.neuronPermitRepository = neuronPermitRepository;
     }
 
-    public async Task<bool> CheckIfExistsAsync(string userNeuronId, string neuronId)
+    public async Task AddAsync(NeuronPermit neuronPermit)
     {
-        AssertionConcern.AssertArgumentNotNull(neuronPermitRepository, nameof(neuronPermitRepository));
-        AssertionConcern.AssertArgumentNotNull(neuronPermitRepository, nameof(neuronPermitRepository));
+        AssertionConcern.AssertArgumentNotNull(neuronPermit, nameof(neuronPermit));
 
-        var neuronPermit = await neuronPermitRepository.GetByIdAsync(userNeuronId, neuronId);
-        return neuronPermit is not null;
+        var np = await this.neuronPermitRepository.GetByCompositeIdAsync(neuronPermit.UserNeuronId, neuronPermit.NeuronId);
+
+        if (np is not null) 
+            throw new InvalidOperationException(string.Format(Constants.Messages.AlreadyExists, Constants.Titles.NeuronPermit));
+        else 
+            await this.neuronPermitRepository.SaveAsync(neuronPermit);
     }
 
     public async Task<IEnumerable<NeuronPermit>> GetAllAsync()
@@ -44,6 +48,11 @@ public class NeuronPermitApplicationService : INeuronPermitApplicationService
     {
         AssertionConcern.AssertArgumentNotNull(neuronPermit, nameof(neuronPermit));
 
-        await this.neuronPermitRepository.SaveAsync(neuronPermit);
+        var np = await this.neuronPermitRepository.GetByCompositeIdAsync(neuronPermit.UserNeuronId, neuronPermit.NeuronId);
+
+        if (np is null)
+            throw new InvalidOperationException(string.Format(Constants.Messages.NotFound, Constants.Titles.NeuronPermit));
+        else
+            await this.neuronPermitRepository.SaveAsync(neuronPermit);
     }
 }
