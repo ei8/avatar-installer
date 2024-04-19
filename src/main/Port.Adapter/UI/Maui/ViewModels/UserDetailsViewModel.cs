@@ -80,7 +80,7 @@ public partial class UserDetailsViewModel : EditAvatarViewModel
                     return;
                 }
             }
-            await this.userApplicationService.SaveAsync(User);
+            await this.userApplicationService.SaveAsync(this.User);
 
             await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Success,
                 string.Format(Constants.Messages.Success, Constants.Operations.Saved, Constants.Titles.User),
@@ -118,7 +118,7 @@ public partial class UserDetailsViewModel : EditAvatarViewModel
         {
             this.IsBusy = true;
 
-            await this.userApplicationService.RemoveAsync(User);
+            await this.userApplicationService.RemoveAsync(this.User);
 
             await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Success,
                 string.Format(Constants.Messages.Success, Constants.Operations.Removed, Constants.Titles.User),

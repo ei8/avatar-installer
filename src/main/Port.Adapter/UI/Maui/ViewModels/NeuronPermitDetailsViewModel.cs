@@ -43,7 +43,7 @@ public partial class NeuronPermitDetailsViewModel : EditAvatarViewModel
         if (string.IsNullOrEmpty(this.NeuronPermit.UserNeuronId))
         {
             await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Error,
-                string.Format(Constants.Messages.CantBe, nameof(NeuronPermit.UserNeuronId), Constants.Operations.Empty),
+                string.Format(Constants.Messages.CantBe, nameof(this.NeuronPermit.UserNeuronId), Constants.Operations.Empty),
                 Constants.Prompts.Ok);
             return;
         }
@@ -51,7 +51,7 @@ public partial class NeuronPermitDetailsViewModel : EditAvatarViewModel
         if (string.IsNullOrEmpty(this.NeuronPermit.NeuronId))
         {
             await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Error,
-                string.Format(Constants.Messages.CantBe, nameof(NeuronPermit.NeuronId), Constants.Operations.Empty),
+                string.Format(Constants.Messages.CantBe, nameof(this.NeuronPermit.NeuronId), Constants.Operations.Empty),
                 Constants.Prompts.Ok);
             return;
         }
@@ -118,7 +118,7 @@ public partial class NeuronPermitDetailsViewModel : EditAvatarViewModel
         {
             this.IsBusy = true;
             
-            await this.neuronPermitApplicationService.RemoveAsync(NeuronPermit);
+            await this.neuronPermitApplicationService.RemoveAsync(this.NeuronPermit);
 
             await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Success,
                 string.Format(Constants.Messages.Success, Constants.Operations.Removed, Constants.Titles.NeuronPermit),

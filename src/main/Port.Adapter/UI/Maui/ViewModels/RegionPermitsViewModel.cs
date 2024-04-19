@@ -38,7 +38,7 @@ public partial class RegionPermitsViewModel : EditAvatarViewModel
             this.IsBusy = true;
 
             this.RegionPermits.Clear();
-            var regionPermits = await regionPermitApplicationService.GetAllAsync();
+            var regionPermits = await this.regionPermitApplicationService.GetAllAsync();
 
             foreach (var regionPermit in regionPermits)
             {

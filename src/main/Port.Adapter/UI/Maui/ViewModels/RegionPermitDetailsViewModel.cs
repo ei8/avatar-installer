@@ -89,7 +89,7 @@ public partial class RegionPermitDetailsViewModel : EditAvatarViewModel
         {
             this.IsBusy = true;
 
-            await this.regionPermitApplicationService.RemoveAsync(RegionPermit);
+            await this.regionPermitApplicationService.RemoveAsync(this.RegionPermit);
 
             await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Success,
                 string.Format(Constants.Messages.Success, Constants.Operations.Removed, Constants.Titles.RegionPermit),
