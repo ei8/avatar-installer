@@ -8,7 +8,7 @@ namespace ei8.Avatar.Installer.Domain.Model.IdentityAccess;
 
 public class NeuronPermit
 {
-    public string UserNeuronId { get; set; } = string.Empty;
-    public string NeuronId { get; set; } = string.Empty;
+    public string UserNeuronId { get; set; }
+    public string NeuronId { get; set; }
     public string ExpirationDate { get; set; }
 }

@@ -13,7 +13,8 @@ using System.Threading.Tasks;
 
 namespace ei8.Avatar.Installer.Port.Adapter.UI.Maui.ViewModels;
 
-[QueryProperty("RegionPermit", "RegionPermit")]
+[QueryProperty(nameof(RegionPermit), "RegionPermit")]
+[QueryProperty(nameof(Mode), "Mode")]
 public partial class RegionPermitDetailsViewModel : EditAvatarViewModel
 {
     private readonly IRegionPermitApplicationService regionPermitApplicationService;
@@ -28,12 +29,19 @@ public partial class RegionPermitDetailsViewModel : EditAvatarViewModel
     [ObservableProperty]
     private RegionPermit regionPermit;
 
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsEditing))]
+    private Mode mode;
+
+    public bool IsEditing => this.Mode == Mode.Edit;
+
     [RelayCommand]
-    private async Task UpdateRegionPermitAsync()
+    private async Task SaveRegionPermitAsync()
     {
-        if (this.RegionPermit is null) return;
-        bool isConfirmed = await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Update, 
-            string.Format(Constants.Messages.Confirmation, Constants.Operations.Update, Constants.Titles.RegionPermit),
+        if (this.RegionPermit is null || this.IsBusy) return;
+
+        bool isConfirmed = await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Save, 
+            string.Format(Constants.Messages.Confirmation, Constants.Operations.Save, Constants.Titles.RegionPermit),
             Constants.Prompts.Yes, Constants.Prompts.No);
 
         if (!isConfirmed)
@@ -41,10 +49,20 @@ public partial class RegionPermitDetailsViewModel : EditAvatarViewModel
 
         try
         {
-            await this.regionPermitApplicationService.UpdateAsync(RegionPermit);
+            this.IsBusy = true;
+
+            switch (this.Mode)
+            {
+                case Mode.Create:
+                    await this.regionPermitApplicationService.AddAsync(this.RegionPermit);
+                    break;
+                case Mode.Edit:
+                    await this.regionPermitApplicationService.SaveAsync(this.RegionPermit);
+                    break;
+            }
 
             await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Success,
-                string.Format(Constants.Messages.Success, Constants.Operations.Updated, Constants.Titles.RegionPermit), 
+                string.Format(Constants.Messages.Success, Constants.Operations.Saved, Constants.Titles.RegionPermit), 
                 Constants.Prompts.Ok);
 
             await Shell.Current.GoToAsync("..");
@@ -54,18 +72,22 @@ public partial class RegionPermitDetailsViewModel : EditAvatarViewModel
             Debug.WriteLine(ex);
 
             await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Error,
-                $"{string.Format(Constants.Messages.Error, Constants.Operations.Update, Constants.Titles.RegionPermit)}: {ex.Message}", 
+                $"{string.Format(Constants.Messages.Error, Constants.Operations.Save, Constants.Titles.RegionPermit)}: {ex.Message}", 
                 Constants.Prompts.Ok);
+        }
+        finally
+        {
+            this.IsBusy = false;
         }
     }
 
     [RelayCommand]
-    private async Task DeleteRegionPermitAsync()
+    private async Task RemoveRegionPermitAsync()
     {
-        if (this.RegionPermit is null) return;
+        if (this.RegionPermit is null || this.IsBusy) return;
 
-        bool isConfirmed = await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Delete,
-            string.Format(Constants.Messages.Confirmation, Constants.Operations.Delete, Constants.Titles.RegionPermit),
+        bool isConfirmed = await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Remove,
+            string.Format(Constants.Messages.Confirmation, Constants.Operations.Remove, Constants.Titles.RegionPermit),
             Constants.Prompts.Yes, Constants.Prompts.No);
 
         if (!isConfirmed)
@@ -73,10 +95,12 @@ public partial class RegionPermitDetailsViewModel : EditAvatarViewModel
 
         try
         {
-            await this.regionPermitApplicationService.DeleteAsync(RegionPermit);
+            this.IsBusy = true;
+
+            await this.regionPermitApplicationService.RemoveAsync(this.RegionPermit);
 
             await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Success,
-                string.Format(Constants.Messages.Success, Constants.Operations.Deleted, Constants.Titles.RegionPermit),
+                string.Format(Constants.Messages.Success, Constants.Operations.Removed, Constants.Titles.RegionPermit),
                 Constants.Prompts.Ok);
 
             await Shell.Current.GoToAsync("..");
@@ -86,8 +110,12 @@ public partial class RegionPermitDetailsViewModel : EditAvatarViewModel
             Debug.WriteLine(ex);
 
             await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Error,
-                $"{string.Format(Constants.Messages.Error, Constants.Operations.Delete, Constants.Titles.RegionPermit)}: {ex.Message}",
+                $"{string.Format(Constants.Messages.Error, Constants.Operations.Remove, Constants.Titles.RegionPermit)}: {ex.Message}",
                 Constants.Prompts.Ok);
+        }
+        finally
+        {
+            this.IsBusy = false;
         }
     }
 }

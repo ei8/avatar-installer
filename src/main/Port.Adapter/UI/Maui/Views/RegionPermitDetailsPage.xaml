@@ -3,7 +3,6 @@
     x:Class="ei8.Avatar.Installer.Port.Adapter.UI.Maui.Views.RegionPermitDetailsPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:models="clr-namespace:ei8.Avatar.Installer.Domain.Model.DTO;assembly=Domain.Model"
     xmlns:viewmodels="clr-namespace:ei8.Avatar.Installer.Port.Adapter.UI.Maui.ViewModels"
     Title="RegionPermitDetailsPage"
     x:DataType="viewmodels:RegionPermitDetailsViewModel"
@@ -16,11 +15,13 @@
                 <Grid Margin="10" ColumnDefinitions="Auto,*">
                     <Label
                         Grid.Column="0"
+                        IsVisible="{Binding IsEditing}"
                         Text="Sequence ID: "
                         VerticalOptions="Center" />
                     <Entry
                         Grid.Column="1"
                         IsReadOnly="True"
+                        IsVisible="{Binding IsEditing}"
                         Text="{Binding RegionPermit.SequenceId}" />
                 </Grid>
                 <Grid Margin="10" ColumnDefinitions="Auto,*">
@@ -69,22 +70,28 @@
         <Grid
             Grid.Row="1"
             Padding="10"
-            ColumnDefinitions="*,*,*">
+            ColumnDefinitions="*,*,Auto"
+            HorizontalOptions="FillAndExpand">
             <Button
+                x:Name="CancelButton"
                 Grid.Column="0"
                 Margin="0,0,6,0"
                 Command="{Binding CancelEditCommand}"
                 Text="Cancel" />
+
             <Button
                 Grid.Column="1"
                 Margin="3,0,3,0"
-                Command="{Binding UpdateRegionPermitCommand}"
-                Text="Update" />
+                Command="{Binding SaveRegionPermitCommand}"
+                Text="Save" />
+
             <Button
                 Grid.Column="2"
                 Margin="6,0,0,0"
-                Command="{Binding DeleteRegionPermitCommand}"
-                Text="Delete" />
+                Command="{Binding RemoveRegionPermitCommand}"
+                IsVisible="{Binding IsEditing}"
+                Text="Remove"
+                WidthRequest="{Binding Path=Width, Source={x:Reference CancelButton}}" />
         </Grid>
 
     </Grid>

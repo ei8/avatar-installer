@@ -6,6 +6,7 @@
     xmlns:viewmodels="clr-namespace:ei8.Avatar.Installer.Port.Adapter.UI.Maui.ViewModels"
     Title="Create Avatar"
     x:DataType="viewmodels:CreateAvatarViewModel"
+    Shell.FlyoutBehavior="Disabled"
     Shell.NavBarIsVisible="False">
 
     <Grid RowDefinitions="*,2*,*">

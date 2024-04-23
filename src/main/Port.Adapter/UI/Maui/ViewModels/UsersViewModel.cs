@@ -59,14 +59,26 @@ public partial class UsersViewModel : EditAvatarViewModel
     }
 
     [RelayCommand]
-    private async Task GoToUserDetailsAsync(User user)
+    private async Task EditUserAsync(User user)
     {
         AssertionConcern.AssertArgumentNotNull(user, nameof(user));
 
         await Shell.Current.GoToAsync($"{nameof(UserDetailsPage)}",
             new Dictionary<string, object>
             {
-                { "User", user }
+                { "User", user },
+                { "Mode", Mode.Edit },
+            });
+    }
+
+    [RelayCommand]
+    private async Task CreateUserAsync()
+    {
+        await Shell.Current.GoToAsync($"{nameof(UserDetailsPage)}",
+            new Dictionary<string, object>
+            {
+                { "User", new User() },
+                { "Mode", Mode.Create },
             });
     }
 }

@@ -8,7 +8,7 @@ namespace ei8.Avatar.Installer.Domain.Model.IdentityAccess;
 
 public class User
 {
-    public string UserId { get; set; } = string.Empty;
-    public string NeuronId { get; set; } = string.Empty;
+    public string UserId { get; set; }
+    public string NeuronId { get; set; }
     public int? Active { get; set; }
 }

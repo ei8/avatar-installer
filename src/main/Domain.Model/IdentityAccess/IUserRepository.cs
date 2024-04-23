@@ -9,7 +9,8 @@ namespace ei8.Avatar.Installer.Domain.Model.IdentityAccess;
 
 public interface IUserRepository
 {
+    Task<User> GetByIdAsync(string userId);
     Task<IEnumerable<User>> GetAllAsync();
-    Task UpdateAsync(User user);
-    Task DeleteAsync(User user);
+    Task RemoveAsync(User user);
+    Task SaveAsync(User user);
 }

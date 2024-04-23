@@ -19,7 +19,7 @@
                         VerticalOptions="Center" />
                     <Entry
                         Grid.Column="1"
-                        IsReadOnly="True"
+                        IsReadOnly="{Binding IsEditing}"
                         Text="{Binding User.UserId}" />
                 </Grid>
                 <Grid Margin="10" ColumnDefinitions="Auto,*">
@@ -48,23 +48,28 @@
         <Grid
             Grid.Row="1"
             Padding="10"
-            ColumnDefinitions="*,*,*">
+            ColumnDefinitions="*,*,Auto"
+            HorizontalOptions="FillAndExpand">
             <Button
+                x:Name="CancelButton"
                 Grid.Column="0"
                 Margin="0,0,6,0"
                 Command="{Binding CancelEditCommand}"
                 Text="Cancel" />
+
             <Button
                 Grid.Column="1"
                 Margin="3,0,3,0"
-                Command="{Binding UpdateUserCommand}"
-                Text="Update" />
+                Command="{Binding SaveUserCommand}"
+                Text="Save" />
+
             <Button
                 Grid.Column="2"
                 Margin="6,0,0,0"
-                Command="{Binding DeleteUserCommand}"
-                Text="Delete" />
-
+                Command="{Binding RemoveUserCommand}"
+                IsVisible="{Binding IsEditing}"
+                Text="Remove"
+                WidthRequest="{Binding Path=Width, Source={x:Reference CancelButton}}" />
         </Grid>
     </Grid>
 </ContentPage>

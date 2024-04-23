@@ -1,4 +1,5 @@
-﻿using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
+﻿using ei8.Avatar.Installer.Common;
+using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
 using neurUL.Common.Domain.Model;
 using System;
 using System.Collections.Generic;
@@ -19,11 +20,16 @@ public class UserApplicationService : IUserApplicationService
         this.userRepository = userRepository;
     }
 
-    public async Task DeleteAsync(User user)
+    public async Task AddAsync(User user)
     {
         AssertionConcern.AssertArgumentNotNull(user, nameof(user));
 
-        await this.userRepository.DeleteAsync(user);
+        var u = await this.userRepository.GetByIdAsync(user.UserId);
+
+        if (u is not null)
+            throw new InvalidOperationException(string.Format(Constants.Messages.AlreadyExists, Constants.Titles.User));
+        else
+            await this.userRepository.SaveAsync(user);
     }
 
     public async Task<IEnumerable<User>> GetAllAsync()
@@ -31,10 +37,22 @@ public class UserApplicationService : IUserApplicationService
         return await this.userRepository.GetAllAsync();
     }
 
-    public async Task UpdateAsync(User user)
+    public async Task RemoveAsync(User user)
     {
         AssertionConcern.AssertArgumentNotNull(user, nameof(user));
 
-        await this.userRepository.UpdateAsync(user);
+        await this.userRepository.RemoveAsync(user);
+    }
+
+    public async Task SaveAsync(User user)
+    {
+        AssertionConcern.AssertArgumentNotNull(user, nameof(user));
+
+        var u = await this.userRepository.GetByIdAsync(user.UserId);
+
+        if (u is null)
+            throw new InvalidOperationException(string.Format(Constants.Messages.NotFound, Constants.TableNames.User));
+        else
+            await this.userRepository.SaveAsync(user);
     }
 }

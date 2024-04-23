@@ -38,7 +38,7 @@ public partial class RegionPermitsViewModel : EditAvatarViewModel
             this.IsBusy = true;
 
             this.RegionPermits.Clear();
-            var regionPermits = await regionPermitApplicationService.GetAllAsync();
+            var regionPermits = await this.regionPermitApplicationService.GetAllAsync();
 
             foreach (var regionPermit in regionPermits)
             {
@@ -48,8 +48,8 @@ public partial class RegionPermitsViewModel : EditAvatarViewModel
         catch (Exception ex)
         {
             Debug.WriteLine(ex);
-            await Shell.Current.DisplayAlert(Constants.Statuses.Error, 
-                $"{string.Format(Constants.Messages.Error, Constants.Operations.Get, Constants.Titles.RegionPermit)}s: {ex.Message}", 
+            await Shell.Current.DisplayAlert(Constants.Statuses.Error,
+                $"{string.Format(Constants.Messages.Error, Constants.Operations.Get, Constants.Titles.RegionPermit)}s: {ex.Message}",
                 Constants.Prompts.Ok);
         }
         finally
@@ -59,14 +59,26 @@ public partial class RegionPermitsViewModel : EditAvatarViewModel
     }
 
     [RelayCommand]
-    private async Task GoToRegionPermitDetailsAsync(RegionPermit regionPermit)
+    private async Task EditRegionPermitAsync(RegionPermit regionPermit)
     {
         AssertionConcern.AssertArgumentNotNull(regionPermit, nameof(regionPermit));
 
         await Shell.Current.GoToAsync($"{nameof(RegionPermitDetailsPage)}",
             new Dictionary<string, object>
             {
-                { "RegionPermit", regionPermit }
+                { "RegionPermit", regionPermit },
+                { "Mode", Mode.Edit },
+            });
+    }
+
+    [RelayCommand]
+    private async Task CreateRegionPermitAsync()
+    {
+        await Shell.Current.GoToAsync($"{nameof(RegionPermitDetailsPage)}",
+            new Dictionary<string, object>
+            {
+                { "RegionPermit", new RegionPermit() },
+                { "Mode", Mode.Create },
             });
     }
 }

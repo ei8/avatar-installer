@@ -48,8 +48,8 @@ public partial class NeuronPermitsViewModel : EditAvatarViewModel
         catch (Exception ex)
         {
             Debug.WriteLine(ex);
-            await Shell.Current.DisplayAlert(Constants.Statuses.Error, 
-                $"{string.Format(Constants.Messages.Error, Constants.Operations.Get, Constants.Titles.NeuronPermit)}s: {ex.Message}", 
+            await Shell.Current.DisplayAlert(Constants.Statuses.Error,
+                $"{string.Format(Constants.Messages.Error, Constants.Operations.Get, Constants.Titles.NeuronPermit)}s: {ex.Message}",
                 Constants.Prompts.Ok);
         }
         finally
@@ -59,14 +59,28 @@ public partial class NeuronPermitsViewModel : EditAvatarViewModel
     }
 
     [RelayCommand]
-    private async Task GoToNeuronPermitDetailsAsync(NeuronPermit neuronPermit)
+    private async Task EditNeuronPermitAsync(NeuronPermit neuronPermit)
     {
         AssertionConcern.AssertArgumentNotNull(neuronPermit, nameof(neuronPermit));
 
         await Shell.Current.GoToAsync($"{nameof(NeuronPermitDetailsPage)}",
             new Dictionary<string, object>
             {
-                { "NeuronPermit", neuronPermit }
+                { "NeuronPermit", neuronPermit },
+                { "Mode", Mode.Edit },
+            });
+    }
+
+    [RelayCommand]
+    private async Task CreateNeuronPermitAsync()
+    {
+        await Shell.Current.GoToAsync($"{nameof(NeuronPermitDetailsPage)}",
+            new Dictionary<string, object>
+            {
+                { "NeuronPermit", new NeuronPermit() },
+                { "Mode", Mode.Create },
             });
     }
 }
+
+
