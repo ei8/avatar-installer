@@ -1,20 +1,25 @@
 ﻿using CommunityToolkit.Maui;
 using ei8.Avatar.Installer.Application;
 using ei8.Avatar.Installer.Application.Avatar;
+using ei8.Avatar.Installer.Application.AvatarSettings;
 using ei8.Avatar.Installer.Application.IdentityAccess;
 using ei8.Avatar.Installer.Application.Settings;
 using ei8.Avatar.Installer.Domain.Model;
 using ei8.Avatar.Installer.Domain.Model.Avatars;
+using ei8.Avatar.Installer.Domain.Model.AvatarSettings;
 using ei8.Avatar.Installer.Domain.Model.Configuration;
 using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
 using ei8.Avatar.Installer.Domain.Model.Mapping;
 using ei8.Avatar.Installer.Domain.Model.Template;
 using ei8.Avatar.Installer.IO.Process.Services.Avatars;
+using ei8.Avatar.Installer.IO.Process.Services.AvatarSettings;
 using ei8.Avatar.Installer.IO.Process.Services.IdentityAccess;
 using ei8.Avatar.Installer.IO.Process.Services.Settings;
 using ei8.Avatar.Installer.IO.Process.Services.Template;
 using ei8.Avatar.Installer.Port.Adapter.UI.Maui.ViewModels;
+using ei8.Avatar.Installer.Port.Adapter.UI.Maui.ViewModels.AvatarSettings;
 using ei8.Avatar.Installer.Port.Adapter.UI.Maui.Views;
+using ei8.Avatar.Installer.Port.Adapter.UI.Maui.Views.AvatarSettings;
 using MetroLog.MicrosoftExtensions;
 using Microsoft.Extensions.Logging;
 
@@ -53,26 +58,42 @@ public static class MauiProgram
                     options.MaxLevel = LogLevel.Critical;
                 });
 
-        #region Maui Pages
+        #region Pages
         builder.Services.AddSingleton<HomePage>();
         builder.Services.AddSingleton<CreateAvatarPage>();
-        builder.Services.AddTransient<NeuronPermitsPage>();
+
+        builder.Services.AddSingleton<NeuronPermitsPage>();
         builder.Services.AddTransient<NeuronPermitDetailsPage>();
-        builder.Services.AddTransient<RegionPermitsPage>();
+
+        builder.Services.AddSingleton<RegionPermitsPage>();
         builder.Services.AddTransient<RegionPermitDetailsPage>();
-        builder.Services.AddTransient<UsersPage>();
+
+        builder.Services.AddSingleton<UsersPage>();
         builder.Services.AddTransient<UserDetailsPage>();
+
+        builder.Services.AddSingleton<AvatarApiSettingsPage>();
+        builder.Services.AddSingleton<EventSourcingSettingsPage>();
+        builder.Services.AddSingleton<CortexGraphSettingsPage>();
+        builder.Services.AddSingleton<AvatarApiSettingsPage>();
+        builder.Services.AddSingleton<IdentityAccessSettingsPage>();
+        builder.Services.AddSingleton<CortexLibrarySettingsPage>();
+        builder.Services.AddSingleton<CortexDiaryNucleusSettingsPage>();
         #endregion
 
-        #region Maui ViewModels
+        #region ViewModels
         builder.Services.AddSingleton<HomeViewModel>();
         builder.Services.AddSingleton<CreateAvatarViewModel>();
-        builder.Services.AddTransient<NeuronPermitsViewModel>();
+
+        builder.Services.AddSingleton<NeuronPermitsViewModel>();
         builder.Services.AddTransient<NeuronPermitDetailsViewModel>();
-        builder.Services.AddTransient<RegionPermitsViewModel>();
+
+        builder.Services.AddSingleton<RegionPermitsViewModel>();
         builder.Services.AddTransient<RegionPermitDetailsViewModel>();
-        builder.Services.AddTransient<UsersViewModel>();
+
+        builder.Services.AddSingleton<UsersViewModel>();
         builder.Services.AddTransient<UserDetailsViewModel>();
+
+        builder.Services.AddSingleton<EventSourcingSettingsViewModel>();
         #endregion
 
         builder.Services.AddScoped<ISettingsService, SettingsService>()
@@ -91,10 +112,12 @@ public static class MauiProgram
         builder.Services.AddSingleton<INeuronPermitRepository, NeuronPermitRepository>();
         builder.Services.AddSingleton<IRegionPermitRepository, RegionPermitRepository>();
         builder.Services.AddSingleton<IUserRepository, UserRepository>();
+        builder.Services.AddSingleton<IEventSourcingSettingsRepository, EventSourcingSettingsRepository>();
 
         builder.Services.AddSingleton<INeuronPermitApplicationService, NeuronPermitApplicationService>();
         builder.Services.AddSingleton<IRegionPermitApplicationService, RegionPermitApplicationService>();
         builder.Services.AddSingleton<IUserApplicationService, UserApplicationService>();
+        builder.Services.AddSingleton<IEventSourcingSettingsApplicationService, EventSourcingSettingsApplicationService>();
 
         return builder.Build();
     }

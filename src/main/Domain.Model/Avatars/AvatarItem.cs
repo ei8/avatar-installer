@@ -65,17 +65,20 @@ namespace ei8.Avatar.Installer.Domain.Model.Avatars
         public bool ValidateServerCertificate { get; set; }
     }
 
+    // TODO: Create Page
     public class IdentityAccessSettings
     {
         public string UserDatabasePath { get; set; }
     }
 
+    // TODO: Create Page
     public class CortexLibrarySettings
     {
         public string NeuronsUrl { get; set; }
         public string TerminalsUrl { get; set; }
     }
 
+    // TODO: Create Page
     public class CortexDiaryNucleusSettings
     {
         public string SubscriptionsDatabasePath { get; set; }

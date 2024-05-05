@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Maui.Storage;
 using CommunityToolkit.Mvvm.Input;
 using ei8.Avatar.Installer.Port.Adapter.UI.Maui.Views;
+using ei8.Avatar.Installer.Port.Adapter.UI.Maui.Views.AvatarSettings;
 
 namespace ei8.Avatar.Installer.Port.Adapter.UI.Maui;
 
@@ -18,6 +19,13 @@ public partial class AppShell : Shell
         Routing.RegisterRoute(nameof(RegionPermitDetailsPage), typeof(RegionPermitDetailsPage));
         Routing.RegisterRoute(nameof(UsersPage), typeof(UsersPage));
         Routing.RegisterRoute(nameof(UserDetailsPage), typeof(UserDetailsPage));
+
+        Routing.RegisterRoute(nameof(EventSourcingSettingsPage), typeof(EventSourcingSettingsPage));
+        Routing.RegisterRoute(nameof(CortexGraphSettingsPage), typeof(CortexGraphSettingsPage));
+        Routing.RegisterRoute(nameof(AvatarApiSettingsPage), typeof(AvatarApiSettingsPage));
+        Routing.RegisterRoute(nameof(IdentityAccessSettingsPage), typeof(IdentityAccessSettingsPage));
+        Routing.RegisterRoute(nameof(CortexLibrarySettingsPage), typeof(CortexLibrarySettingsPage));
+        Routing.RegisterRoute(nameof(CortexDiaryNucleusSettingsPage), typeof(CortexDiaryNucleusSettingsPage));
 
         BindingContext = this;
     }

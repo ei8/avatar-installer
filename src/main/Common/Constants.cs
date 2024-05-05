@@ -11,6 +11,13 @@
             public const string StartEi8SiteBat = "start - ei8.site.bat";
             public const string LoopStartEi8SiteBat = "loop start - ei8.site.bat";
             public const string AutoLockCmd = "autolock.cmd";
+            public const string VariablesEnv = "variables.env";
+        }
+
+        public sealed class EventSourcingSettings
+        {
+            public const string DatabasePath = "DATABASE_PATH";
+            public const string DisplayErrorTraces = "DISPLAY_ERROR_TRACES";
         }
 
         public sealed class Databases
@@ -35,6 +42,7 @@
             public const string NeuronPermit = "Neuron Permit";
             public const string RegionPermit = "Region Permit";
             public const string User = "User";
+            public const string EventSourcingSettings = "Event Sourcing Settings";
         }
 
         public sealed class Statuses
