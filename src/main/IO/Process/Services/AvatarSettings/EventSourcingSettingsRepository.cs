@@ -1,4 +1,5 @@
-﻿using ei8.Avatar.Installer.Common;
+﻿using ei8.Avatar.Installer.Application.Avatar;
+using ei8.Avatar.Installer.Common;
 using ei8.Avatar.Installer.Domain.Model;
 using ei8.Avatar.Installer.Domain.Model.Avatars;
 using ei8.Avatar.Installer.Domain.Model.AvatarSettings;
@@ -18,6 +19,8 @@ public class EventSourcingSettingsRepository : IEventSourcingSettingsRepository
 
     public EventSourcingSettingsRepository(IAvatarContextService avatarContextService)
     {
+        AssertionConcern.AssertArgumentNotNull(avatarContextService, nameof(avatarContextService));
+
         this.avatarContextService = avatarContextService;
     }
 
@@ -59,6 +62,7 @@ public class EventSourcingSettingsRepository : IEventSourcingSettingsRepository
         return eventSourcingSettings;
     }
 
+    // public async Task SaveAsync(AvatarSettings avatarSettings)
     public async Task SaveAsync(EventSourcingSettings eventSourcingSettings)
     {
         AssertionConcern.AssertArgumentNotNull(eventSourcingSettings, nameof(eventSourcingSettings));

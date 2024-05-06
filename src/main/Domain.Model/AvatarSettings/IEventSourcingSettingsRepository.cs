@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 
 namespace ei8.Avatar.Installer.Domain.Model.AvatarSettings;
 
+// TODO: rename to AvatarSettingsRepository
+/// <summary>
+/// Load and save whole file of variables.env
+/// </summary>
 public interface IEventSourcingSettingsRepository
 {
     Task<EventSourcingSettings> GetAsync();

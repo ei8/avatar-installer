@@ -27,19 +27,9 @@
         <Grid
             Grid.Row="1"
             Padding="10"
-            ColumnDefinitions="*,*"
+            ColumnDefinitions="*"
             HorizontalOptions="FillAndExpand">
-            <Button
-                x:Name="CancelButton"
-                Grid.Column="0"
-                Margin="0,0,6,0"
-                Command="{Binding CancelEditCommand}"
-                Text="Cancel" />
-            <Button
-                Grid.Column="1"
-                Margin="3,0,3,0"
-                Command="{Binding SaveCommand}"
-                Text="Save" />
+            <Button Command="{Binding SaveCommand}" Text="Save" />
         </Grid>
     </Grid>
 </ContentPage>

@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using ei8.Avatar.Installer.Application.AvatarSettings;
 using ei8.Avatar.Installer.Common;
 using ei8.Avatar.Installer.Domain.Model.Avatars;
+using neurUL.Common.Domain.Model;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -18,6 +19,8 @@ public partial class EventSourcingSettingsViewModel : EditAvatarViewModel
 
     public EventSourcingSettingsViewModel(IEventSourcingSettingsApplicationService eventSourcingSettingsApplicationService)
     {
+        AssertionConcern.AssertArgumentNotNull(eventSourcingSettingsApplicationService, nameof(eventSourcingSettingsApplicationService));
+
         this.eventSourcingSettingsApplicationService = eventSourcingSettingsApplicationService;
     }
 
@@ -38,6 +41,7 @@ public partial class EventSourcingSettingsViewModel : EditAvatarViewModel
             this.IsBusy = true;
 
             var eventSourcingSettings = await this.eventSourcingSettingsApplicationService.GetAsync();
+            //var eventSourcingSettings = await this.avatarSettingsApplicationService.GetAsync().EventSourcingSettings;
 
             this.DatabasePath = eventSourcingSettings.DatabasePath;
             this.DisplayErrorTraces = eventSourcingSettings.DisplayErrorTraces;
@@ -80,6 +84,11 @@ public partial class EventSourcingSettingsViewModel : EditAvatarViewModel
             };
 
             await this.eventSourcingSettingsApplicationService.SaveAsync(eventSourcingSettings);
+            // var avatarSettings = await this.avatarSettingsApplicationService.GetAsync();
+            // avatarSettings.EventSourcing.DatabasePath = this.DatabasePath;
+            // avatarSettings.EventSourcing.DisplayErrorTraces = this.DisplayErrorTraces;
+
+            //await this.avatarSettingsService.SaveAsync(avatarSettings);
 
             await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Success,
               string.Format(Constants.Messages.Success, Constants.Operations.Saved, Constants.Titles.EventSourcingSettings),

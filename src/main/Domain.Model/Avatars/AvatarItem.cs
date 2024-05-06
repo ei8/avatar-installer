@@ -10,12 +10,16 @@ namespace ei8.Avatar.Installer.Domain.Model.Avatars
         public string Id { get; set; }
         public string Name { get; set; }
         public string OwnerName { get; set; }
+
+        // TODO: Change to AvatarSettings class
         public EventSourcingSettings EventSourcing { get; set; } = new();
         public CortexGraphSettings CortexGraph { get; set; } = new();
         public AvatarApiSettings AvatarApi { get; set; } = new();
         public IdentityAccessSettings IdentityAccess { get; set; } = new();
         public CortexLibrarySettings CortexLibrary { get; set; } = new();
         public CortexDiaryNucleusSettings CortexDiaryNucleus { get; set; } = new();
+        // END TODO 
+
         public d23Settings d23 { get; set; } = new();
         public AvatarNetworkSettings Network { get; set; } = new();
 
@@ -32,6 +36,7 @@ namespace ei8.Avatar.Installer.Domain.Model.Avatars
         }
     }
 
+    // TODO: Move all avatar settings to Settings folder
     public class EventSourcingSettings
     {
         public string DatabasePath { get; set; }
@@ -96,10 +101,11 @@ namespace ei8.Avatar.Installer.Domain.Model.Avatars
         public string SubscriptionsCortexGraphOutBaseUrl { get; set; }
     }
 
-    public class PlatformSettings
-    {
-        public string AspnetcoreEnvironment { get; set; }
-    }
+    //public class PlatformSettings
+    //{
+    //    public string AspnetcoreEnvironment { get; set; }
+    //}
+
     public class d23Settings
     {
         public string OidcAuthority { get; set; }

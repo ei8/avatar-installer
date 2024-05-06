@@ -1,4 +1,5 @@
-﻿using ei8.Avatar.Installer.Domain.Model.Avatars;
+﻿using ei8.Avatar.Installer.Application.Avatar;
+using ei8.Avatar.Installer.Domain.Model.Avatars;
 using ei8.Avatar.Installer.Domain.Model.AvatarSettings;
 using neurUL.Common.Domain.Model;
 using System;
@@ -15,6 +16,8 @@ public class EventSourcingSettingsApplicationService : IEventSourcingSettingsApp
 
     public EventSourcingSettingsApplicationService(IEventSourcingSettingsRepository eventSourcingSettingsRepository)
     {
+        AssertionConcern.AssertArgumentNotNull(eventSourcingSettingsRepository, nameof(eventSourcingSettingsRepository));
+
         this.eventSourcingSettingsRepository = eventSourcingSettingsRepository;
     }
 
