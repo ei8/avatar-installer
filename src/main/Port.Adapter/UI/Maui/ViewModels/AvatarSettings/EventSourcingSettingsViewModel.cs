@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using ei8.Avatar.Installer.Application.AvatarSettings;
 using ei8.Avatar.Installer.Common;
 using ei8.Avatar.Installer.Domain.Model.Avatars;
+using ei8.Avatar.Installer.Domain.Model.Avatars.Settings;
 using neurUL.Common.Domain.Model;
 using System;
 using System.Collections.Generic;

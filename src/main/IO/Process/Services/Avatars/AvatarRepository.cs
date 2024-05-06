@@ -1,5 +1,6 @@
 ﻿using ei8.Avatar.Installer.Common;
 using ei8.Avatar.Installer.Domain.Model.Avatars;
+using ei8.Avatar.Installer.Domain.Model.Avatars.Settings;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Logging;
 using System.Reflection;

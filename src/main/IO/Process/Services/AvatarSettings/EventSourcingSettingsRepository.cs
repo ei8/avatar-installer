@@ -2,6 +2,7 @@
 using ei8.Avatar.Installer.Common;
 using ei8.Avatar.Installer.Domain.Model;
 using ei8.Avatar.Installer.Domain.Model.Avatars;
+using ei8.Avatar.Installer.Domain.Model.Avatars.Settings;
 using ei8.Avatar.Installer.Domain.Model.AvatarSettings;
 using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
 using neurUL.Common.Domain.Model;

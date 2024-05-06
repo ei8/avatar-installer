@@ -1,4 +1,5 @@
 ﻿using ei8.Avatar.Installer.Domain.Model.Avatars;
+using ei8.Avatar.Installer.Domain.Model.Avatars.Settings;
 using System;
 using System.Collections.Generic;
 using System.Linq;

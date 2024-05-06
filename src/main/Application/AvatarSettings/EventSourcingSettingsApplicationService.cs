@@ -1,5 +1,6 @@
 ﻿using ei8.Avatar.Installer.Application.Avatar;
 using ei8.Avatar.Installer.Domain.Model.Avatars;
+using ei8.Avatar.Installer.Domain.Model.Avatars.Settings;
 using ei8.Avatar.Installer.Domain.Model.AvatarSettings;
 using neurUL.Common.Domain.Model;
 using System;
