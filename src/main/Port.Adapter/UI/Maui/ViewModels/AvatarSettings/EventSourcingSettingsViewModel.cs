@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using ei8.Avatar.Installer.Application.AvatarSettings;
+using ei8.Avatar.Installer.Application.Avatar;
 using ei8.Avatar.Installer.Common;
 using ei8.Avatar.Installer.Domain.Model.Avatars;
 using ei8.Avatar.Installer.Domain.Model.Avatars.Settings;
@@ -16,13 +16,13 @@ namespace ei8.Avatar.Installer.Port.Adapter.UI.Maui.ViewModels.AvatarSettings;
 
 public partial class EventSourcingSettingsViewModel : EditAvatarViewModel
 {
-    private readonly IEventSourcingSettingsApplicationService eventSourcingSettingsApplicationService;
+    private readonly IAvatarSettingsApplicationService avatarSettingsApplicationService;
 
-    public EventSourcingSettingsViewModel(IEventSourcingSettingsApplicationService eventSourcingSettingsApplicationService)
+    public EventSourcingSettingsViewModel(IAvatarSettingsApplicationService avatarSettingsApplicationService)
     {
-        AssertionConcern.AssertArgumentNotNull(eventSourcingSettingsApplicationService, nameof(eventSourcingSettingsApplicationService));
+        AssertionConcern.AssertArgumentNotNull(avatarSettingsApplicationService, nameof(avatarSettingsApplicationService));
 
-        this.eventSourcingSettingsApplicationService = eventSourcingSettingsApplicationService;
+        this.avatarSettingsApplicationService = avatarSettingsApplicationService;
     }
 
     [ObservableProperty]
@@ -41,8 +41,8 @@ public partial class EventSourcingSettingsViewModel : EditAvatarViewModel
         {
             this.IsBusy = true;
 
-            var eventSourcingSettings = await this.eventSourcingSettingsApplicationService.GetAsync();
-            //var eventSourcingSettings = await this.avatarSettingsApplicationService.GetAsync().EventSourcingSettings;
+            var avatarSettings = await this.avatarSettingsApplicationService.GetAsync();
+            var eventSourcingSettings = avatarSettings.EventSourcing;
 
             this.DatabasePath = eventSourcingSettings.DatabasePath;
             this.DisplayErrorTraces = eventSourcingSettings.DisplayErrorTraces;
@@ -78,18 +78,11 @@ public partial class EventSourcingSettingsViewModel : EditAvatarViewModel
         {
             this.IsBusy = true;
 
-            var eventSourcingSettings = new EventSourcingSettings
-            {
-                DatabasePath = this.DatabasePath,
-                DisplayErrorTraces = this.DisplayErrorTraces,
-            };
+            var avatarSettings = await this.avatarSettingsApplicationService.GetAsync();
+            avatarSettings.EventSourcing.DatabasePath = this.DatabasePath;
+            avatarSettings.EventSourcing.DisplayErrorTraces = this.DisplayErrorTraces;
 
-            await this.eventSourcingSettingsApplicationService.SaveAsync(eventSourcingSettings);
-            // var avatarSettings = await this.avatarSettingsApplicationService.GetAsync();
-            // avatarSettings.EventSourcing.DatabasePath = this.DatabasePath;
-            // avatarSettings.EventSourcing.DisplayErrorTraces = this.DisplayErrorTraces;
-
-            //await this.avatarSettingsService.SaveAsync(avatarSettings);
+            await this.avatarSettingsApplicationService.SaveAsync(avatarSettings);
 
             await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Success,
               string.Format(Constants.Messages.Success, Constants.Operations.Saved, Constants.Titles.EventSourcingSettings),

@@ -1,18 +1,15 @@
 ﻿using CommunityToolkit.Maui;
 using ei8.Avatar.Installer.Application;
 using ei8.Avatar.Installer.Application.Avatar;
-using ei8.Avatar.Installer.Application.AvatarSettings;
 using ei8.Avatar.Installer.Application.IdentityAccess;
 using ei8.Avatar.Installer.Application.Settings;
 using ei8.Avatar.Installer.Domain.Model;
 using ei8.Avatar.Installer.Domain.Model.Avatars;
-using ei8.Avatar.Installer.Domain.Model.AvatarSettings;
 using ei8.Avatar.Installer.Domain.Model.Configuration;
 using ei8.Avatar.Installer.Domain.Model.IdentityAccess;
 using ei8.Avatar.Installer.Domain.Model.Mapping;
 using ei8.Avatar.Installer.Domain.Model.Template;
 using ei8.Avatar.Installer.IO.Process.Services.Avatars;
-using ei8.Avatar.Installer.IO.Process.Services.AvatarSettings;
 using ei8.Avatar.Installer.IO.Process.Services.IdentityAccess;
 using ei8.Avatar.Installer.IO.Process.Services.Settings;
 using ei8.Avatar.Installer.IO.Process.Services.Template;
@@ -112,12 +109,12 @@ public static class MauiProgram
         builder.Services.AddSingleton<INeuronPermitRepository, NeuronPermitRepository>();
         builder.Services.AddSingleton<IRegionPermitRepository, RegionPermitRepository>();
         builder.Services.AddSingleton<IUserRepository, UserRepository>();
-        builder.Services.AddSingleton<IEventSourcingSettingsRepository, EventSourcingSettingsRepository>();
+        builder.Services.AddSingleton<IAvatarSettingsRepository, AvatarSettingsRepository>();
 
         builder.Services.AddSingleton<INeuronPermitApplicationService, NeuronPermitApplicationService>();
         builder.Services.AddSingleton<IRegionPermitApplicationService, RegionPermitApplicationService>();
         builder.Services.AddSingleton<IUserApplicationService, UserApplicationService>();
-        builder.Services.AddSingleton<IEventSourcingSettingsApplicationService, EventSourcingSettingsApplicationService>();
+        builder.Services.AddSingleton<IAvatarSettingsApplicationService, AvatarSettingsApplicationService>();
 
         return builder.Build();
     }

@@ -6,10 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ei8.Avatar.Installer.Application.AvatarSettings;
+namespace ei8.Avatar.Installer.Application.Avatar;
 
-public interface IEventSourcingSettingsApplicationService
+public interface IAvatarSettingsApplicationService
 {
-    Task<EventSourcingSettings> GetAsync();
-    Task SaveAsync(EventSourcingSettings eventSourcingSettings);
+    Task<AvatarSettings> GetAsync();
+    Task SaveAsync(AvatarSettings avatarSettings);
 }

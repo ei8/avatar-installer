@@ -20,6 +20,83 @@
             public const string DisplayErrorTraces = "DISPLAY_ERROR_TRACES";
         }
 
+        public sealed class CortexGraphSettingsEnv
+        {
+            public const string PollInterval = "POLL_INTERVAL";
+            public const string DbName = "DB_NAME";
+            public const string DbUsername = "DB_USERNAME";
+            public const string DbPassword = "DB_PASSWORD";
+            public const string DbUrl = "DB_URL";
+            public const string DefaultRelativeValues = "DEFAULT_RELATIVE_VALUES";
+            public const string DefaultNeuronActiveValues = "DEFAULT_NEURON_ACTIVE_VALUES";
+            public const string DefaultTerminalActiveValues = "DEFAULT_TERMINAL_ACTIVE_VALUES";
+            public const string DefaultPageSize = "DEFAULT_PAGE_SIZE";
+            public const string DefaultPage = "DEFAULT_PAGE";
+            public const string ArangoRootPassword = "ARANGO_ROOT_PASSWORD";
+        }
+
+        public sealed class AvatarApiSettingsEnv
+        {
+            public const string ResourceDatabasePath = "RESOURCE_DATABASE_PATH";
+            public const string RequireAuthentication = "REQUIRE_AUTHENTICATION";
+            public const string AnonymousUserId = "ANONYMOUS_USER_ID";
+            public const string ProxyUserId = "PROXY_USER_ID";
+            public const string TokenIssuerUrl = "TOKEN_ISSUER_URL";
+            public const string ApiName = "API_NAME";
+            public const string ApiSecret = "API_SECRET";
+            public const string ValidateServerCertificate = "VALIDATE_SERVER_CERTIFICATE";
+        }
+
+        public sealed class IdentityAccessSettingsEnv
+        {
+            public const string UserDatabasePath = "USER_DATABASE_PATH";
+        }
+
+        public sealed class CortexLibrarySettingsEnv
+        {
+            public const string NeuronsUrl = "NEURONS_URL";
+            public const string TerminalsUrl = "TERMINALS_URL";
+        }
+
+        public sealed class CortexDiaryNucleusSettingsEnv
+        {
+            public const string SubscriptionsDatabasePath = "SUBSCRIPTIONS_DATABASE_PATH";
+            public const string SubscriptionsPollingIntervalSecs = "SUBSCRIPTIONS_POLLING_INTERVAL_SECS";
+            public const string SubscriptionsPushOwner = "SUBSCRIPTIONS_PUSH_OWNER";
+            public const string SubscriptionsPushPublicKey = "SUBSCRIPTIONS_PUSH_PUBLIC_KEY";
+            public const string SubscriptionsPushPrivateKey = "SUBSCRIPTIONS_PUSH_PRIVATE_KEY";
+            public const string SubscriptionsSmtpServerAddress = "SUBSCRIPTIONS_SMTP_SERVER_ADDRESS";
+            public const string SubscriptionsSmtpPort = "SUBSCRIPTIONS_SMTP_PORT";
+            public const string SubscriptionsSmtpUseSsl = "SUBSCRIPTIONS_SMTP_USE_SSL";
+            public const string SubscriptionsSmtpSenderName = "SUBSCRIPTIONS_SMTP_SENDER_NAME";
+            public const string SubscriptionsSmtpSenderAddress = "SUBSCRIPTIONS_SMTP_SENDER_ADDRESS";
+            public const string SubscriptionsSmtpSenderUsername = "SUBSCRIPTIONS_SMTP_SENDER_USERNAME";
+            public const string SubscriptionsSmtpSenderPassword = "SUBSCRIPTIONS_SMTP_SENDER_PASSWORD";
+            public const string SubscriptionsCortexGraphOutBaseUrl = "SUBSCRIPTIONS_CORTEX_GRAPH_OUT_BASE_URL";
+        }
+
+        public sealed class d23SettingsEnv
+        {
+            public const string OidcAuthority = "OIDC_AUTHORITY";
+            public const string ClientId = "CLIENT_ID";
+            public const string ClientSecret = "CLIENT_SECRET";
+            public const string UpdateCheckInterval = "UPDATE_CHECK_INTERVAL";
+            public const string DatabasePath = "DATABASE_PATH";
+            public const string BasePath = "BASE_PATH";
+            public const string PluginsPath = "PLUGINS_PATH";
+            public const string ValidateServerCertificate = "VALIDATE_SERVER_CERTIFICATE";
+            public const string AppTitle = "APP_TITLE";
+            public const string AppIcon = "APP_ICON";
+        }
+
+        public sealed class AvatarNetworkSettingsEnv
+        {
+            public const string AvatarIp = "AVATAR_IP";
+            public const string D23Ip = "D23_IP";
+            public const string AvatarInPort = "AVATAR_IN_PORT";
+            public const string D23BlazorPort = "D23_BLAZOR_PORT";
+        }
+
         public sealed class Databases
         {
             public const string AvatarDb = "avatar.db";
