@@ -39,12 +39,12 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
                             logger.LogInformation("Loading {file}", file);
 
                             var variables = await GetEnvironmentVariablesFromFileAsync(file);
-                            avatarItem.CortexGraph = DeserializeEnvironmentVariables<CortexGraphSettings>(variables);
-                            avatarItem.EventSourcing = DeserializeEnvironmentVariables<EventSourcingSettings>(variables);
-                            avatarItem.AvatarApi = DeserializeEnvironmentVariables<AvatarApiSettings>(variables);
-                            avatarItem.IdentityAccess = DeserializeEnvironmentVariables<IdentityAccessSettings>(variables);
-                            avatarItem.CortexLibrary = DeserializeEnvironmentVariables<CortexLibrarySettings>(variables);
-                            avatarItem.CortexDiaryNucleus = DeserializeEnvironmentVariables<CortexDiaryNucleusSettings>(variables);
+                            avatarItem.Settings.CortexGraph = DeserializeEnvironmentVariables<CortexGraphSettings>(variables);
+                            avatarItem.Settings.EventSourcing = DeserializeEnvironmentVariables<EventSourcingSettings>(variables);
+                            avatarItem.Settings.AvatarApi = DeserializeEnvironmentVariables<AvatarApiSettings>(variables);
+                            avatarItem.Settings.IdentityAccess = DeserializeEnvironmentVariables<IdentityAccessSettings>(variables);
+                            avatarItem.Settings.CortexLibrary = DeserializeEnvironmentVariables<CortexLibrarySettings>(variables);
+                            avatarItem.Settings.CortexDiaryNucleus = DeserializeEnvironmentVariables<CortexDiaryNucleusSettings>(variables);
                         }
                         break;
 
@@ -133,12 +133,12 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
         {
             logger.LogInformation("Serializing variables.env");
             var variablesLines = new List<string>();
-            variablesLines.AddRange(SerializeEnvironmentVariables(avatarItem.EventSourcing));
-            variablesLines.AddRange(SerializeEnvironmentVariables(avatarItem.CortexGraph));
-            variablesLines.AddRange(SerializeEnvironmentVariables(avatarItem.AvatarApi));
-            variablesLines.AddRange(SerializeEnvironmentVariables(avatarItem.IdentityAccess));
-            variablesLines.AddRange(SerializeEnvironmentVariables(avatarItem.CortexLibrary));
-            variablesLines.AddRange(SerializeEnvironmentVariables(avatarItem.CortexDiaryNucleus));
+            variablesLines.AddRange(SerializeEnvironmentVariables(avatarItem.Settings.EventSourcing));
+            variablesLines.AddRange(SerializeEnvironmentVariables(avatarItem.Settings.CortexGraph));
+            variablesLines.AddRange(SerializeEnvironmentVariables(avatarItem.Settings.AvatarApi));
+            variablesLines.AddRange(SerializeEnvironmentVariables(avatarItem.Settings.IdentityAccess));
+            variablesLines.AddRange(SerializeEnvironmentVariables(avatarItem.Settings.CortexLibrary));
+            variablesLines.AddRange(SerializeEnvironmentVariables(avatarItem.Settings.CortexDiaryNucleus));
             await File.WriteAllLinesAsync(Path.Combine(avatarItem.Id, "variables.env"), variablesLines);
 
             logger.LogInformation("Serializing d23-variables.env");

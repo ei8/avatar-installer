@@ -14,7 +14,7 @@
             public const string VariablesEnv = "variables.env";
         }
 
-        public sealed class EventSourcingSettings
+        public sealed class EventSourcingSettingsEnv
         {
             public const string DatabasePath = "DATABASE_PATH";
             public const string DisplayErrorTraces = "DISPLAY_ERROR_TRACES";

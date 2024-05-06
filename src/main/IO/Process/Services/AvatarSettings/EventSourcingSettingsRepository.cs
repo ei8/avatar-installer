@@ -47,10 +47,10 @@ public class EventSourcingSettingsRepository : IEventSourcingSettingsRepository
 
             switch (key.ToUpper())
             {
-                case Constants.EventSourcingSettings.DatabasePath:
+                case Constants.EventSourcingSettingsEnv.DatabasePath:
                     eventSourcingSettings.DatabasePath = value;
                     break;
-                case Constants.EventSourcingSettings.DisplayErrorTraces:
+                case Constants.EventSourcingSettingsEnv.DisplayErrorTraces:
                     bool displayErrorTraces;
                     if (bool.TryParse(value, out displayErrorTraces))
                         eventSourcingSettings.DisplayErrorTraces = displayErrorTraces;
@@ -90,8 +90,8 @@ public class EventSourcingSettingsRepository : IEventSourcingSettingsRepository
         }
 
         // Update key-value pairs
-        envVariables[Constants.EventSourcingSettings.DatabasePath] = eventSourcingSettings.DatabasePath;
-        envVariables[Constants.EventSourcingSettings.DisplayErrorTraces] = eventSourcingSettings.DisplayErrorTraces.ToString();
+        envVariables[Constants.EventSourcingSettingsEnv.DatabasePath] = eventSourcingSettings.DatabasePath;
+        envVariables[Constants.EventSourcingSettingsEnv.DisplayErrorTraces] = eventSourcingSettings.DisplayErrorTraces.ToString();
 
         // Write changes to the file
         using var writer = new StreamWriter(path);
