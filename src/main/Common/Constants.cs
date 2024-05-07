@@ -124,6 +124,7 @@
             public const string AvatarApiSettings = "Avatar Api Settings";
             public const string IdentityAccessSettings = "Identity Access Settings";
             public const string CortexLibrarySettings = "Cortex Library Settings";
+            public const string CortexDiaryNucleusSettings = "Cortex Diary Nucleus Settings";
         }
 
         public sealed class Statuses
