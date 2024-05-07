@@ -123,6 +123,7 @@
             public const string CortexGraphSettings = "Cortex Graph Settings";
             public const string AvatarApiSettings = "Avatar Api Settings";
             public const string IdentityAccessSettings = "Identity Access Settings";
+            public const string CortexLibrarySettings = "Cortex Library Settings";
         }
 
         public sealed class Statuses
