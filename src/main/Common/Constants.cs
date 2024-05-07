@@ -120,6 +120,7 @@
             public const string RegionPermit = "Region Permit";
             public const string User = "User";
             public const string EventSourcingSettings = "Event Sourcing Settings";
+            public const string CortexGraphSettings = "Cortex Graph Settings";
         }
 
         public sealed class Statuses

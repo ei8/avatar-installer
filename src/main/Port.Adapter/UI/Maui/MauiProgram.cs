@@ -91,6 +91,7 @@ public static class MauiProgram
         builder.Services.AddTransient<UserDetailsViewModel>();
 
         builder.Services.AddSingleton<EventSourcingSettingsViewModel>();
+        builder.Services.AddSingleton<CortexGraphSettingsViewModel>();
         #endregion
 
         builder.Services.AddScoped<ISettingsService, SettingsService>()

@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace ei8.Avatar.Installer.Port.Adapter.UI.Maui.ViewModels.AvatarSettings;
 
-public partial class EventSourcingSettingsViewModel : EditAvatarViewModel
+public partial class EventSourcingSettingsViewModel : BaseViewModel
 {
     private readonly IAvatarSettingsApplicationService avatarSettingsApplicationService;
 

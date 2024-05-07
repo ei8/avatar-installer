@@ -81,22 +81,22 @@ public class AvatarSettingsRepository : IAvatarSettingsRepository
                 case Constants.CortexGraphSettingsEnv.DefaultNeuronActiveValues:
                     int defaultNeuronActiveValues;
                     if (int.TryParse(value, out defaultNeuronActiveValues))
-                        avatarSettings.CortexGraph.DefaultRelativeValues = defaultNeuronActiveValues;
+                        avatarSettings.CortexGraph.DefaultNeuronActiveValues = defaultNeuronActiveValues;
                     break;
                 case Constants.CortexGraphSettingsEnv.DefaultTerminalActiveValues:
                     int defaultTerminalActiveValues;
                     if (int.TryParse(value, out defaultTerminalActiveValues))
-                        avatarSettings.CortexGraph.DefaultRelativeValues = defaultTerminalActiveValues;
+                        avatarSettings.CortexGraph.DefaultTerminalActiveValues = defaultTerminalActiveValues;
                     break;
                 case Constants.CortexGraphSettingsEnv.DefaultPageSize:
                     int defaultPageSize;
                     if (int.TryParse(value, out defaultPageSize))
-                        avatarSettings.CortexGraph.DefaultRelativeValues = defaultPageSize;
+                        avatarSettings.CortexGraph.DefaultPageSize = defaultPageSize;
                     break;
                 case Constants.CortexGraphSettingsEnv.DefaultPage:
                     int defaultPage;
                     if (int.TryParse(value, out defaultPage))
-                        avatarSettings.CortexGraph.DefaultRelativeValues = defaultPage;
+                        avatarSettings.CortexGraph.DefaultPage = defaultPage;
                     break;
                 case Constants.CortexGraphSettingsEnv.ArangoRootPassword:
                     avatarSettings.CortexGraph.ArangoRootPassword = value;
@@ -242,51 +242,51 @@ public class AvatarSettingsRepository : IAvatarSettingsRepository
 
         #region CortexGraphSettingsEnv
         envVariables[Constants.CortexGraphSettingsEnv.PollInterval] = avatarSettings.CortexGraph.PollInterval.ToString();
-        envVariables[Constants.CortexGraphSettingsEnv.DbName] = avatarSettings.CortexGraph.DbName.ToString();
-        envVariables[Constants.CortexGraphSettingsEnv.DbUsername] = avatarSettings.CortexGraph.DbUsername.ToString();
-        envVariables[Constants.CortexGraphSettingsEnv.DbPassword] = avatarSettings.CortexGraph.DbPassword.ToString();
-        envVariables[Constants.CortexGraphSettingsEnv.DbUrl] = avatarSettings.CortexGraph.DbUrl.ToString();
+        envVariables[Constants.CortexGraphSettingsEnv.DbName] = avatarSettings.CortexGraph.DbName;
+        envVariables[Constants.CortexGraphSettingsEnv.DbUsername] = avatarSettings.CortexGraph.DbUsername;
+        envVariables[Constants.CortexGraphSettingsEnv.DbPassword] = avatarSettings.CortexGraph.DbPassword;
+        envVariables[Constants.CortexGraphSettingsEnv.DbUrl] = avatarSettings.CortexGraph.DbUrl;
         envVariables[Constants.CortexGraphSettingsEnv.DefaultRelativeValues] = avatarSettings.CortexGraph.DefaultRelativeValues.ToString();
         envVariables[Constants.CortexGraphSettingsEnv.DefaultNeuronActiveValues] = avatarSettings.CortexGraph.DefaultNeuronActiveValues.ToString();
         envVariables[Constants.CortexGraphSettingsEnv.DefaultTerminalActiveValues] = avatarSettings.CortexGraph.DefaultTerminalActiveValues.ToString();
         envVariables[Constants.CortexGraphSettingsEnv.DefaultPageSize] = avatarSettings.CortexGraph.DefaultPageSize.ToString();
         envVariables[Constants.CortexGraphSettingsEnv.DefaultPage] = avatarSettings.CortexGraph.DefaultPage.ToString();
-        envVariables[Constants.CortexGraphSettingsEnv.ArangoRootPassword] = avatarSettings.CortexGraph.ArangoRootPassword.ToString();
+        envVariables[Constants.CortexGraphSettingsEnv.ArangoRootPassword] = avatarSettings.CortexGraph.ArangoRootPassword;
         #endregion
 
         #region AvatarApiSettingsEnv
-        envVariables[Constants.AvatarApiSettingsEnv.ResourceDatabasePath] = avatarSettings.AvatarApi.ResourceDatabasePath.ToString();
+        envVariables[Constants.AvatarApiSettingsEnv.ResourceDatabasePath] = avatarSettings.AvatarApi.ResourceDatabasePath;
         envVariables[Constants.AvatarApiSettingsEnv.RequireAuthentication] = avatarSettings.AvatarApi.RequireAuthentication.ToString();
         envVariables[Constants.AvatarApiSettingsEnv.AnonymousUserId] = avatarSettings.AvatarApi.AnonymousUserId.ToString();
-        envVariables[Constants.AvatarApiSettingsEnv.TokenIssuerUrl] = avatarSettings.AvatarApi.TokenIssuerUrl.ToString();
-        envVariables[Constants.AvatarApiSettingsEnv.ApiName] = avatarSettings.AvatarApi.ApiName.ToString();
-        envVariables[Constants.AvatarApiSettingsEnv.ApiSecret] = avatarSettings.AvatarApi.ApiSecret.ToString();
+        envVariables[Constants.AvatarApiSettingsEnv.TokenIssuerUrl] = avatarSettings.AvatarApi.TokenIssuerUrl;
+        envVariables[Constants.AvatarApiSettingsEnv.ApiName] = avatarSettings.AvatarApi.ApiName;
+        envVariables[Constants.AvatarApiSettingsEnv.ApiSecret] = avatarSettings.AvatarApi.ApiSecret;
         envVariables[Constants.AvatarApiSettingsEnv.ValidateServerCertificate] = avatarSettings.AvatarApi.ValidateServerCertificate.ToString();
         #endregion
 
         #region IdentityAccessSettings
-        envVariables[Constants.IdentityAccessSettingsEnv.UserDatabasePath] = avatarSettings.IdentityAccess.UserDatabasePath.ToString();
+        envVariables[Constants.IdentityAccessSettingsEnv.UserDatabasePath] = avatarSettings.IdentityAccess.UserDatabasePath;
         #endregion
 
         #region CortexLibrarySettings
-        envVariables[Constants.CortexLibrarySettingsEnv.NeuronsUrl] = avatarSettings.CortexLibrary.NeuronsUrl.ToString();
-        envVariables[Constants.CortexLibrarySettingsEnv.TerminalsUrl] = avatarSettings.CortexLibrary.TerminalsUrl.ToString();
+        envVariables[Constants.CortexLibrarySettingsEnv.NeuronsUrl] = avatarSettings.CortexLibrary.NeuronsUrl;
+        envVariables[Constants.CortexLibrarySettingsEnv.TerminalsUrl] = avatarSettings.CortexLibrary.TerminalsUrl;
         #endregion
 
         #region CortexDiaryNucleusSettings
-        envVariables[Constants.CortexDiaryNucleusSettingsEnv.SubscriptionsDatabasePath] = avatarSettings.CortexDiaryNucleus.SubscriptionsDatabasePath.ToString();
+        envVariables[Constants.CortexDiaryNucleusSettingsEnv.SubscriptionsDatabasePath] = avatarSettings.CortexDiaryNucleus.SubscriptionsDatabasePath;
         envVariables[Constants.CortexDiaryNucleusSettingsEnv.SubscriptionsPollingIntervalSecs] = avatarSettings.CortexDiaryNucleus.SubscriptionsPollingIntervalSecs.ToString();
-        envVariables[Constants.CortexDiaryNucleusSettingsEnv.SubscriptionsPushOwner] = avatarSettings.CortexDiaryNucleus.SubscriptionsPushOwner.ToString();
-        envVariables[Constants.CortexDiaryNucleusSettingsEnv.SubscriptionsPushPublicKey] = avatarSettings.CortexDiaryNucleus.SubscriptionsPushPublicKey.ToString();
-        envVariables[Constants.CortexDiaryNucleusSettingsEnv.SubscriptionsPushPrivateKey] = avatarSettings.CortexDiaryNucleus.SubscriptionsPushPrivateKey.ToString();
-        envVariables[Constants.CortexDiaryNucleusSettingsEnv.SubscriptionsSmtpServerAddress] = avatarSettings.CortexDiaryNucleus.SubscriptionsSmtpServerAddress.ToString();
+        envVariables[Constants.CortexDiaryNucleusSettingsEnv.SubscriptionsPushOwner] = avatarSettings.CortexDiaryNucleus.SubscriptionsPushOwner;
+        envVariables[Constants.CortexDiaryNucleusSettingsEnv.SubscriptionsPushPublicKey] = avatarSettings.CortexDiaryNucleus.SubscriptionsPushPublicKey;
+        envVariables[Constants.CortexDiaryNucleusSettingsEnv.SubscriptionsPushPrivateKey] = avatarSettings.CortexDiaryNucleus.SubscriptionsPushPrivateKey;
+        envVariables[Constants.CortexDiaryNucleusSettingsEnv.SubscriptionsSmtpServerAddress] = avatarSettings.CortexDiaryNucleus.SubscriptionsSmtpServerAddress;
         envVariables[Constants.CortexDiaryNucleusSettingsEnv.SubscriptionsSmtpPort] = avatarSettings.CortexDiaryNucleus.SubscriptionsSmtpPort.ToString();
         envVariables[Constants.CortexDiaryNucleusSettingsEnv.SubscriptionsSmtpUseSsl] = avatarSettings.CortexDiaryNucleus.SubscriptionsSmtpUseSsl.ToString();
-        envVariables[Constants.CortexDiaryNucleusSettingsEnv.SubscriptionsSmtpSenderName] = avatarSettings.CortexDiaryNucleus.SubscriptionsSmtpSenderName.ToString();
-        envVariables[Constants.CortexDiaryNucleusSettingsEnv.SubscriptionsSmtpSenderAddress] = avatarSettings.CortexDiaryNucleus.SubscriptionsSmtpSenderAddress.ToString();
-        envVariables[Constants.CortexDiaryNucleusSettingsEnv.SubscriptionsSmtpSenderUsername] = avatarSettings.CortexDiaryNucleus.SubscriptionsSmtpSenderUsername.ToString();
-        envVariables[Constants.CortexDiaryNucleusSettingsEnv.SubscriptionsSmtpSenderPassword] = avatarSettings.CortexDiaryNucleus.SubscriptionsSmtpSenderPassword.ToString();
-        envVariables[Constants.CortexDiaryNucleusSettingsEnv.SubscriptionsCortexGraphOutBaseUrl] = avatarSettings.CortexDiaryNucleus.SubscriptionsCortexGraphOutBaseUrl.ToString();
+        envVariables[Constants.CortexDiaryNucleusSettingsEnv.SubscriptionsSmtpSenderName] = avatarSettings.CortexDiaryNucleus.SubscriptionsSmtpSenderName;
+        envVariables[Constants.CortexDiaryNucleusSettingsEnv.SubscriptionsSmtpSenderAddress] = avatarSettings.CortexDiaryNucleus.SubscriptionsSmtpSenderAddress;
+        envVariables[Constants.CortexDiaryNucleusSettingsEnv.SubscriptionsSmtpSenderUsername] = avatarSettings.CortexDiaryNucleus.SubscriptionsSmtpSenderUsername;
+        envVariables[Constants.CortexDiaryNucleusSettingsEnv.SubscriptionsSmtpSenderPassword] = avatarSettings.CortexDiaryNucleus.SubscriptionsSmtpSenderPassword;
+        envVariables[Constants.CortexDiaryNucleusSettingsEnv.SubscriptionsCortexGraphOutBaseUrl] = avatarSettings.CortexDiaryNucleus.SubscriptionsCortexGraphOutBaseUrl;
         #endregion
 
         // Write changes to the file
