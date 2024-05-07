@@ -121,6 +121,7 @@
             public const string User = "User";
             public const string EventSourcingSettings = "Event Sourcing Settings";
             public const string CortexGraphSettings = "Cortex Graph Settings";
+            public const string AvatarApiSettings = "Avatar Api Settings";
         }
 
         public sealed class Statuses
@@ -163,6 +164,7 @@
             public const string Success = "Successfully {0} {1}";
             public const string Error = "Unable to {0} {1}";
             public const string CantBe = "{0} cannot be {1}";
+            public const string MustBe = "{0} must be a {1}";
             public const string NotFound = "{0} not found";
             public const string AlreadyExists = "{0} already exists";
         }

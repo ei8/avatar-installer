@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ei8.Avatar.Installer.Port.Adapter.UI.Maui.ViewModels.AvatarSettings;
+
 public partial class CortexGraphSettingsViewModel : BaseViewModel
 {
     private readonly IAvatarSettingsApplicationService avatarSettingsApplicationService;

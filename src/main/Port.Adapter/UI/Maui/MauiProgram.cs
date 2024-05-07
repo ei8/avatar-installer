@@ -92,6 +92,7 @@ public static class MauiProgram
 
         builder.Services.AddSingleton<EventSourcingSettingsViewModel>();
         builder.Services.AddSingleton<CortexGraphSettingsViewModel>();
+        builder.Services.AddSingleton<AvatarApiSettingsViewModel>();
         #endregion
 
         builder.Services.AddScoped<ISettingsService, SettingsService>()
