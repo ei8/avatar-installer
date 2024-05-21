@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ei8.Avatar.Installer.Domain.Model.Avatars;
+using ei8.Avatar.Installer.Domain.Model.Avatars.Settings;
 using ei8.Avatar.Installer.Domain.Model.Configuration;
 using ei8.Avatar.Installer.Domain.Model.Mapping;
 
@@ -47,18 +48,18 @@ namespace Domain.Model.Test.Mapping
             var sampleTarget = new AvatarItem("id_sample1", "sample");
             var sampleResult = sut.Apply(config.Avatars[0], sampleTarget);
 
-            Assert.Equal("test", sampleResult.CortexGraph.ArangoRootPassword);
-            Assert.Equal("custom", sampleResult.CortexGraph.DbName);
-            Assert.Equal(@"http://www.example.com", sampleResult.CortexGraph.DbUrl);
-            Assert.Equal("not-root", sampleResult.CortexGraph.DbUsername);
+            Assert.Equal("test", sampleResult.Settings.CortexGraph.ArangoRootPassword);
+            Assert.Equal("custom", sampleResult.Settings.CortexGraph.DbName);
+            Assert.Equal(@"http://www.example.com", sampleResult.Settings.CortexGraph.DbUrl);
+            Assert.Equal("not-root", sampleResult.Settings.CortexGraph.DbUsername);
 
             var defaultTarget = new AvatarItem("id_defaults1", "defaults");
             var defaultResult = sut.Apply(config.Avatars[1], defaultTarget);
 
-            Assert.Equal("", defaultResult.CortexGraph.ArangoRootPassword);
-            Assert.Equal("graph", defaultResult.CortexGraph.DbName);
-            Assert.Equal(@"http://cortex.graph.persistence:8529", defaultResult.CortexGraph.DbUrl);
-            Assert.Equal("root", defaultResult.CortexGraph.DbUsername);
+            Assert.Equal("", defaultResult.Settings.CortexGraph.ArangoRootPassword);
+            Assert.Equal("graph", defaultResult.Settings.CortexGraph.DbName);
+            Assert.Equal(@"http://cortex.graph.persistence:8529", defaultResult.Settings.CortexGraph.DbUrl);
+            Assert.Equal("root", defaultResult.Settings.CortexGraph.DbUsername);
         }
 
         [Fact]
@@ -85,15 +86,15 @@ namespace Domain.Model.Test.Mapping
             var sampleTarget = new AvatarItem("id_sample2", "sample");
             var sampleResult = sut.Apply(config.Avatars[0], sampleTarget);
 
-            Assert.Equal("api", sampleResult.AvatarApi.ApiName);
-            Assert.Equal(@"https://www.junvic.me", sampleResult.AvatarApi.TokenIssuerUrl);
+            Assert.Equal("api", sampleResult.Settings.AvatarApi.ApiName);
+            Assert.Equal(@"https://www.junvic.me", sampleResult.Settings.AvatarApi.TokenIssuerUrl);
 
 
             var defaultTarget = new AvatarItem("id_defaults2", "defaults");
             var defaultResult = sut.Apply(config.Avatars[1], defaultTarget);
 
-            Assert.Equal("avatarapi-defaults", defaultResult.AvatarApi.ApiName);
-            Assert.Equal(@"https://login.fibona.cc", defaultResult.AvatarApi.TokenIssuerUrl);
+            Assert.Equal("avatarapi-defaults", defaultResult.Settings.AvatarApi.ApiName);
+            Assert.Equal(@"https://login.fibona.cc", defaultResult.Settings.AvatarApi.TokenIssuerUrl);
         }
 
         [Fact]
@@ -120,15 +121,15 @@ namespace Domain.Model.Test.Mapping
             var sampleTarget = new AvatarItem("id_sample3", "sample");
             var sampleResult = sut.Apply(config.Avatars[0], sampleTarget);
 
-            Assert.Equal(@"https://neuronsurl.example.com", sampleResult.CortexLibrary.NeuronsUrl);
-            Assert.Equal(@"https://terminalsurl.example.com", sampleResult.CortexLibrary.TerminalsUrl);
+            Assert.Equal(@"https://neuronsurl.example.com", sampleResult.Settings.CortexLibrary.NeuronsUrl);
+            Assert.Equal(@"https://terminalsurl.example.com", sampleResult.Settings.CortexLibrary.TerminalsUrl);
 
 
             var defaultTarget = new AvatarItem("id_defaults3", "defaults");
             var defaultResult = sut.Apply(config.Avatars[1], defaultTarget);
 
-            Assert.Equal(@"https://fibona.cc/defaults/cortex/neurons", defaultResult.CortexLibrary.NeuronsUrl);
-            Assert.Equal(@"https://fibona.cc/defaults/cortex/terminals", defaultResult.CortexLibrary.TerminalsUrl);
+            Assert.Equal(@"https://fibona.cc/defaults/cortex/neurons", defaultResult.Settings.CortexLibrary.NeuronsUrl);
+            Assert.Equal(@"https://fibona.cc/defaults/cortex/terminals", defaultResult.Settings.CortexLibrary.TerminalsUrl);
         }
 
         [Fact]
@@ -223,58 +224,61 @@ namespace Domain.Model.Test.Mapping
             var sut = new AvatarMapperService(mapper);
             var sampleTarget = new AvatarItem("id_sample6", "sample")
             {
-                EventSourcing = new EventSourcingSettings()
+                Settings = new AvatarSettings
                 {
-                    DatabasePath = "/C/db/events.db",
-                    DisplayErrorTraces = false
-                },
-                CortexGraph = new CortexGraphSettings()
-                {
-                    PollInterval = 1000,
-                    DefaultRelativeValues = 3,
-                    DefaultNeuronActiveValues = 1,
-                    DefaultTerminalActiveValues = 1,
-                    DefaultPage = 1,
-                    DefaultPageSize = 10
-                },
-                AvatarApi = new AvatarApiSettings()
-                {
-                    ResourceDatabasePath = "/C/db/avatar.db",
-                    RequireAuthentication = true,
-                    AnonymousUserId = Guid.Parse("498c5d30-1253-4baf-8bb5-0af6c3d66a91"),
-                    ProxyUserId = Guid.Parse("ca008cde-61bb-4260-92fb-9abcca1209ef"),
-                    ApiSecret = "72019790-7daa-4de6-a7a9-3a1615cabf59",
-                    ValidateServerCertificate = false
-                },
-                IdentityAccess = new IdentityAccessSettings()
-                {
-                    UserDatabasePath = "/C/db/identity-access.db"
-                },
-                CortexDiaryNucleus = new CortexDiaryNucleusSettings()
-                {
-                    SubscriptionsDatabasePath = "/C/db/subscriptions.db",
-                    SubscriptionsPollingIntervalSecs = 15,
-                    SubscriptionsPushOwner = "mailto:example@example.com",
-                    SubscriptionsPushPublicKey = "BLrW80tp5imbJlxAY5WJnmtzaZvTCJoM8ywZEI6E65VTHcqtB69tnqUsRkYC6U-1WfSj0bFovZF6DZaA9Bgo0Ts",
-                    SubscriptionsPushPrivateKey = "JlI0-oL2NQ8HyAAZF3pGxWtbjRsYQxTB9tg6Fe7_1x8",
-                    SubscriptionsSmtpServerAddress = "smtp.gmail.com",
-                    SubscriptionsSmtpPort = 587,
-                    SubscriptionsSmtpUseSsl = false,
-                    SubscriptionsSmtpSenderName = "ei8 Support",
-                    SubscriptionsSmtpSenderAddress = "support@ei8.works",
-                    SubscriptionsSmtpSenderUsername = "support@ei8.works",
-                    SubscriptionsSmtpSenderPassword = string.Empty,
-                    SubscriptionsCortexGraphOutBaseUrl = "http://cortex.graph.out.api:80"
+                    EventSourcing = new EventSourcingSettings()
+                    {
+                        DatabasePath = "/C/db/events.db",
+                        DisplayErrorTraces = false
+                    },
+                    CortexGraph = new CortexGraphSettings()
+                    {
+                        PollInterval = 1000,
+                        DefaultRelativeValues = 3,
+                        DefaultNeuronActiveValues = 1,
+                        DefaultTerminalActiveValues = 1,
+                        DefaultPage = 1,
+                        DefaultPageSize = 10
+                    },
+                    AvatarApi = new AvatarApiSettings()
+                    {
+                        ResourceDatabasePath = "/C/db/avatar.db",
+                        RequireAuthentication = true,
+                        AnonymousUserId = Guid.Parse("498c5d30-1253-4baf-8bb5-0af6c3d66a91"),
+                        ProxyUserId = Guid.Parse("ca008cde-61bb-4260-92fb-9abcca1209ef"),
+                        ApiSecret = "72019790-7daa-4de6-a7a9-3a1615cabf59",
+                        ValidateServerCertificate = false
+                    },
+                    IdentityAccess = new IdentityAccessSettings()
+                    {
+                        UserDatabasePath = "/C/db/identity-access.db"
+                    },
+                    CortexDiaryNucleus = new CortexDiaryNucleusSettings()
+                    {
+                        SubscriptionsDatabasePath = "/C/db/subscriptions.db",
+                        SubscriptionsPollingIntervalSecs = 15,
+                        SubscriptionsPushOwner = "mailto:example@example.com",
+                        SubscriptionsPushPublicKey = "BLrW80tp5imbJlxAY5WJnmtzaZvTCJoM8ywZEI6E65VTHcqtB69tnqUsRkYC6U-1WfSj0bFovZF6DZaA9Bgo0Ts",
+                        SubscriptionsPushPrivateKey = "JlI0-oL2NQ8HyAAZF3pGxWtbjRsYQxTB9tg6Fe7_1x8",
+                        SubscriptionsSmtpServerAddress = "smtp.gmail.com",
+                        SubscriptionsSmtpPort = 587,
+                        SubscriptionsSmtpUseSsl = false,
+                        SubscriptionsSmtpSenderName = "ei8 Support",
+                        SubscriptionsSmtpSenderAddress = "support@ei8.works",
+                        SubscriptionsSmtpSenderUsername = "support@ei8.works",
+                        SubscriptionsSmtpSenderPassword = string.Empty,
+                        SubscriptionsCortexGraphOutBaseUrl = "http://cortex.graph.out.api:80"
+                    }
                 }
             };
 
             var sampleResult = sut.Apply(config.Avatars[0], sampleTarget);
 
-            Assert.Equal("/C/db/events.db", sampleResult.EventSourcing.DatabasePath);
-            Assert.Equal(1000, sampleResult.CortexGraph.PollInterval);
-            Assert.Equal(Guid.Parse("498c5d30-1253-4baf-8bb5-0af6c3d66a91"), sampleResult.AvatarApi.AnonymousUserId);
-            Assert.Equal("/C/db/identity-access.db", sampleResult.IdentityAccess.UserDatabasePath);
-            Assert.Equal("BLrW80tp5imbJlxAY5WJnmtzaZvTCJoM8ywZEI6E65VTHcqtB69tnqUsRkYC6U-1WfSj0bFovZF6DZaA9Bgo0Ts", sampleResult.CortexDiaryNucleus.SubscriptionsPushPublicKey);
+            Assert.Equal("/C/db/events.db", sampleResult.Settings.EventSourcing.DatabasePath);
+            Assert.Equal(1000, sampleResult.Settings.CortexGraph.PollInterval);
+            Assert.Equal(Guid.Parse("498c5d30-1253-4baf-8bb5-0af6c3d66a91"), sampleResult.Settings.AvatarApi.AnonymousUserId);
+            Assert.Equal("/C/db/identity-access.db", sampleResult.Settings.IdentityAccess.UserDatabasePath);
+            Assert.Equal("BLrW80tp5imbJlxAY5WJnmtzaZvTCJoM8ywZEI6E65VTHcqtB69tnqUsRkYC6U-1WfSj0bFovZF6DZaA9Bgo0Ts", sampleResult.Settings.CortexDiaryNucleus.SubscriptionsPushPublicKey);
         }
     }
 }

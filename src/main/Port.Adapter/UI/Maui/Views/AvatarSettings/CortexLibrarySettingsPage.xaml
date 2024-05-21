@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="ei8.Avatar.Installer.Port.Adapter.UI.Maui.Views.AvatarSettings.CortexLibrarySettingsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewmodels="clr-namespace:ei8.Avatar.Installer.Port.Adapter.UI.Maui.ViewModels.AvatarSettings"
+    Title="CortexLibrarySettingsPage"
+    x:DataType="viewmodels:CortexLibrarySettingsViewModel">
+    <Grid RowDefinitions="*,Auto">
+        <Grid Grid.Row="0" Padding="5">
+            <ScrollView>
+                <StackLayout>
+                    <Label Margin="5" Text="Neurons Url:" />
+                    <Entry Margin="0,0,0,10" Text="{Binding NeuronsUrl}" />
+
+                    <Label Margin="5" Text="Terminals Url:" />
+                    <Entry Margin="0,0,0,10" Text="{Binding TerminalsUrl}" />
+                </StackLayout>
+            </ScrollView>
+        </Grid>
+        <Grid
+            Grid.Row="1"
+            Padding="10"
+            ColumnDefinitions="*"
+            HorizontalOptions="FillAndExpand">
+            <Button Command="{Binding SaveCommand}" Text="Save" />
+        </Grid>
+    </Grid>
+</ContentPage>

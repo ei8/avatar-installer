@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="ei8.Avatar.Installer.Port.Adapter.UI.Maui.Views.AvatarSettings.CortexGraphSettingsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewmodels="clr-namespace:ei8.Avatar.Installer.Port.Adapter.UI.Maui.ViewModels.AvatarSettings"
+    Title="CortexGraphSettingsPage"
+    x:DataType="viewmodels:CortexGraphSettingsViewModel">
+    <Grid RowDefinitions="*,Auto">
+        <Grid Grid.Row="0" Padding="5">
+            <ScrollView>
+                <StackLayout>
+                    <Label Margin="5" Text="Poll Interval:" />
+                    <Entry Margin="0,0,0,10" Text="{Binding PollInterval}" />
+
+                    <Label Margin="5" Text="Database Name:" />
+                    <Entry Margin="0,0,0,10" Text="{Binding DbName}" />
+
+                    <Label Margin="5" Text="Database Username:" />
+                    <Entry Margin="0,0,0,10" Text="{Binding DbUsername}" />
+
+                    <Label Margin="5" Text="Database Password:" />
+                    <Entry Margin="0,0,0,10" Text="{Binding DbPassword}" />
+
+                    <Label Margin="5" Text="Database Url:" />
+                    <Entry Margin="0,0,0,10" Text="{Binding DbUrl}" />
+
+                    <Label Margin="5" Text="Default Relative Values:" />
+                    <Entry Margin="0,0,0,10" Text="{Binding DefaultRelativeValues}" />
+
+                    <Label Margin="5" Text="Default Neuron Active Values:" />
+                    <Entry Margin="0,0,0,10" Text="{Binding DefaultNeuronActiveValues}" />
+
+                    <Label Margin="5" Text="Default Terminal Active Values:" />
+                    <Entry Margin="0,0,0,10" Text="{Binding DefaultTerminalActiveValues}" />
+
+                    <Label Margin="5" Text="Default Page Size:" />
+                    <Entry Margin="0,0,0,10" Text="{Binding DefaultPageSize}" />
+
+                    <Label Margin="5" Text="Default Page:" />
+                    <Entry Margin="0,0,0,10" Text="{Binding DefaultPage}" />
+
+                    <Label Margin="5" Text="Arango Root Password:" />
+                    <Entry Margin="0,0,0,10" Text="{Binding ArangoRootPassword}" />
+                </StackLayout>
+            </ScrollView>
+        </Grid>
+        <Grid
+            Grid.Row="1"
+            Padding="10"
+            ColumnDefinitions="*"
+            HorizontalOptions="FillAndExpand">
+            <Button Command="{Binding SaveCommand}" Text="Save" />
+        </Grid>
+    </Grid>
+</ContentPage>

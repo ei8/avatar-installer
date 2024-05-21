@@ -46,6 +46,47 @@
                 Route="UsersPage" />
         </Tab>
     </FlyoutItem>
+    <FlyoutItem
+        Title="Settings"
+        FlyoutItemIsVisible="True"
+        Route="AvatarSettingsPage">
+        <Tab Title="Event Sourcing">
+            <ShellContent
+                Title="Event Sourcing Settings"
+                ContentTemplate="{DataTemplate views:AvatarSettings.EventSourcingSettingsPage}"
+                Route="EventSourcingSettingsPage" />
+        </Tab>
+        <Tab Title="Cortex Graph">
+            <ShellContent
+                Title="Cortex Graph Settings"
+                ContentTemplate="{DataTemplate views:AvatarSettings.CortexGraphSettingsPage}"
+                Route="CortexGraphSettingsPage" />
+        </Tab>
+        <Tab Title="Avatar Api">
+            <ShellContent
+                Title="Avatar Api Settings"
+                ContentTemplate="{DataTemplate views:AvatarSettings.AvatarApiSettingsPage}"
+                Route="AvatarApiSettingsPage" />
+        </Tab>
+        <Tab Title="Identity Access">
+            <ShellContent
+                Title="Identity Access Settings"
+                ContentTemplate="{DataTemplate views:AvatarSettings.IdentityAccessSettingsPage}"
+                Route="IdentityAccessSettingsPage" />
+        </Tab>
+        <Tab Title="Cortex Library">
+            <ShellContent
+                Title="Cortex Library Settings"
+                ContentTemplate="{DataTemplate views:AvatarSettings.CortexLibrarySettingsPage}"
+                Route="CortexLibrarySettingsPage" />
+        </Tab>
+        <Tab Title="Cortex Diary Nucleus">
+            <ShellContent
+                Title="Cortex Diary Nucleus Settings"
+                ContentTemplate="{DataTemplate views:AvatarSettings.CortexDiaryNucleusSettingsPage}"
+                Route="CortexDiaryNucleusSettingsPage" />
+        </Tab>
+    </FlyoutItem>
 
     <Shell.FlyoutFooter>
         <Button

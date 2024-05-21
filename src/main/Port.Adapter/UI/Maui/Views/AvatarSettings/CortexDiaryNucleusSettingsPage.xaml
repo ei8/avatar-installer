@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="ei8.Avatar.Installer.Port.Adapter.UI.Maui.Views.AvatarSettings.CortexDiaryNucleusSettingsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewmodels="clr-namespace:ei8.Avatar.Installer.Port.Adapter.UI.Maui.ViewModels.AvatarSettings"
+    Title="CortexDiaryNucleusSettingsPage"
+    x:DataType="viewmodels:CortexDiaryNucleusSettingsViewModel">
+    <Grid RowDefinitions="*,Auto">
+        <Grid Grid.Row="0" Padding="5">
+            <ScrollView>
+                <StackLayout>
+                    <Label Margin="5" Text="Subscriptions Database Path:" />
+                    <Entry Margin="0,0,0,10" Text="{Binding SubscriptionsDatabasePath}" />
+
+                    <Label Margin="5" Text="Polling Interval Seconds:" />
+                    <Entry Margin="0,0,0,10" Text="{Binding SubscriptionsPollingIntervalSecs}" />
+
+                    <Label Margin="5" Text="Push Owner:" />
+                    <Entry Margin="0,0,0,10" Text="{Binding SubscriptionsPushOwner}" />
+                    <Label Margin="5" Text="Push Public Key:" />
+                    <Entry Margin="0,0,0,10" Text="{Binding SubscriptionsPushPublicKey}" />
+
+                    <Label Margin="5" Text="Push Private Key:" />
+                    <Entry Margin="0,0,0,10" Text="{Binding SubscriptionsPushPrivateKey}" />
+
+                    <Label Margin="5" Text="Smtp Server Address:" />
+                    <Entry Margin="0,0,0,10" Text="{Binding SubscriptionsSmtpServerAddress}" />
+
+                    <Label Margin="5" Text="Smtp Port:" />
+                    <Entry Margin="0,0,0,10" Text="{Binding SubscriptionsSmtpPort}" />
+
+                    <HorizontalStackLayout>
+                        <Label
+                            Margin="0,0,5,0"
+                            Text="Smtp Use Ssl: "
+                            VerticalOptions="Center" />
+                        <CheckBox IsChecked="{Binding SubscriptionsSmtpUseSsl}" />
+                    </HorizontalStackLayout>
+
+                    <Label Margin="5" Text="Smtp Sender Name:" />
+                    <Entry Margin="0,0,0,10" Text="{Binding SubscriptionsSmtpSenderName}" />
+
+                    <Label Margin="5" Text="Smtp Sender Address:" />
+                    <Entry Margin="0,0,0,10" Text="{Binding SubscriptionsSmtpSenderAddress}" />
+
+                    <Label Margin="5" Text="Sender Username:" />
+                    <Entry Margin="0,0,0,10" Text="{Binding SubscriptionsSmtpSenderUsername}" />
+
+                    <Label Margin="5" Text="Smtp Sender Password:" />
+                    <Entry Margin="0,0,0,10" Text="{Binding SubscriptionsSmtpSenderPassword}" />
+
+                    <Label Margin="5" Text="Cortex Graph Out Base Url:" />
+                    <Entry Margin="0,0,0,10" Text="{Binding SubscriptionsCortexGraphOutBaseUrl}" />
+                </StackLayout>
+            </ScrollView>
+        </Grid>
+        <Grid
+            Grid.Row="1"
+            Padding="10"
+            ColumnDefinitions="*"
+            HorizontalOptions="FillAndExpand">
+            <Button Command="{Binding SaveCommand}" Text="Save" />
+        </Grid>
+    </Grid>
+</ContentPage>
