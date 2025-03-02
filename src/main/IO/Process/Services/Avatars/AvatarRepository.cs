@@ -11,13 +11,13 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
     {
         private readonly ILogger<AvatarRepository> logger;
 
-        public AvatarRepository(ILogger<AvatarRepository> logger) 
+        public AvatarRepository(ILogger<AvatarRepository> logger)
         {
             this.logger = logger;
         }
 
         // TODO: Add unit tests
-        public async Task<AvatarItem?> GetByAsync(string id)
+        public async Task<AvatarItem> GetByAsync(string id)
         {
             if (!Directory.Exists(id))
             {
@@ -79,7 +79,7 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
                               .ToDictionary(l => l[0], l => l[1]);
         }
 
-        private T? DeserializeEnvironmentVariables<T>(Dictionary<string, string> variables)
+        private T DeserializeEnvironmentVariables<T>(Dictionary<string, string> variables)
             where T : class, new()
         {
             if (!variables.Any())
@@ -98,8 +98,8 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
             return settings;
         }
 
-        private List<string>? SerializeEnvironmentVariables<T>(T settings)
-            where T: class, new()
+        private List<string> SerializeEnvironmentVariables<T>(T settings)
+            where T : class, new()
         {
             if (settings == null)
                 return null;

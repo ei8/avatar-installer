@@ -5,6 +5,6 @@ namespace ei8.Avatar.Installer.Domain.Model.Mapping
 {
     public interface IAvatarServerMapperService
     {
-        AvatarServer? Apply(AvatarConfiguration configuration, AvatarServer? item);
+        AvatarServer Apply(AvatarConfiguration configuration, AvatarServer item);
     }
 }

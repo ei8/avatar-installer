@@ -12,7 +12,7 @@ namespace ei8.Avatar.Installer.Common
         /// <param name="property"></param>
         /// <param name="obj"></param>
         /// <param name="value"></param>
-        public static void SetValueFromString(this PropertyInfo property, object obj, string? value)
+        public static void SetValueFromString(this PropertyInfo property, object obj, string value)
         {
             if (property.PropertyType == typeof(string))
                 property.SetValue(obj, value);

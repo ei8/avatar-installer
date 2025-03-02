@@ -1,7 +1,7 @@
-﻿using System.Text;
-using ei8.Avatar.Installer.Common;
+﻿using ei8.Avatar.Installer.Common;
 using ei8.Avatar.Installer.Domain.Model.Avatars;
 using Microsoft.Extensions.Logging;
+using System.Text;
 using Tomlyn;
 
 namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
@@ -16,7 +16,7 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
         }
 
         // TODO: add unit tests
-        public async Task<AvatarServer?> GetByAsync(string id)
+        public async Task<AvatarServer> GetByAsync(string id)
         {
             if (!Directory.Exists(id))
             {
@@ -73,7 +73,7 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
             await File.WriteAllTextAsync(autolockCmdPath, Constants.BatchFileTemplates.AutoLockCmd);
         }
 
-        private async Task<SshSettings?> DeserializeSshSettingsFile(string fileName)
+        private async Task<SshSettings> DeserializeSshSettingsFile(string fileName)
         {
             if (!File.Exists(fileName))
             {
@@ -90,8 +90,8 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
 
             using (var file = new StreamReader(fileName))
             {
-                string? line;
-                string? currentKey = null;
+                string line;
+                string currentKey = null;
 
                 while ((line = await file.ReadLineAsync()) != null)
                 {
@@ -144,7 +144,7 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
             await File.WriteAllTextAsync(fileName, sb.ToString());
         }
 
-        private async Task<TraefikSettings?> DeserializeTraefikFile(string fileName)
+        private async Task<TraefikSettings> DeserializeTraefikFile(string fileName)
         {
             if (!File.Exists(fileName))
             {
