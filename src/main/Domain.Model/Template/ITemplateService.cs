@@ -6,8 +6,9 @@
         /// Download template files from a remote source into a local directory
         /// </summary>
         /// <param name="destinationPath"></param>
+        /// <param name="templateUrl"></param>
         /// <returns></returns>
-        void DownloadTemplate(string destinationPath);
+        void DownloadTemplate(string destinationPath, string templateUrl);
 
         /// <summary>
         /// Enumerate all template files in the local directory
