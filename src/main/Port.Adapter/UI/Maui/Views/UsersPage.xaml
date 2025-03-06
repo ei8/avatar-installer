@@ -57,7 +57,11 @@
             </ScrollView>
         </Grid>
         <Grid Grid.Row="1" Padding="10">
-            <Button Command="{Binding CreateUserCommand}" Text="Create User" />
+            <Button
+                Command="{Binding CreateUserCommand}"
+                HorizontalOptions="End"
+                Style="{StaticResource SuccessButtonStyle}"
+                Text="Create" />
         </Grid>
     </Grid>
 </ContentPage>

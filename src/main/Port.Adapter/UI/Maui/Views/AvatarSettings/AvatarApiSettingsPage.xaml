@@ -51,7 +51,11 @@
             Padding="10"
             ColumnDefinitions="*"
             HorizontalOptions="FillAndExpand">
-            <Button Command="{Binding SaveCommand}" Text="Save" />
+            <Button
+                Command="{Binding SaveCommand}"
+                HorizontalOptions="End"
+                Style="{StaticResource SuccessButtonStyle}"
+                Text="Save" />
         </Grid>
     </Grid>
 </ContentPage>
