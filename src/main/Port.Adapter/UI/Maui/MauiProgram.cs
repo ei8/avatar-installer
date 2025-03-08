@@ -2,7 +2,6 @@
 using ei8.Avatar.Installer.Application;
 using ei8.Avatar.Installer.Application.Avatar;
 using ei8.Avatar.Installer.Application.IdentityAccess;
-using ei8.Avatar.Installer.Application.Settings;
 using ei8.Avatar.Installer.Domain.Model;
 using ei8.Avatar.Installer.Domain.Model.Avatars;
 using ei8.Avatar.Installer.Domain.Model.Configuration;
@@ -11,7 +10,6 @@ using ei8.Avatar.Installer.Domain.Model.Mapping;
 using ei8.Avatar.Installer.Domain.Model.Template;
 using ei8.Avatar.Installer.IO.Process.Services.Avatars;
 using ei8.Avatar.Installer.IO.Process.Services.IdentityAccess;
-using ei8.Avatar.Installer.IO.Process.Services.Settings;
 using ei8.Avatar.Installer.IO.Process.Services.Template;
 using ei8.Avatar.Installer.Port.Adapter.UI.Maui.ViewModels;
 using ei8.Avatar.Installer.Port.Adapter.UI.Maui.ViewModels.AvatarSettings;
@@ -98,7 +96,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<CortexDiaryNucleusSettingsViewModel>();
         #endregion
 
-        builder.Services.AddScoped<ISettingsService, SettingsService>()
+        builder.Services
                 .AddScoped<ITemplateService, GithubTemplateService>()
                 .AddScoped<IConfigurationRepository, JsonConfigurationRepository>()
                 .AddScoped<IAvatarRepository, AvatarRepository>()

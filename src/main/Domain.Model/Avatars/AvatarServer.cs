@@ -1,8 +1,4 @@
-﻿using System;
-using System.Data;
-using System.Reflection.Emit;
-
-namespace ei8.Avatar.Installer.Domain.Model.Avatars
+﻿namespace ei8.Avatar.Installer.Domain.Model.Avatars
 {
     /// <summary>
     /// Represents the network configuration within the user's filesystem
@@ -10,8 +6,8 @@ namespace ei8.Avatar.Installer.Domain.Model.Avatars
     public class AvatarServer
     {
         public string Id { get; set; }
-        public TraefikSettings? TraefikSettings { get; set; } = new();
-        public SshSettings? SshSettings { get; set; } = new();
+        public TraefikSettings TraefikSettings { get; set; } = new();
+        public SshSettings SshSettings { get; set; } = new();
     }
 
     #region Traefik TOML structure
@@ -29,11 +25,11 @@ namespace ei8.Avatar.Installer.Domain.Model.Avatars
         /// <remarks>
         /// The dictionary is expected to be empty, but it should not be null.
         /// </remarks>
-        public Dictionary<string, object?> File { get; set; }
+        public Dictionary<string, object> File { get; set; }
         public Dictionary<string, TraefikFrontend> Frontends { get; set; }
         public Dictionary<string, TraefikBackend> Backends { get; set; }
 
-        public void AddRoute(string name, string frontendRule, string backendUrl, string[]? entryPoints = null)
+        public void AddRoute(string name, string frontendRule, string backendUrl, string[] entryPoints = null)
         {
             entryPoints ??= new[] { "http" };
 

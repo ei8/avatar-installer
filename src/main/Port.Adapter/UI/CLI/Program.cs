@@ -1,11 +1,9 @@
 ﻿using ei8.Avatar.Installer.Application.Avatar;
-using ei8.Avatar.Installer.Application.Settings;
 using ei8.Avatar.Installer.Domain.Model.Avatars;
 using ei8.Avatar.Installer.Domain.Model.Configuration;
 using ei8.Avatar.Installer.Domain.Model.Mapping;
 using ei8.Avatar.Installer.Domain.Model.Template;
 using ei8.Avatar.Installer.IO.Process.Services.Avatars;
-using ei8.Avatar.Installer.IO.Process.Services.Settings;
 using ei8.Avatar.Installer.IO.Process.Services.Template;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,7 +22,7 @@ namespace ei8.Avatar.Installer.CLI
             {
                 var builder = Host.CreateApplicationBuilder(args);
 
-                builder.Services.AddScoped<ISettingsService, SettingsService>()
+                builder.Services
                                 .AddScoped<ITemplateService, GithubTemplateService>()
                                 .AddScoped<IConfigurationRepository, JsonConfigurationRepository>()
                                 .AddScoped<IAvatarRepository, AvatarRepository>()

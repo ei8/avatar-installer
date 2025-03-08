@@ -6,7 +6,7 @@ namespace ei8.Avatar.Installer.Domain.Model.Mapping
     public class AvatarServerMapperService : IAvatarServerMapperService
     {
         // TODO: Add unit tests
-        public AvatarServer? Apply(AvatarConfiguration configuration, AvatarServer? item)
+        public AvatarServer Apply(AvatarConfiguration configuration, AvatarServer item)
         {
             if (item == null)
                 return null;
@@ -17,7 +17,7 @@ namespace ei8.Avatar.Installer.Domain.Model.Mapping
             return item;
         }
 
-        private TraefikSettings ApplyTraefikSettings(AvatarConfiguration configuration, TraefikSettings? item) 
+        private TraefikSettings ApplyTraefikSettings(AvatarConfiguration configuration, TraefikSettings item)
         {
             if (item == null)
             {
@@ -63,7 +63,7 @@ namespace ei8.Avatar.Installer.Domain.Model.Mapping
             return item;
         }
 
-        private SshSettings ApplySshSettings(SshConfiguration configuration, SshSettings? item)
+        private SshSettings ApplySshSettings(SshConfiguration configuration, SshSettings item)
         {
             // revisit if we need to create multiple SSH host settings
             if (item == null)

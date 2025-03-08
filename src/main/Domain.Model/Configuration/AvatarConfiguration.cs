@@ -1,5 +1,4 @@
-﻿using System.Runtime.Intrinsics.X86;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace ei8.Avatar.Installer.Domain.Model.Configuration
 {
@@ -10,6 +9,7 @@ namespace ei8.Avatar.Installer.Domain.Model.Configuration
     {
         public AvatarConfigurationItem[] Avatars { get; set; }
         public string Destination { get; set; }
+        public string TemplateUrl { get; set; }
         public AvatarServerConfiguration Network { get; set; } = new();
     }
 

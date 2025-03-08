@@ -2,7 +2,7 @@
 {
     public interface IAvatarServerRepository
     {
-        Task<AvatarServer?> GetByAsync(string id);
+        Task<AvatarServer> GetByAsync(string id);
         Task SaveAsync(AvatarServer avatarServer);
     }
 }

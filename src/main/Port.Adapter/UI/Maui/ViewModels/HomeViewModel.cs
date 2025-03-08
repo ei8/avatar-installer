@@ -1,18 +1,11 @@
 ﻿using CommunityToolkit.Maui.Storage;
-using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using ei8.Avatar.Installer.Application.Avatar;
 using ei8.Avatar.Installer.Common;
 using ei8.Avatar.Installer.Domain.Model;
 using ei8.Avatar.Installer.Domain.Model.Avatars;
 using ei8.Avatar.Installer.Port.Adapter.UI.Maui.Views;
 using neurUL.Common.Domain.Model;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ei8.Avatar.Installer.Port.Adapter.UI.Maui.ViewModels;
 
@@ -50,12 +43,12 @@ public partial class HomeViewModel : BaseViewModel
 
             if (workingDirectory.Folder is null)
             {
-                await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Cancelled, 
+                await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Cancelled,
                     Constants.Messages.EditingCancelled, Constants.Prompts.Ok);
                 return;
             }
 
-            string[] requiredFiles = [Constants.Databases.AvatarDb, Constants.Databases.d23Db, Constants.Databases.EventsDb, 
+            string[] requiredFiles = [Constants.Databases.AvatarDb, Constants.Databases.d23Db, Constants.Databases.EventsDb,
                 Constants.Databases.IdentityAccessDb, Constants.Databases.SubscriptionsDb];
 
             foreach (var file in requiredFiles)

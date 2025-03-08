@@ -1,6 +1,4 @@
-﻿using ei8.Avatar.Installer.Application.Settings;
-using ei8.Avatar.Installer.Common;
-using ei8.Avatar.Installer.Domain.Model.Template;
+﻿using ei8.Avatar.Installer.Domain.Model.Template;
 using LibGit2Sharp;
 using Microsoft.Extensions.Logging;
 using neurUL.Common.Domain.Model;
@@ -9,29 +7,28 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Template
 {
     public class GithubTemplateService : ITemplateService
     {
-        private readonly ISettingsService settingsService;
         private readonly ILogger<GithubTemplateService> logger;
 
-        public GithubTemplateService(ISettingsService settingsService,
-            ILogger<GithubTemplateService> logger) 
+        public GithubTemplateService(ILogger<GithubTemplateService> logger)
         {
-            this.settingsService = settingsService;
             this.logger = logger;
         }
 
-        public void DownloadTemplate(string destinationPath)
+        public void DownloadTemplate(string destinationPath, string templateUrl)
         {
             AssertionConcern.AssertArgumentNotNull(destinationPath, nameof(destinationPath));
+            AssertionConcern.AssertArgumentNotNull(templateUrl, nameof(templateUrl));
 
-            // .NET Maui doesn't have environment variables so the url is hardcoded
-            var templateDownloadUrl = settingsService.TemplateDownloadUrl ?? Constants.Urls.DefaultTemplateDownloadUrl;
-
-            Repository.Clone(templateDownloadUrl, destinationPath, new CloneOptions()
-            {
-                RepositoryOperationStarting = HandleStarting,
-                RepositoryOperationCompleted = HandleComplete,
-                OnCheckoutProgress = HandleCheckoutProgress,
-            });
+            Repository.Clone(
+                templateUrl,
+                destinationPath,
+                new CloneOptions()
+                {
+                    RepositoryOperationStarting = HandleStarting,
+                    RepositoryOperationCompleted = HandleComplete,
+                    OnCheckoutProgress = HandleCheckoutProgress,
+                }
+            );
         }
 
         public IEnumerable<string> GetTemplateFilenames(string templatePath)
@@ -39,10 +36,11 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Template
             if (!Directory.Exists(templatePath))
                 return null;
 
-            return Directory.EnumerateFiles(templatePath, "*.*", new EnumerationOptions()
-            {
-                RecurseSubdirectories = true
-            });
+            return Directory.EnumerateFiles(
+                templatePath,
+                "*.*",
+                new EnumerationOptions() { RecurseSubdirectories = true }
+            );
         }
 
         #region git event handlers
@@ -51,8 +49,10 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Template
         {
             if (!string.IsNullOrWhiteSpace(fileName))
             {
-                var percentage = checkoutSteps * 100f / totalSteps; 
-                logger.LogInformation($"Creating {fileName} {checkoutSteps}/{totalSteps} ({percentage}%)");
+                var percentage = checkoutSteps * 100f / totalSteps;
+                logger.LogInformation(
+                    $"Creating {fileName} {checkoutSteps}/{totalSteps} ({percentage}%)"
+                );
             }
         }
 
@@ -65,7 +65,9 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Template
 
         private void HandleComplete(RepositoryOperationContext context)
         {
-            logger.LogInformation($"Cloned {context.RemoteUrl} to {context.RepositoryPath} successfully.");
+            logger.LogInformation(
+                $"Cloned {context.RemoteUrl} to {context.RepositoryPath} successfully."
+            );
         }
         #endregion
     }
