@@ -70,29 +70,34 @@
         <Grid
             Grid.Row="1"
             Padding="10"
-            ColumnDefinitions="*,*,Auto"
+            ColumnDefinitions="Auto,*,Auto"
             HorizontalOptions="FillAndExpand">
+
             <Button
-                x:Name="CancelButton"
                 Grid.Column="0"
-                Margin="0,0,6,0"
-                Command="{Binding CancelEditCommand}"
-                Text="Cancel" />
-
-            <Button
-                Grid.Column="1"
-                Margin="3,0,3,0"
-                Command="{Binding SaveRegionPermitCommand}"
-                Text="Save" />
-
-            <Button
-                Grid.Column="2"
-                Margin="6,0,0,0"
                 Command="{Binding RemoveRegionPermitCommand}"
                 IsVisible="{Binding IsEditing}"
-                Text="Remove"
-                WidthRequest="{Binding Path=Width, Source={x:Reference CancelButton}}" />
+                Style="{StaticResource DangerButtonStyle}"
+                Text="Remove" />
+
+            <Label Grid.Column="1" />
+
+            <StackLayout
+                Grid.Column="2"
+                Orientation="Horizontal"
+                Spacing="6">
+                <Button
+                    Command="{Binding CancelEditCommand}"
+                    Style="{StaticResource SecondaryButtonStyle}"
+                    Text="Cancel" />
+                <Button
+                    Command="{Binding SaveRegionPermitCommand}"
+                    Style="{StaticResource SuccessButtonStyle}"
+                    Text="Save" />
+            </StackLayout>
         </Grid>
+
+
 
     </Grid>
 </ContentPage>
