@@ -10,13 +10,20 @@ namespace ei8.Avatar.Installer.Domain.Model.Configuration
             if (!File.Exists(id))
                 throw new FileNotFoundException($"{id} does not exist.");
 
-            using (var file = File.OpenRead(id))
-            {
-                return await JsonSerializer.DeserializeAsync<AvatarConfiguration>(file, new JsonSerializerOptions
-                {
-                    PropertyNamingPolicy = new SnakeCaseNamingPolicy()
-                });
-            }
+            using var file = File.OpenRead(id);
+
+            var avatarConfiguration = await JsonSerializer.DeserializeAsync<AvatarConfiguration>(
+                file,
+                new JsonSerializerOptions { PropertyNamingPolicy = new SnakeCaseNamingPolicy() }
+            );
+
+            // Expand environment variables in the destination path to ensure
+            // placeholders like %USERPROFILE% are correctly replaced with actual values.
+            avatarConfiguration.Destination = Environment.ExpandEnvironmentVariables(
+                avatarConfiguration.Destination
+            );
+
+            return avatarConfiguration;
         }
 
         private class SnakeCaseNamingPolicy : JsonNamingPolicy

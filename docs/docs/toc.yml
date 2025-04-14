@@ -1,0 +1,7 @@
+- name: Getting started
+- href: ../index.md
+- href: quick-start.md
+
+- name: User Manual
+- href: configuration.md
+- href: editing-avatar.md
