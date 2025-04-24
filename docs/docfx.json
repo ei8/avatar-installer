@@ -21,7 +21,7 @@
       "pdf": true
     },
     "sitemap": {
-      "baseUrl": "https://dkroderos.github.io/avatar-docs",
+      "baseUrl": "https://ei8.github.io/avatar-installer",
       "priority": 0.5,
       "changefreq": "daily"
     }
