@@ -70,16 +70,16 @@ namespace Domain.Model.Test.Configuration
 
             // avatar_api - should infer defaults
             Assert.Equal("https://login.fibona.cc", result.Avatars[0].AvatarApi!.TokenIssuerUrl);
-            Assert.Equal("avatarapi-valdez", result.Avatars[0].AvatarApi!.ApiName);
+            Assert.Equal("avatarapi-sample", result.Avatars[0].AvatarApi!.ApiName);
 
             // cortex_library - should infer defaults
-            Assert.Equal("https://fibona.cc/valdez/cortex/neurons", result.Avatars[0].CortexLibrary!.NeuronsUrl);
-            Assert.Equal("https://fibona.cc/valdez/cortex/terminals", result.Avatars[0].CortexLibrary!.TerminalsUrl);
+            Assert.Equal("https://fibona.cc/sample/cortex/neurons", result.Avatars[0].CortexLibrary!.NeuronsUrl);
+            Assert.Equal("https://fibona.cc/sample/cortex/terminals", result.Avatars[0].CortexLibrary!.TerminalsUrl);
 
             // d23 - should infer defaults
             Assert.Equal("https://login.fibona.cc", result.Avatars[0].D23!.OidcAuthorityUrl);
-            Assert.Equal("d23-valdez", result.Avatars[0].D23!.ClientId);
-            Assert.Equal("/valdez/d23", result.Avatars[0].D23!.BasePath);
+            Assert.Equal("d23-sample", result.Avatars[0].D23!.ClientId);
+            Assert.Equal("/sample/d23", result.Avatars[0].D23!.BasePath);
 
             // network - should infer defaults
             Assert.Equal("192.168.50.2", result.Avatars[0].Network!.LocalIp);
@@ -123,16 +123,16 @@ namespace Domain.Model.Test.Configuration
 
             // avatar_api
             Assert.Equal("https://login.fibona.cc", avatar.AvatarApi!.TokenIssuerUrl);
-            Assert.Equal($"avatarapi-{avatarName}", avatar.AvatarApi!.ApiName);
+            Assert.Equal($"avatarapi-sample", avatar.AvatarApi!.ApiName);
 
             // cortex_library
-            Assert.Equal($"https://fibona.cc/{avatarName}/cortex/neurons", avatar.CortexLibrary!.NeuronsUrl);
-            Assert.Equal($"https://fibona.cc/{avatarName}/cortex/terminals", avatar.CortexLibrary!.TerminalsUrl);
+            Assert.Equal($"https://fibona.cc/sample/cortex/neurons", avatar.CortexLibrary!.NeuronsUrl);
+            Assert.Equal($"https://fibona.cc/sample/cortex/terminals", avatar.CortexLibrary!.TerminalsUrl);
 
             // d23
             Assert.Equal("https://login.fibona.cc", avatar.D23!.OidcAuthorityUrl);
-            Assert.Equal($"d23-{avatarName}", avatar.D23!.ClientId);
-            Assert.Equal($"/{avatarName}/d23", avatar.D23!.BasePath);
+            Assert.Equal($"d23-sample", avatar.D23!.ClientId);
+            Assert.Equal($"/sample/d23", avatar.D23!.BasePath);
 
             // network
             Assert.Equal("192.168.1.110", avatar.Network!.LocalIp);
