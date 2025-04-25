@@ -5,7 +5,7 @@ namespace ei8.Avatar.Installer.Domain.Model.Configuration
 {
     public class JsonConfigurationRepository : IConfigurationRepository
     {
-        public async Task<AvatarConfiguration> GetByAsync(string id)
+        public async Task<AvatarConfiguration> GetByIdAsync(string id)
         {
             if (!File.Exists(id))
                 throw new FileNotFoundException($"{id} does not exist.");

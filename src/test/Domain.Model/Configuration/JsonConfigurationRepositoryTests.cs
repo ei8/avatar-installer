@@ -10,7 +10,7 @@ namespace Domain.Model.Test.Configuration
             var jsonFile = "./Configuration/testcase_single.json";
 
             var sut = new JsonConfigurationRepository();
-            var result = await sut.GetByAsync(jsonFile);
+            var result = await sut.GetByIdAsync(jsonFile);
 
             Assert.Equal("./sample", result.Destination);
 
@@ -57,7 +57,7 @@ namespace Domain.Model.Test.Configuration
             var jsonFile = "./Configuration/testcase_optionalfields.json";
 
             var sut = new JsonConfigurationRepository();
-            var result = await sut.GetByAsync(jsonFile);
+            var result = await sut.GetByIdAsync(jsonFile);
 
             Assert.Single(result.Avatars);
             Assert.Equal("valdez", result.Avatars[0].Name);
@@ -102,7 +102,7 @@ namespace Domain.Model.Test.Configuration
             var jsonFile = "./Configuration/testcase_multiple.json";
 
             var sut = new JsonConfigurationRepository();
-            var result = await sut.GetByAsync(jsonFile);
+            var result = await sut.GetByIdAsync(jsonFile);
 
             Assert.Equal(2, result.Avatars.Count());
 
