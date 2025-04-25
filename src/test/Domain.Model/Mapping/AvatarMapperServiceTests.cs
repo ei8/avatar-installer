@@ -93,7 +93,7 @@ namespace Domain.Model.Test.Mapping
             var defaultTarget = new AvatarItem("id_defaults2", "defaults");
             var defaultResult = sut.Apply(config.Avatars[1], defaultTarget);
 
-            Assert.Equal("avatarapi-defaults", defaultResult.Settings.AvatarApi.ApiName);
+            Assert.Equal("avatarapi-sample", defaultResult.Settings.AvatarApi.ApiName);
             Assert.Equal(@"https://login.fibona.cc", defaultResult.Settings.AvatarApi.TokenIssuerUrl);
         }
 
@@ -128,8 +128,8 @@ namespace Domain.Model.Test.Mapping
             var defaultTarget = new AvatarItem("id_defaults3", "defaults");
             var defaultResult = sut.Apply(config.Avatars[1], defaultTarget);
 
-            Assert.Equal(@"https://fibona.cc/defaults/cortex/neurons", defaultResult.Settings.CortexLibrary.NeuronsUrl);
-            Assert.Equal(@"https://fibona.cc/defaults/cortex/terminals", defaultResult.Settings.CortexLibrary.TerminalsUrl);
+            Assert.Equal(@"https://fibona.cc/sample/cortex/neurons", defaultResult.Settings.CortexLibrary.NeuronsUrl);
+            Assert.Equal(@"https://fibona.cc/sample/cortex/terminals", defaultResult.Settings.CortexLibrary.TerminalsUrl);
         }
 
         [Fact]
@@ -166,8 +166,8 @@ namespace Domain.Model.Test.Mapping
             var defaultResult = sut.Apply(config.Avatars[1], defaultTarget);
 
             Assert.Equal(@"https://login.fibona.cc", defaultResult.d23.OidcAuthority);
-            Assert.Equal("d23-defaults", defaultResult.d23.ClientId);
-            Assert.Equal("/defaults/d23", defaultResult.d23.BasePath);
+            Assert.Equal("d23-sample", defaultResult.d23.ClientId);
+            Assert.Equal("/sample/d23", defaultResult.d23.BasePath);
         }
 
         [Fact]
