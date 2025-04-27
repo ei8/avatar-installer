@@ -2,7 +2,7 @@ using ei8.Avatar.Installer.Domain.Model.Configuration;
 
 namespace Domain.Model.Test.Configuration
 {
-    public class JsonConfigurationRepositoryTests
+    public class JsonConfigurationRepositoryFixture
     {
         [Fact]
         public async Task LoadsAllJsonPropertiesIntoAvatarConfiguration()

@@ -1,6 +1,6 @@
 namespace ei8.Avatar.Installer.Common.Test;
 
-public class StringExtensionsTests
+public class StringExtensionsFixture
 {
     [Theory]
     [InlineData("HelloWorld", "hello_world")]
