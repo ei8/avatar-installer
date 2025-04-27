@@ -6,13 +6,13 @@ using ei8.Avatar.Installer.Domain.Model.Mapping;
 
 namespace Domain.Model.Test.Mapping
 {
-    public class AvatarMapperServiceTests
+    public class AvatarMapperServiceFixture
     {
         private readonly MapperConfiguration mapperConfig;
         private readonly IMapper mapper;
 
         // setup
-        public AvatarMapperServiceTests()
+        public AvatarMapperServiceFixture()
         {
             this.mapperConfig = new MapperConfiguration(cfg =>
             {
