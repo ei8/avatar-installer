@@ -46,7 +46,7 @@ namespace ei8.Avatar.Installer.Application.Avatar
             this.progressService.Reset();
             this.progressService.Update(0.1, "Creating Avatar...");
 
-            var configObject = await configurationRepository.GetByAsync(id);
+            var configObject = await configurationRepository.GetByIdAsync(id);
 
             this.progressService.Update(0.3, "Configuring Avatar...");
             foreach (var item in configObject.Avatars)

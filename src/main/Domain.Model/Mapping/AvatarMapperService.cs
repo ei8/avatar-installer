@@ -9,7 +9,7 @@ namespace ei8.Avatar.Installer.Domain.Model.Mapping
     {
         private readonly IMapper mapper;
 
-        public AvatarMapperService(IMapper mapper) 
+        public AvatarMapperService(IMapper mapper)
         {
             this.mapper = mapper;
         }
@@ -24,12 +24,25 @@ namespace ei8.Avatar.Installer.Domain.Model.Mapping
     {
         public AvatarAutoMapperProfile()
         {
-            CreateMap<AvatarConfigurationItem, AvatarItem>();
+            CreateMap<AvatarConfigurationItem, AvatarItem>()
+                .ForPath(
+                    dest => dest.Settings.CortexGraph,
+                    opt => opt.MapFrom(src => src.CortexGraph)
+                )
+                .ForPath(dest => dest.Settings.AvatarApi, opt => opt.MapFrom(src => src.AvatarApi))
+                .ForPath(
+                    dest => dest.Settings.CortexLibrary,
+                    opt => opt.MapFrom(src => src.CortexLibrary)
+                );
+
             CreateMap<CortexGraphConfiguration, CortexGraphSettings>();
             CreateMap<AvatarApiConfiguration, AvatarApiSettings>();
             CreateMap<CortexLibraryConfiguration, CortexLibrarySettings>();
             CreateMap<d23Configuration, d23Settings>()
-                .ForMember(dest => dest.OidcAuthority, opt => opt.MapFrom(src => src.OidcAuthorityUrl));
+                .ForMember(
+                    dest => dest.OidcAuthority,
+                    opt => opt.MapFrom(src => src.OidcAuthorityUrl)
+                );
 
             CreateMap<NetworkConfiguration, AvatarNetworkSettings>()
                 .ForMember(dest => dest.AvatarIp, opt => opt.MapFrom(src => src.LocalIp))
