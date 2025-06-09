@@ -97,6 +97,11 @@
             public const string D23BlazorPort = "D23_BLAZOR_PORT";
         }
 
+        public sealed class Directories
+        {
+            public const string Un8y = "un8y";
+        }
+
         public sealed class Databases
         {
             public const string AvatarDb = "avatar.db";

@@ -17,6 +17,7 @@ using ei8.Avatar.Installer.Port.Adapter.UI.Maui.Views;
 using ei8.Avatar.Installer.Port.Adapter.UI.Maui.Views.AvatarSettings;
 using MetroLog.MicrosoftExtensions;
 using Microsoft.Extensions.Logging;
+using System.Reflection;
 
 namespace ei8.Avatar.Installer.Port.Adapter.UI.Maui;
 
@@ -34,6 +35,12 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
 
+        using var stream = Assembly.GetExecutingAssembly()
+            .GetManifestResourceStream(typeof(MauiProgram).Namespace + ".appsettings.json");
+        stream.Position = 0;
+        var settings = System.Text.Json.JsonSerializer.Deserialize<AppSettings>(stream);
+        builder.Services.AddSingleton(settings.Mirrors);
+
 #if DEBUG
         builder.Logging.AddDebug();
 
@@ -46,12 +53,12 @@ public static class MauiProgram
 #endif
 
         builder.Logging.AddInMemoryLogger(
-                options =>
-                {
-                    options.MaxLines = 1024;
-                    options.MinLevel = LogLevel.Debug;
-                    options.MaxLevel = LogLevel.Critical;
-                });
+            options =>
+            {
+                options.MaxLines = 1024;
+                options.MinLevel = LogLevel.Debug;
+                options.MaxLevel = LogLevel.Critical;
+            });
 
         #region Pages
         builder.Services.AddSingleton<HomePage>();
@@ -99,7 +106,8 @@ public static class MauiProgram
         builder.Services
                 .AddScoped<ITemplateService, GithubTemplateService>()
                 .AddScoped<IConfigurationRepository, JsonConfigurationRepository>()
-                .AddScoped<IAvatarRepository, AvatarRepository>()
+                .AddScoped<IAvatarItemWriteRepository, AvatarItemWriteRepository>()
+                .AddScoped<IAvatarItemReadRepository, AvatarItemReadRepository>()
                 .AddScoped<IAvatarMapperService, AvatarMapperService>()
                 .AddScoped<IAvatarServerRepository, AvatarServerRepository>()
                 .AddScoped<IAvatarServerMapperService, AvatarServerMapperService>()

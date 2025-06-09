@@ -25,7 +25,7 @@ namespace ei8.Avatar.Installer.CLI
                 builder.Services
                                 .AddScoped<ITemplateService, GithubTemplateService>()
                                 .AddScoped<IConfigurationRepository, JsonConfigurationRepository>()
-                                .AddScoped<IAvatarRepository, AvatarRepository>()
+                                .AddScoped<IAvatarItemWriteRepository, AvatarItemWriteRepository>()
                                 .AddScoped<IAvatarMapperService, AvatarMapperService>()
                                 .AddScoped<IAvatarServerRepository, AvatarServerRepository>()
                                 .AddScoped<IAvatarServerMapperService, AvatarServerMapperService>()
