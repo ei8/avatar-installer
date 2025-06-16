@@ -1,7 +1,9 @@
-﻿namespace ei8.Avatar.Installer.Application.Settings
+﻿using ei8.Cortex.Coding;
+
+namespace ei8.Avatar.Installer.Application.Settings
 {
-    // Unused service.
     public interface ISettingsService
     {
+        IEnumerable<MirrorConfig> Mirrors { get; set; }
     }
 }

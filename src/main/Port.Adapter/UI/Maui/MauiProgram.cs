@@ -35,12 +35,6 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
 
-        using var stream = Assembly.GetExecutingAssembly()
-            .GetManifestResourceStream(typeof(MauiProgram).Namespace + ".appsettings.json");
-        stream.Position = 0;
-        var settings = System.Text.Json.JsonSerializer.Deserialize<AppSettings>(stream);
-        builder.Services.AddSingleton(settings.Mirrors);
-
 #if DEBUG
         builder.Logging.AddDebug();
 

@@ -54,9 +54,9 @@ namespace ei8.Avatar.Installer.Domain.Model.Mapping
                     var avatarLocalUrl = $"http://{configuration.Network.LocalIp}:{avatar.Network.AvatarInPort}";
                     item.AddRoute(avatarRouteName, $"PathPrefixStrip:/{avatar.Network.NeurULServer}/{avatar.Name}", avatarLocalUrl);
 
-                    var d23RouteName = $"{avatar.Name}d23";
-                    var d23LocalUrl = $"http://{configuration.Network.LocalIp}:{avatar.Network.d23BlazorPort}";
-                    item.AddRoute(d23RouteName, $"PathPrefixStrip:/{avatar.Network.NeurULServer}/{avatar.Name}/d23", d23LocalUrl);
+                    var un8yRouteName = $"{avatar.Name}un8y";
+                    var un8yLocalUrl = $"http://{configuration.Network.LocalIp}:{avatar.Network.Un8yBlazorPort}";
+                    item.AddRoute(un8yRouteName, $"PathPrefixStrip:/{avatar.Network.NeurULServer}/{avatar.Name}/un8y", un8yLocalUrl);
                 }
             }
 

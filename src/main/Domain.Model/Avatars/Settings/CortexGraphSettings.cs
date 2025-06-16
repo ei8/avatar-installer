@@ -12,6 +12,7 @@
         public int DefaultTerminalActiveValues { get; set; }
         public int DefaultPageSize { get; set; }
         public int DefaultPage { get; set; }
-        public string ArangoRootPassword { get; set; }
+        public int DefaultDepth { get; set; }
+        public int DefaultDirectionValues { get; set; }
     }
 }

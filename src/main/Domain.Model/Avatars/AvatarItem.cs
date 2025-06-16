@@ -11,8 +11,9 @@ namespace ei8.Avatar.Installer.Domain.Model.Avatars
         public string Id { get; set; }
         public string Name { get; set; }
         public string OwnerName { get; set; }
+        public string OwnerUserId { get; set; }
         public AvatarSettings Settings { get; set; } = new();
-        public d23Settings d23 { get; set; } = new();
+        public Un8ySettings Un8y { get; set; } = new();
         public AvatarNetworkSettings Network { get; set; } = new();
 
         public AvatarItem(string id, string name)

@@ -48,8 +48,13 @@ public partial class HomeViewModel : BaseViewModel
                 return;
             }
 
-            string[] requiredFiles = [Constants.Databases.AvatarDb, Constants.Databases.d23Db, Constants.Databases.EventsDb,
-                Constants.Databases.IdentityAccessDb, Constants.Databases.SubscriptionsDb];
+            string[] requiredFiles = [
+                Constants.Databases.AvatarDb, 
+                Constants.Databases.Un8yDb,
+                Constants.Databases.EventsDb,
+                Constants.Databases.Iden8yDb, 
+                Constants.Databases.SubscriptionsDb
+            ];
 
             foreach (var file in requiredFiles)
             {

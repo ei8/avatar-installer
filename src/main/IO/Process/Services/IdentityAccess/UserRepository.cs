@@ -27,7 +27,7 @@ public class UserRepository : IUserRepository
         AssertionConcern.AssertArgumentNotNull(userId, nameof(userId));
 
         var id = avatarContextService.Avatar.Id;
-        var connectionString = $@"Data Source=file:{Path.Combine(id, Constants.Databases.IdentityAccessDb)}";
+        var connectionString = $@"Data Source=file:{Path.Combine(id, Constants.Databases.Iden8yDb)}";
 
         using var connection = new SqliteConnection(connectionString);
         await connection.OpenAsync();
@@ -54,7 +54,7 @@ public class UserRepository : IUserRepository
     public async Task<IEnumerable<User>> GetAllAsync()
     {
         var id = avatarContextService.Avatar.Id;
-        var connectionString = $@"Data Source=file:{Path.Combine(id, Constants.Databases.IdentityAccessDb)}";
+        var connectionString = $@"Data Source=file:{Path.Combine(id, Constants.Databases.Iden8yDb)}";
         var users = new List<User>();
 
         using var connection = new SqliteConnection(connectionString);
@@ -83,7 +83,7 @@ public class UserRepository : IUserRepository
         AssertionConcern.AssertArgumentNotNull(user, nameof(user));
 
         var id = avatarContextService.Avatar.Id;
-        var connectionString = $@"Data Source=file:{Path.Combine(id, Constants.Databases.IdentityAccessDb)}";
+        var connectionString = $@"Data Source=file:{Path.Combine(id, Constants.Databases.Iden8yDb)}";
 
         using var connection = new SqliteConnection(connectionString);
         await connection.OpenAsync();
@@ -101,7 +101,7 @@ public class UserRepository : IUserRepository
         AssertionConcern.AssertArgumentNotNull(user, nameof(user));
 
         var id = avatarContextService.Avatar.Id;
-        var connectionString = $@"Data Source=file:{Path.Combine(id, Constants.Databases.IdentityAccessDb)}";
+        var connectionString = $@"Data Source=file:{Path.Combine(id, Constants.Databases.Iden8yDb)}";
 
         using var connection = new SqliteConnection(connectionString);
         await connection.OpenAsync();

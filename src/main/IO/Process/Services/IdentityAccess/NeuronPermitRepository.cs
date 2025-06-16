@@ -28,7 +28,7 @@ public class NeuronPermitRepository : INeuronPermitRepository
         AssertionConcern.AssertArgumentNotNull(neuronId, nameof(neuronId));
 
         var id = avatarContextService.Avatar.Id;
-        var connectionString = $@"Data Source=file:{Path.Combine(id, Constants.Databases.IdentityAccessDb)}";
+        var connectionString = $@"Data Source=file:{Path.Combine(id, Constants.Databases.Iden8yDb)}";
 
         using var connection = new SqliteConnection(connectionString);
         await connection.OpenAsync();
@@ -56,7 +56,7 @@ public class NeuronPermitRepository : INeuronPermitRepository
     public async Task<IEnumerable<NeuronPermit>> GetAllAsync()
     {
         var id = avatarContextService.Avatar.Id;
-        var connectionString = $@"Data Source=file:{Path.Combine(id, Constants.Databases.IdentityAccessDb)}";
+        var connectionString = $@"Data Source=file:{Path.Combine(id, Constants.Databases.Iden8yDb)}";
         var neuronPermits = new List<NeuronPermit>();
 
         using var connection = new SqliteConnection(connectionString);
@@ -86,7 +86,7 @@ public class NeuronPermitRepository : INeuronPermitRepository
         AssertionConcern.AssertArgumentNotNull(neuronPermit, nameof(neuronPermit));
 
         var id = avatarContextService.Avatar.Id;
-        var connectionString = $@"Data Source=file:{Path.Combine(id, Constants.Databases.IdentityAccessDb)}";
+        var connectionString = $@"Data Source=file:{Path.Combine(id, Constants.Databases.Iden8yDb)}";
 
         using var connection = new SqliteConnection(connectionString);
         await connection.OpenAsync();
@@ -104,7 +104,7 @@ public class NeuronPermitRepository : INeuronPermitRepository
         AssertionConcern.AssertArgumentNotNull(neuronPermit, nameof(neuronPermit));
 
         var id = avatarContextService.Avatar.Id;
-        var connectionString = $@"Data Source=file:{Path.Combine(id, Constants.Databases.IdentityAccessDb)}";
+        var connectionString = $@"Data Source=file:{Path.Combine(id, Constants.Databases.Iden8yDb)}";
 
         using var connection = new SqliteConnection(connectionString);
         await connection.OpenAsync();

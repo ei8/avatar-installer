@@ -46,7 +46,7 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
                         avatarItem.Settings.CortexDiaryNucleus = DeserializeEnvironmentVariables<CortexDiaryNucleusSettings>(variables);
                         break;
 
-                    case ".env":
+                    case Common.Constants.Filenames.Env:
                         logger.LogInformation("Loading {file}", file);
 
                         avatarItem.Network = DeserializeEnvironmentVariables<AvatarNetworkSettings>(
@@ -65,7 +65,7 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
                         logger.LogInformation("Loading {file}", file);
 
                         var variables = await GetEnvironmentVariablesFromFileAsync(file);
-                        avatarItem.d23 = DeserializeEnvironmentVariables<d23Settings>(variables);
+                        avatarItem.Un8y = DeserializeEnvironmentVariables<Un8ySettings>(variables);
                         break;
                 }
             }

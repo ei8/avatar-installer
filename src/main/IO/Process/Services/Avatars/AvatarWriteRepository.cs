@@ -1,7 +1,5 @@
 ﻿using ei8.Avatar.Installer.Domain.Model.Avatars;
 using ei8.Cortex.Coding;
-using ei8.Cortex.Coding.d23.Grannies;
-using ei8.Cortex.Coding.d23.neurULization.Persistence;
 using ei8.Cortex.Coding.Persistence;
 using ei8.Cortex.Coding.Reflection;
 using ei8.EventSourcing.Client;
@@ -62,6 +60,17 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
                 mirrors
             );
 
+            var cachedNeuron = this.networkTransactionData.SavedTransientNeurons.SingleOrDefault(n => n.Id == avatar.Id);
+            if (nn.TryGetById(avatar.Id, out Neuron result) &&
+                cachedNeuron != null)
+            {
+                ei8.Cortex.Coding.Persistence.NetworkExtensions.ReplaceWithIdentical(
+                    nn,
+                    this.networkTransactionData,
+                    result.Id,
+                    cachedNeuron
+                );
+            }
             await this.networkTransactionService.SaveAsync(this.transaction, nn);
         }
     }
