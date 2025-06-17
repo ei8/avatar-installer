@@ -132,6 +132,7 @@
             public const string User = "User";
             public const string EventSourcingSettings = "Event Sourcing Settings";
             public const string CortexGraphSettings = "Cortex Graph Settings";
+            public const string CortexGraphPersistenceSettings = "Cortex Graph Persistence Settings";
             public const string AvatarApiSettings = "Avatar Api Settings";
             public const string IdentityAccessSettings = "Identity Access Settings";
             public const string CortexLibrarySettings = "Cortex Library Settings";

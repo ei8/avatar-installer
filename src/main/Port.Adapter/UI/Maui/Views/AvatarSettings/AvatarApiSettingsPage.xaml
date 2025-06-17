@@ -27,7 +27,7 @@
                     <Label Margin="5" Text="Proxy User Id:" />
                     <Entry Margin="0,0,0,10" Text="{Binding ProxyUserId}" />
 
-                    <Label Margin="5" Text="Token Issuer Url:" />
+                    <Label Margin="5" Text="Token Issuer Address:" />
                     <Entry Margin="0,0,0,10" Text="{Binding TokenIssuerAddress}" />
 
                     <Label Margin="5" Text="Api Name:" />

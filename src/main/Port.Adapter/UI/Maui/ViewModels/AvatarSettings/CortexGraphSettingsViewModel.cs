@@ -54,9 +54,6 @@ public partial class CortexGraphSettingsViewModel : BaseViewModel
     [ObservableProperty]
     public int defaultDirectionValues;
 
-    [ObservableProperty]
-    public string arangoRootPassword;
-
     [RelayCommand]
     private async Task GetAsync()
     {

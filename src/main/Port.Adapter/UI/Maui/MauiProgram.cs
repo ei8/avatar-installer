@@ -70,6 +70,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<AvatarApiSettingsPage>();
         builder.Services.AddSingleton<EventSourcingSettingsPage>();
         builder.Services.AddSingleton<CortexGraphSettingsPage>();
+        builder.Services.AddSingleton<CortexGraphPersistenceSettingsPage>();
         builder.Services.AddSingleton<AvatarApiSettingsPage>();
         builder.Services.AddSingleton<IdentityAccessSettingsPage>();
         builder.Services.AddSingleton<CortexLibrarySettingsPage>();
@@ -91,6 +92,7 @@ public static class MauiProgram
 
         builder.Services.AddSingleton<EventSourcingSettingsViewModel>();
         builder.Services.AddSingleton<CortexGraphSettingsViewModel>();
+        builder.Services.AddSingleton<CortexGraphPersistenceSettingsViewModel>();
         builder.Services.AddSingleton<AvatarApiSettingsViewModel>();
         builder.Services.AddSingleton<IdentityAccessSettingsViewModel>();
         builder.Services.AddSingleton<CortexLibrarySettingsViewModel>();

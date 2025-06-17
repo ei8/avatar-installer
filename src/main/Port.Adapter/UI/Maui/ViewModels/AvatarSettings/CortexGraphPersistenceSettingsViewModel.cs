@@ -41,7 +41,7 @@ public partial class CortexGraphPersistenceSettingsViewModel : BaseViewModel
             Debug.WriteLine(ex);
             await Shell.Current.DisplayAlert(
                 Constants.Statuses.Error,
-                $"{string.Format(Constants.Messages.Error, Constants.Operations.Get, Constants.Titles.CortexGraphSettings)}: {ex.Message}",
+                $"{string.Format(Constants.Messages.Error, Constants.Operations.Get, Constants.Titles.CortexGraphPersistenceSettings)}: {ex.Message}",
                 Constants.Prompts.Ok);
         }
         finally
@@ -57,7 +57,7 @@ public partial class CortexGraphPersistenceSettingsViewModel : BaseViewModel
             return;
 
         bool isConfirmed = await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Save,
-            string.Format(Constants.Messages.Confirmation, Constants.Operations.Save, Constants.Titles.CortexGraphSettings),
+            string.Format(Constants.Messages.Confirmation, Constants.Operations.Save, Constants.Titles.CortexGraphPersistenceSettings),
             Constants.Prompts.Yes, Constants.Prompts.No);
 
         if (!isConfirmed)
@@ -74,7 +74,7 @@ public partial class CortexGraphPersistenceSettingsViewModel : BaseViewModel
             await this.avatarSettingsApplicationService.SaveAsync(avatarSettings);
 
             await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Success,
-              string.Format(Constants.Messages.Success, Constants.Operations.Saved, Constants.Titles.CortexGraphSettings),
+              string.Format(Constants.Messages.Success, Constants.Operations.Saved, Constants.Titles.CortexGraphPersistenceSettings),
               Constants.Prompts.Ok);
         }
         catch (Exception ex)
@@ -82,7 +82,7 @@ public partial class CortexGraphPersistenceSettingsViewModel : BaseViewModel
             Debug.WriteLine(ex);
             await Shell.Current.DisplayAlert(
                 Constants.Statuses.Error,
-                $"{string.Format(Constants.Messages.Error, Constants.Operations.Save, Constants.Titles.CortexGraphSettings)}: {ex.Message}",
+                $"{string.Format(Constants.Messages.Error, Constants.Operations.Save, Constants.Titles.CortexGraphPersistenceSettings)}: {ex.Message}",
                 Constants.Prompts.Ok);
         }
         finally
