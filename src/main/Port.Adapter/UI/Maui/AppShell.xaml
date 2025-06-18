@@ -92,6 +92,12 @@
                 ContentTemplate="{DataTemplate views:AvatarSettings.CortexDiaryNucleusSettingsPage}"
                 Route="CortexDiaryNucleusSettingsPage" />
         </Tab>
+        <Tab Title="Cortex Chat Nucleus">
+            <ShellContent
+                Title="Cortex Chat Nucleus Settings"
+                ContentTemplate="{DataTemplate views:AvatarSettings.CortexChatNucleusSettingsPage}"
+                Route="CortexChatNucleusSettingsPage" />
+        </Tab>
     </FlyoutItem>
 
     <Shell.FlyoutFooter>

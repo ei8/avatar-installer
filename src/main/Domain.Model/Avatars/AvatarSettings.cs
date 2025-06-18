@@ -10,5 +10,6 @@ public class AvatarSettings
     public IdentityAccessSettings IdentityAccess { get; set; } = new();
     public CortexLibrarySettings CortexLibrary { get; set; } = new();
     public CortexDiaryNucleusSettings CortexDiaryNucleus { get; set; } = new();
+    public CortexChatNucleusSettings CortexChatNucleus { get; set; } = new();
     public CortexGraphPersistenceSettings CortexGraphPersistence { get; set; } = new();
 }

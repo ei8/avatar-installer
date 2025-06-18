@@ -204,6 +204,16 @@ public class AvatarSettingsRepository : IAvatarSettingsRepository
                     break;
                 #endregion
 
+                #region Cortex Chat Nucleus Settings
+                case Constants.CortexChatNucleusSettingsEnv.PageSize:
+                    if (int.TryParse(value, out int pageSize))
+                        avatarSettings.CortexChatNucleus.PageSize = pageSize;
+                    break;
+                case Constants.CortexChatNucleusSettingsEnv.AppUserId:
+                    avatarSettings.CortexChatNucleus.AppUserId = value;
+                    break;
+                #endregion
+
                 #region Cortex Graph Persistence Settings
                 case Constants.CortexGraphPersistenceSettingsEnv.ArangoRootPassword:
                     avatarSettings.CortexGraphPersistence.ArangoRootPassword = value;
@@ -297,6 +307,11 @@ public class AvatarSettingsRepository : IAvatarSettingsRepository
         envVariables[Constants.CortexDiaryNucleusSettingsEnv.SubscriptionsSmtpSenderUsername] = avatarSettings.CortexDiaryNucleus.SubscriptionsSmtpSenderUsername;
         envVariables[Constants.CortexDiaryNucleusSettingsEnv.SubscriptionsSmtpSenderPassword] = avatarSettings.CortexDiaryNucleus.SubscriptionsSmtpSenderPassword;
         envVariables[Constants.CortexDiaryNucleusSettingsEnv.SubscriptionsCortexGraphOutBaseUrl] = avatarSettings.CortexDiaryNucleus.SubscriptionsCortexGraphOutBaseUrl;
+        #endregion
+
+        #region CortexChatNucleusSettings
+        envVariables[Constants.CortexChatNucleusSettingsEnv.PageSize] = avatarSettings.CortexChatNucleus.PageSize.ToString();
+        envVariables[Constants.CortexChatNucleusSettingsEnv.AppUserId] = avatarSettings.CortexChatNucleus.AppUserId;
         #endregion
 
         #region CortexGraphPersistenceSettings

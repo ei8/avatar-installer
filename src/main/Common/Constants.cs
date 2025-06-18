@@ -79,6 +79,12 @@
             public const string SubscriptionsCortexGraphOutBaseUrl = "SUBSCRIPTIONS_CORTEX_GRAPH_OUT_BASE_URL";
         }
 
+        public sealed class CortexChatNucleusSettingsEnv
+        {
+            public const string PageSize = "PAGE_SIZE";
+            public const string AppUserId = "APP_USER_ID";
+        }
+
         public sealed class CortexGraphPersistenceSettingsEnv
         {
             public const string ArangoRootPassword = "ARANGO_ROOT_PASSWORD";
@@ -137,6 +143,7 @@
             public const string IdentityAccessSettings = "Identity Access Settings";
             public const string CortexLibrarySettings = "Cortex Library Settings";
             public const string CortexDiaryNucleusSettings = "Cortex Diary Nucleus Settings";
+            public const string CortexChatNucleusSettings = "Cortex Chat Nucleus Settings";
         }
 
         public sealed class Statuses

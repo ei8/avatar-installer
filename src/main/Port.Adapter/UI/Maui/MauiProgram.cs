@@ -75,6 +75,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<IdentityAccessSettingsPage>();
         builder.Services.AddSingleton<CortexLibrarySettingsPage>();
         builder.Services.AddSingleton<CortexDiaryNucleusSettingsPage>();
+        builder.Services.AddSingleton<CortexChatNucleusSettingsPage>();
         #endregion
 
         #region ViewModels
@@ -97,6 +98,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<IdentityAccessSettingsViewModel>();
         builder.Services.AddSingleton<CortexLibrarySettingsViewModel>();
         builder.Services.AddSingleton<CortexDiaryNucleusSettingsViewModel>();
+        builder.Services.AddSingleton<CortexChatNucleusSettingsViewModel>();
         #endregion
 
         builder.Services

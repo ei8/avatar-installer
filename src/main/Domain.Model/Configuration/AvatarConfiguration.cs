@@ -53,17 +53,20 @@ namespace ei8.Avatar.Installer.Domain.Model.Configuration
         public CortexLibraryConfiguration CortexLibrary { get; set; }
         public Un8yConfiguration Un8y { get; set; }
         public NetworkConfiguration Network { get; set; }
+        public CortexChatNucleusConfiguration CortexChatNucleus { get; set; }
 
         [JsonConstructor]
-        public AvatarConfigurationItem(string name)
+        public AvatarConfigurationItem(string name, string ownerUserId)
         {
             this.Name = name;
+            this.OwnerUserId = ownerUserId;
             this.CortexGraphPersistence = new();
             this.CortexGraph = new(this.Name);
             this.AvatarApi = new(this.Name);
             this.CortexLibrary = new(this.Name);
             this.Un8y = new(this.Name);
             this.Network = new();
+            this.CortexChatNucleus = new(this.OwnerUserId);
         }
     }
 
@@ -181,6 +184,21 @@ namespace ei8.Avatar.Installer.Domain.Model.Configuration
             Un8yBlazorPort = 64103;
             NeurULServer = "fibona.cc";
         }
+    }
+
+    public class CortexChatNucleusConfiguration
+    {
+        public int PageSize { get; set; }
+        public string AppUserId { get; set; }
+
+        public CortexChatNucleusConfiguration(string appUserId)
+        {
+            this.PageSize =  10;
+            this.AppUserId = appUserId;
+        }
+
+        [JsonConstructor]
+        public CortexChatNucleusConfiguration() : this(string.Empty) { }
     }
 
     public class SshConfiguration

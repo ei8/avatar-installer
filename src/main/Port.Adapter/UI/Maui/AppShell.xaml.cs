@@ -27,6 +27,7 @@ public partial class AppShell : Shell
         Routing.RegisterRoute(nameof(IdentityAccessSettingsPage), typeof(IdentityAccessSettingsPage));
         Routing.RegisterRoute(nameof(CortexLibrarySettingsPage), typeof(CortexLibrarySettingsPage));
         Routing.RegisterRoute(nameof(CortexDiaryNucleusSettingsPage), typeof(CortexDiaryNucleusSettingsPage));
+        Routing.RegisterRoute(nameof(CortexChatNucleusSettingsPage), typeof(CortexChatNucleusSettingsPage));
 
         BindingContext = this;
     }

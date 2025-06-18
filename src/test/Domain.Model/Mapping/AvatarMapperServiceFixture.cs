@@ -30,14 +30,14 @@ namespace Domain.Model.Test.Mapping
             {
                 Avatars = new AvatarConfigurationItem[2]
                 {
-            new("sample")
+            new("sample", "me@me.com")
             {
                 CortexGraphPersistence = new()
                 {
                     ArangoRootPassword = "test",
                 }
             },
-            new("defaults")
+            new("defaults", "me@me.com")
                 }
             };
 
@@ -61,7 +61,7 @@ namespace Domain.Model.Test.Mapping
             {
                 Avatars = new AvatarConfigurationItem[2]
                 {
-                    new("sample")
+                    new("sample", "me@me.com")
                     {
                         CortexGraph = new()
                         {
@@ -70,7 +70,7 @@ namespace Domain.Model.Test.Mapping
                             DbUsername = "not-root"
                         }
                     },
-                    new("defaults")
+                    new("defaults", "me@me.com")
                 }
             };
 
@@ -98,7 +98,7 @@ namespace Domain.Model.Test.Mapping
             {
                 Avatars = new AvatarConfigurationItem[2]
                 {
-                    new("sample")
+                    new("sample", "me@me.com")
                     {
                         AvatarApi = new()
                         {
@@ -108,7 +108,7 @@ namespace Domain.Model.Test.Mapping
                         }
                     },
 
-                    new("defaults")
+                    new("defaults", "me@me.com")
                 }
             };
 
@@ -135,7 +135,7 @@ namespace Domain.Model.Test.Mapping
             {
                 Avatars = new AvatarConfigurationItem[2]
                 {
-                    new("sample")
+                    new("sample", "me@me.com")
                     {
                         CortexLibrary = new()
                         {
@@ -144,7 +144,7 @@ namespace Domain.Model.Test.Mapping
                         }
                     },
 
-                    new("defaults")
+                    new("defaults", "me@me.com")
                 }
             };
 
@@ -170,7 +170,7 @@ namespace Domain.Model.Test.Mapping
             {
                 Avatars = new AvatarConfigurationItem[2]
                 {
-                    new("sample")
+                    new("sample", "me@me.com")
                     {
                         Un8y = new()
                         {
@@ -181,7 +181,7 @@ namespace Domain.Model.Test.Mapping
                         }
                     },
 
-                    new("defaults")
+                    new("defaults", "me@me.com")
                 }
             };
 
@@ -211,7 +211,7 @@ namespace Domain.Model.Test.Mapping
             {
                 Avatars = new AvatarConfigurationItem[2]
                 {
-                    new("sample")
+                    new("sample", "me@me.com")
                     {
                         Network = new()
                         {
@@ -221,7 +221,7 @@ namespace Domain.Model.Test.Mapping
                         }
                     },
 
-                    new("defaults")
+                    new("defaults", "me@me.com")
                 }
             };
 
@@ -245,13 +245,47 @@ namespace Domain.Model.Test.Mapping
         }
 
         [Fact]
+        public void MapsCortexChatNucleusConfiguration()
+        {
+            var config = new AvatarConfiguration
+            {
+                Avatars = new AvatarConfigurationItem[2]
+                {
+                    new("sample", "me@me.com")
+                    {
+                        CortexChatNucleus  = new()
+                        {
+                            PageSize = 6,
+                            AppUserId = "jono"
+                        }
+                    },
+
+                    new("defaults", "me2@me2.com")
+                }
+            };
+
+            var sut = new AvatarMapperService(mapper);
+            var sampleTarget = new AvatarItem("id_sample5", "sample");
+            var sampleResult = sut.Apply(config.Avatars[0], sampleTarget);
+
+            Assert.Equal(6, sampleResult.Settings.CortexChatNucleus.PageSize);
+            Assert.Equal("jono", sampleResult.Settings.CortexChatNucleus.AppUserId);
+            
+            var defaultTarget = new AvatarItem("id_defaults5", "defaults");
+            var defaultResult = sut.Apply(config.Avatars[1], defaultTarget);
+
+            Assert.Equal(10, defaultResult.Settings.CortexChatNucleus.PageSize);
+            Assert.Equal("me2@me2.com", defaultResult.Settings.CortexChatNucleus.AppUserId);
+        }
+
+        [Fact]
         public void DoesNotOverwritePropertiesNotConfigured()
         {
             var config = new AvatarConfiguration
             {
                 Avatars = new AvatarConfigurationItem[1]
                 {
-                    new("sample")
+                    new("sample", "me@me.com")
                 }
             };
 
@@ -292,7 +326,7 @@ namespace Domain.Model.Test.Mapping
                         SubscriptionsDatabasePath = "/C/db/subscriptions.db",
                         SubscriptionsPollingIntervalSecs = 15,
                         SubscriptionsPushOwner = "mailto:example@example.com",
-                        SubscriptionsPushPublicKey = "BLrW80tp5imbJlxAY5WJnmtzaZvTCJoM8ywZEI6E65VTHcqtB69tnqUsRkYC6U-1WfSj0bFovZF6DZaA9Bgo0Ts",
+                        SubscriptionsPushPublicKey = "aLrW80tp5imbJlxAY5WJnmtzaZvTCJoM8ywZEI6E65VTHcqtB69tnqUsRkYC6U-1WfSj0bFovZF6DZaA9Bgo0Ts",
                         SubscriptionsPushPrivateKey = "JlI0-oL2NQ8HyAAZF3pGxWtbjRsYQxTB9tg6Fe7_1x8",
                         SubscriptionsSmtpServerAddress = "smtp.gmail.com",
                         SubscriptionsSmtpPort = 587,
@@ -302,6 +336,11 @@ namespace Domain.Model.Test.Mapping
                         SubscriptionsSmtpSenderUsername = "support@ei8.works",
                         SubscriptionsSmtpSenderPassword = string.Empty,
                         SubscriptionsCortexGraphOutBaseUrl = "http://cortex.graph.out.api:80"
+                    },
+                    CortexChatNucleus = new CortexChatNucleusSettings()
+                    {
+                        PageSize = 8,
+                        AppUserId = "me2@me2.com"
                     }
                 }
             };
@@ -312,7 +351,7 @@ namespace Domain.Model.Test.Mapping
             Assert.Equal(1000, sampleResult.Settings.CortexGraph.PollInterval);
             Assert.Equal("Guest", sampleResult.Settings.AvatarApi.AnonymousUserId);
             Assert.Equal("/C/db/identity-access.db", sampleResult.Settings.IdentityAccess.UserDatabasePath);
-            Assert.Equal("BLrW80tp5imbJlxAY5WJnmtzaZvTCJoM8ywZEI6E65VTHcqtB69tnqUsRkYC6U-1WfSj0bFovZF6DZaA9Bgo0Ts", sampleResult.Settings.CortexDiaryNucleus.SubscriptionsPushPublicKey);
+            Assert.Equal("aLrW80tp5imbJlxAY5WJnmtzaZvTCJoM8ywZEI6E65VTHcqtB69tnqUsRkYC6U-1WfSj0bFovZF6DZaA9Bgo0Ts", sampleResult.Settings.CortexDiaryNucleus.SubscriptionsPushPublicKey);
         }
     }
 }

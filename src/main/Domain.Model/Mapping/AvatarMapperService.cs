@@ -40,6 +40,10 @@ namespace ei8.Avatar.Installer.Domain.Model.Mapping
                 .ForPath(
                     dest => dest.Settings.CortexLibrary,
                     opt => opt.MapFrom(src => src.CortexLibrary)
+                )
+                .ForPath(
+                    dest => dest.Settings.CortexChatNucleus,
+                    opt => opt.MapFrom(src => src.CortexChatNucleus)
                 );
 
             CreateMap<CortexGraphPersistenceConfiguration, CortexGraphPersistenceSettings>();
@@ -55,6 +59,8 @@ namespace ei8.Avatar.Installer.Domain.Model.Mapping
             CreateMap<NetworkConfiguration, AvatarNetworkSettings>()
                 .ForMember(dest => dest.AvatarIp, opt => opt.MapFrom(src => src.LocalIp))
                 .ForMember(dest => dest.Un8yIp, opt => opt.MapFrom(src => src.LocalIp));
+
+            CreateMap<CortexChatNucleusConfiguration, CortexChatNucleusSettings>();
         }
     }
 }

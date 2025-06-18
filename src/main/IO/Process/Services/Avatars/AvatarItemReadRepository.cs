@@ -44,6 +44,7 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
                         avatarItem.Settings.IdentityAccess = DeserializeEnvironmentVariables<IdentityAccessSettings>(variables);
                         avatarItem.Settings.CortexLibrary = DeserializeEnvironmentVariables<CortexLibrarySettings>(variables);
                         avatarItem.Settings.CortexDiaryNucleus = DeserializeEnvironmentVariables<CortexDiaryNucleusSettings>(variables);
+                        avatarItem.Settings.CortexChatNucleus = DeserializeEnvironmentVariables<CortexChatNucleusSettings>(variables);
                         break;
 
                     case Common.Constants.Filenames.Env:

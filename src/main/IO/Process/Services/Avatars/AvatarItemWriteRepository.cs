@@ -69,6 +69,7 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
             variablesLines.AddRange(SerializeEnvironmentVariables(avatarItem.Settings.IdentityAccess));
             variablesLines.AddRange(SerializeEnvironmentVariables(avatarItem.Settings.CortexLibrary));
             variablesLines.AddRange(SerializeEnvironmentVariables(avatarItem.Settings.CortexDiaryNucleus));
+            variablesLines.AddRange(SerializeEnvironmentVariables(avatarItem.Settings.CortexChatNucleus));
             variablesLines.AddRange(SerializeEnvironmentVariables(avatarItem.Settings.CortexGraphPersistence));
             await File.WriteAllLinesAsync(Path.Combine(avatarItem.Id, Common.Constants.Filenames.VariablesEnv), variablesLines);
 

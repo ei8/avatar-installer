@@ -107,6 +107,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Views\AvatarSettings\CortexChatNucleusSettingsPage.xaml.cs">
+	    <DependentUpon>CortexChatNucleusSettingsPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\AvatarSettings\CortexGraphPersistenceSettingsPage.xaml.cs">
 	    <DependentUpon>CortexGraphPersistenceSettingsPage.xaml</DependentUpon>
 	  </Compile>
@@ -117,6 +120,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\AvatarSettings\AvatarApiSettingsPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\AvatarSettings\CortexChatNucleusSettingsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\AvatarSettings\CortexDiaryNucleusSettingsPage.xaml">
