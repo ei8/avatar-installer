@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using ei8.Avatar.Installer.Domain.Model.Avatars.Settings;
+using System.Text.Json.Serialization;
 
 namespace ei8.Avatar.Installer.Domain.Model.Configuration
 {
@@ -10,13 +11,23 @@ namespace ei8.Avatar.Installer.Domain.Model.Configuration
         public AvatarConfigurationItem[] Avatars { get; set; }
         public string Destination { get; set; }
         public string TemplateUrl { get; set; }
-        public AvatarServerConfiguration Network { get; set; } = new();
+        public AvatarServerConfiguration Network { get; set; }
+
+        public AvatarConfiguration(string avatarName)
+        {
+            this.Network = new(avatarName);
+        }
+
+        [JsonConstructor]
+        public AvatarConfiguration() : this("sample")
+        {
+        }
     }
 
     public class AvatarServerConfiguration
     {
         public string LocalIp { get; set; }
-        public SshConfiguration Ssh { get; set; } = new();
+        public SshConfiguration Ssh { get; set; }
 
         /// <summary>
         /// Initialize with defaults
@@ -35,16 +46,40 @@ namespace ei8.Avatar.Installer.Domain.Model.Configuration
     {
         public string Name { get; set; }
         public string OwnerName { get; set; }
-        public CortexGraphConfiguration CortexGraph { get; set; } = new();
-        public AvatarApiConfiguration AvatarApi { get; set; } = new();
-        public CortexLibraryConfiguration CortexLibrary { get; set; } = new();
-        public d23Configuration D23 { get; set; } = new();
-        public NetworkConfiguration Network { get; set; } = new();
+        public string OwnerUserId { get; set; }
+        public CortexGraphPersistenceConfiguration CortexGraphPersistence { get; set; }
+        public CortexGraphConfiguration CortexGraph { get; set; }
+        public AvatarApiConfiguration AvatarApi { get; set; }
+        public CortexLibraryConfiguration CortexLibrary { get; set; }
+        public Un8yConfiguration Un8y { get; set; }
+        public NetworkConfiguration Network { get; set; }
+        public CortexChatNucleusConfiguration CortexChatNucleus { get; set; }
 
         [JsonConstructor]
-        public AvatarConfigurationItem(string name)
+        public AvatarConfigurationItem(string name, string ownerUserId)
         {
-            Name = name;
+            this.Name = name;
+            this.OwnerUserId = ownerUserId;
+            this.CortexGraphPersistence = new();
+            this.CortexGraph = new(this.Name);
+            this.AvatarApi = new(this.Name);
+            this.CortexLibrary = new(this.Name);
+            this.Un8y = new(this.Name);
+            this.Network = new();
+            this.CortexChatNucleus = new(this.OwnerUserId);
+        }
+    }
+
+    public class CortexGraphPersistenceConfiguration
+    {
+        public string ArangoRootPassword { get; set; }
+
+        /// <summary>
+        /// Initialize with defaults
+        /// </summary>
+        public CortexGraphPersistenceConfiguration()
+        {
+            this.ArangoRootPassword = string.Empty;
         }
     }
 
@@ -53,23 +88,27 @@ namespace ei8.Avatar.Installer.Domain.Model.Configuration
         public string DbName { get; set; }
         public string DbUsername { get; set; }
         public string DbUrl { get; set; }
-        public string ArangoRootPassword { get; set; }
 
         /// <summary>
         /// Initialize with defaults
         /// </summary>
-        public CortexGraphConfiguration()
+        public CortexGraphConfiguration(string avatarName)
         {
-            DbName = "graph";
+            DbName = $"graph_{avatarName}";
             DbUsername = "root";
             DbUrl = "http://cortex.graph.persistence:8529";
-            ArangoRootPassword = string.Empty;
+        }
+
+        [JsonConstructor]
+        public CortexGraphConfiguration() : this("sample")
+        {
         }
     }
 
     public class AvatarApiConfiguration
     {
-        public string TokenIssuerUrl { get; set; }
+        public string AnonymousUserId { get; set; }
+        public string TokenIssuerAddress { get; set; }
         public string ApiName { get; set; }
 
         /// <summary>
@@ -77,7 +116,8 @@ namespace ei8.Avatar.Installer.Domain.Model.Configuration
         /// </summary>
         public AvatarApiConfiguration(string avatarName)
         {
-            TokenIssuerUrl = @"https://login.fibona.cc";
+            AnonymousUserId = "Guest";
+            TokenIssuerAddress = @"https://login.fibona.cc";
             ApiName = $"avatarapi-{avatarName}";
         }
 
@@ -103,31 +143,33 @@ namespace ei8.Avatar.Installer.Domain.Model.Configuration
         public CortexLibraryConfiguration() : this("sample") { }
     }
 
-    public class d23Configuration
+    public class Un8yConfiguration
     {
         public string OidcAuthorityUrl { get; set; }
         public string ClientId { get; set; }
+        public string RequestedScopes { get; set; }
         public string BasePath { get; set; }
 
         /// <summary>
         /// Initialize with defaults
         /// </summary>
-        public d23Configuration(string avatarName)
+        public Un8yConfiguration(string avatarName)
         {
             OidcAuthorityUrl = @"https://login.fibona.cc";
-            ClientId = $"d23-{avatarName}";
-            BasePath = $"/{avatarName}/d23";
+            ClientId = $"un8y-{avatarName}";
+            RequestedScopes = $"openid,profile,email,avatarapi-{avatarName},offline_access";
+            BasePath = $"/{avatarName}/un8y";
         }
 
         [JsonConstructor]
-        public d23Configuration() : this("sample") { }
+        public Un8yConfiguration() : this("sample") { }
     }
 
     public class NetworkConfiguration
     {
         public string LocalIp { get; set; }
         public int AvatarInPort { get; set; }
-        public int d23BlazorPort { get; set; }
+        public int Un8yBlazorPort { get; set; }
         public string NeurULServer { get; set; }
 
         /// <summary>
@@ -139,9 +181,24 @@ namespace ei8.Avatar.Installer.Domain.Model.Configuration
         {
             LocalIp = "192.168.1.110";
             AvatarInPort = 64101;
-            d23BlazorPort = 64103;
+            Un8yBlazorPort = 64103;
             NeurULServer = "fibona.cc";
         }
+    }
+
+    public class CortexChatNucleusConfiguration
+    {
+        public int PageSize { get; set; }
+        public string AppUserId { get; set; }
+
+        public CortexChatNucleusConfiguration(string appUserId)
+        {
+            this.PageSize =  10;
+            this.AppUserId = appUserId;
+        }
+
+        [JsonConstructor]
+        public CortexChatNucleusConfiguration() : this(string.Empty) { }
     }
 
     public class SshConfiguration

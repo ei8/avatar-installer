@@ -22,10 +22,12 @@ public partial class AppShell : Shell
 
         Routing.RegisterRoute(nameof(EventSourcingSettingsPage), typeof(EventSourcingSettingsPage));
         Routing.RegisterRoute(nameof(CortexGraphSettingsPage), typeof(CortexGraphSettingsPage));
+        Routing.RegisterRoute(nameof(CortexGraphPersistenceSettingsPage), typeof(CortexGraphPersistenceSettingsPage));
         Routing.RegisterRoute(nameof(AvatarApiSettingsPage), typeof(AvatarApiSettingsPage));
         Routing.RegisterRoute(nameof(IdentityAccessSettingsPage), typeof(IdentityAccessSettingsPage));
         Routing.RegisterRoute(nameof(CortexLibrarySettingsPage), typeof(CortexLibrarySettingsPage));
         Routing.RegisterRoute(nameof(CortexDiaryNucleusSettingsPage), typeof(CortexDiaryNucleusSettingsPage));
+        Routing.RegisterRoute(nameof(CortexChatNucleusSettingsPage), typeof(CortexChatNucleusSettingsPage));
 
         BindingContext = this;
     }

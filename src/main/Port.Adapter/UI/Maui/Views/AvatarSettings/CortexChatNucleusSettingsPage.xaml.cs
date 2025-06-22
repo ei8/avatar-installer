@@ -2,11 +2,11 @@ using ei8.Avatar.Installer.Port.Adapter.UI.Maui.ViewModels.AvatarSettings;
 
 namespace ei8.Avatar.Installer.Port.Adapter.UI.Maui.Views.AvatarSettings;
 
-public partial class CortexDiaryNucleusSettingsPage : ContentPage
+public partial class CortexChatNucleusSettingsPage : ContentPage
 {
-    private readonly CortexDiaryNucleusSettingsViewModel viewModel;
+    private readonly CortexChatNucleusSettingsViewModel viewModel;
 
-    public CortexDiaryNucleusSettingsPage(CortexDiaryNucleusSettingsViewModel viewModel)
+    public CortexChatNucleusSettingsPage(CortexChatNucleusSettingsViewModel viewModel)
     {
         InitializeComponent();
 

@@ -26,7 +26,7 @@ public class RegionPermitRepository : IRegionPermitRepository
     public async Task<RegionPermit> GetByIdAsync(int sequenceId)
     {
         var id = avatarContextService.Avatar.Id;
-        var connectionString = $@"Data Source=file:{Path.Combine(id, Constants.Databases.IdentityAccessDb)}";
+        var connectionString = $@"Data Source=file:{Path.Combine(id, Constants.Databases.Iden8yDb)}";
 
         using var connection = new SqliteConnection(connectionString);
         await connection.OpenAsync();
@@ -55,7 +55,7 @@ public class RegionPermitRepository : IRegionPermitRepository
     public async Task<IEnumerable<RegionPermit>> GetAllAsync()
     {
         var id = avatarContextService.Avatar.Id;
-        var connectionString = $@"Data Source=file:{Path.Combine(id, Constants.Databases.IdentityAccessDb)}";
+        var connectionString = $@"Data Source=file:{Path.Combine(id, Constants.Databases.Iden8yDb)}";
         var regionPermits = new List<RegionPermit>();
 
         using var connection = new SqliteConnection(connectionString);
@@ -86,7 +86,7 @@ public class RegionPermitRepository : IRegionPermitRepository
         AssertionConcern.AssertArgumentNotNull(regionPermit, nameof(regionPermit));
 
         var id = avatarContextService.Avatar.Id;
-        var connectionString = $@"Data Source=file:{Path.Combine(id, Constants.Databases.IdentityAccessDb)}";
+        var connectionString = $@"Data Source=file:{Path.Combine(id, Constants.Databases.Iden8yDb)}";
 
         using var connection = new SqliteConnection(connectionString);
         await connection.OpenAsync();
@@ -104,7 +104,7 @@ public class RegionPermitRepository : IRegionPermitRepository
         AssertionConcern.AssertArgumentNotNull(regionPermit, nameof(regionPermit));
 
         var id = avatarContextService.Avatar.Id;
-        var connectionString = $@"Data Source=file:{Path.Combine(id, Constants.Databases.IdentityAccessDb)}";
+        var connectionString = $@"Data Source=file:{Path.Combine(id, Constants.Databases.Iden8yDb)}";
 
         using var connection = new SqliteConnection(connectionString);
         await connection.OpenAsync();

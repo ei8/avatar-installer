@@ -12,6 +12,9 @@
             public const string LoopStartEi8SiteBat = "loop start - ei8.site.bat";
             public const string AutoLockCmd = "autolock.cmd";
             public const string VariablesEnv = "variables.env";
+            public const string Env = ".env";
+
+            public const string SettingsJson = "settings.json";
         }
 
         public sealed class EventSourcingSettingsEnv
@@ -32,7 +35,8 @@
             public const string DefaultTerminalActiveValues = "DEFAULT_TERMINAL_ACTIVE_VALUES";
             public const string DefaultPageSize = "DEFAULT_PAGE_SIZE";
             public const string DefaultPage = "DEFAULT_PAGE";
-            public const string ArangoRootPassword = "ARANGO_ROOT_PASSWORD";
+            public const string DefaultDepth = "DEFAULT_DEPTH";
+            public const string DefaultDirectionValues = "DEFAULT_DIRECTION_VALUES";
         }
 
         public sealed class AvatarApiSettingsEnv
@@ -41,7 +45,7 @@
             public const string RequireAuthentication = "REQUIRE_AUTHENTICATION";
             public const string AnonymousUserId = "ANONYMOUS_USER_ID";
             public const string ProxyUserId = "PROXY_USER_ID";
-            public const string TokenIssuerUrl = "TOKEN_ISSUER_URL";
+            public const string TokenIssuerAddress = "TOKEN_ISSUER_ADDRESS";
             public const string ApiName = "API_NAME";
             public const string ApiSecret = "API_SECRET";
             public const string ValidateServerCertificate = "VALIDATE_SERVER_CERTIFICATE";
@@ -75,34 +79,47 @@
             public const string SubscriptionsCortexGraphOutBaseUrl = "SUBSCRIPTIONS_CORTEX_GRAPH_OUT_BASE_URL";
         }
 
-        public sealed class d23SettingsEnv
+        public sealed class CortexChatNucleusSettingsEnv
+        {
+            public const string PageSize = "PAGE_SIZE";
+            public const string AppUserId = "APP_USER_ID";
+        }
+
+        public sealed class CortexGraphPersistenceSettingsEnv
+        {
+            public const string ArangoRootPassword = "ARANGO_ROOT_PASSWORD";
+        }
+
+        public sealed class Un8ySettingsEnv
         {
             public const string OidcAuthority = "OIDC_AUTHORITY";
             public const string ClientId = "CLIENT_ID";
             public const string ClientSecret = "CLIENT_SECRET";
+            public const string RequestedScopes = "REQUESTED_SCOPES";
             public const string UpdateCheckInterval = "UPDATE_CHECK_INTERVAL";
             public const string DatabasePath = "DATABASE_PATH";
             public const string BasePath = "BASE_PATH";
             public const string PluginsPath = "PLUGINS_PATH";
+            public const string MirrorConfigFiles = "MIRROR_CONFIG_FILES";
             public const string ValidateServerCertificate = "VALIDATE_SERVER_CERTIFICATE";
             public const string AppTitle = "APP_TITLE";
             public const string AppIcon = "APP_ICON";
         }
 
-        public sealed class AvatarNetworkSettingsEnv
+        public sealed class Directories
         {
-            public const string AvatarIp = "AVATAR_IP";
-            public const string D23Ip = "D23_IP";
-            public const string AvatarInPort = "AVATAR_IN_PORT";
-            public const string D23BlazorPort = "D23_BLAZOR_PORT";
+            public const string Un8y = "un8y";
+            public const string Av8r = "av8r";
+            public const string Iden8y = "iden8y";
         }
 
         public sealed class Databases
         {
-            public const string AvatarDb = "avatar.db";
-            public const string d23Db = "d23.db";
+            public static readonly string AvatarDb = Path.Combine(Directories.Av8r, Databases.DefaultDb);
+            public static readonly string Un8yDb = Path.Combine(Directories.Un8y, Databases.DefaultDb);
+            public const string DefaultDb = ".db";
             public const string EventsDb = "events.db";
-            public const string IdentityAccessDb = "identity-access.db";
+            public static readonly string Iden8yDb = Path.Combine(Directories.Iden8y, Databases.DefaultDb);
             public const string SubscriptionsDb = "subscriptions.db";
         }
 
@@ -121,10 +138,12 @@
             public const string User = "User";
             public const string EventSourcingSettings = "Event Sourcing Settings";
             public const string CortexGraphSettings = "Cortex Graph Settings";
+            public const string CortexGraphPersistenceSettings = "Cortex Graph Persistence Settings";
             public const string AvatarApiSettings = "Avatar Api Settings";
             public const string IdentityAccessSettings = "Identity Access Settings";
             public const string CortexLibrarySettings = "Cortex Library Settings";
             public const string CortexDiaryNucleusSettings = "Cortex Diary Nucleus Settings";
+            public const string CortexChatNucleusSettings = "Cortex Chat Nucleus Settings";
         }
 
         public sealed class Statuses

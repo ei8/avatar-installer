@@ -11,7 +11,7 @@
             },
 
             "avatar_api": {
-                "token_issuer_url": "https://www.example.com/token",
+                "token_issuer_address": "https://www.example.com/token",
                 "api_name": "avatarapi-junvic"
             },
 
@@ -20,16 +20,16 @@
                 "terminals_url": "http://fibona.cc/junvic/cortex/terminals"
             },
 
-            "d23": {
+            "un8y": {
                 "oidc_authority_url": "https://www.example.com/oidc",
-                "client_id": "d23-junvic",
-                "base_path": "/junvic/d23"
+                "client_id": "un8y-junvic",
+                "base_path": "/junvic/un8y"
             },
 
             "network": {
                 "local_ip": "192.168.1.110",
                 "avatar_in_port": 64101,
-                "d23_blazor_port": 64103,
+                "un8y_blazor_port": 64103,
                 "neurul_server": "neurul.net"
             }
         }

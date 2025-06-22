@@ -12,15 +12,15 @@ namespace ei8.Avatar.Installer.Port.Adapter.UI.Maui.ViewModels;
 public partial class HomeViewModel : BaseViewModel
 {
     private readonly IAvatarContextService avatarContextService;
-    private readonly IAvatarRepository avatarRepository;
+    private readonly IAvatarItemReadRepository avatarItemReadRepository;
 
-    public HomeViewModel(IAvatarRepository avatarRepository, IAvatarContextService avatarContextService)
+    public HomeViewModel(IAvatarItemReadRepository avatarItemReadRepository, IAvatarContextService avatarContextService)
     {
-        AssertionConcern.AssertArgumentNotNull(avatarRepository, nameof(avatarRepository));
+        AssertionConcern.AssertArgumentNotNull(avatarItemReadRepository, nameof(avatarItemReadRepository));
         AssertionConcern.AssertArgumentNotNull(avatarContextService, nameof(avatarContextService));
 
         this.avatarContextService = avatarContextService;
-        this.avatarRepository = avatarRepository;
+        this.avatarItemReadRepository = avatarItemReadRepository;
     }
 
     [RelayCommand]
@@ -48,8 +48,13 @@ public partial class HomeViewModel : BaseViewModel
                 return;
             }
 
-            string[] requiredFiles = [Constants.Databases.AvatarDb, Constants.Databases.d23Db, Constants.Databases.EventsDb,
-                Constants.Databases.IdentityAccessDb, Constants.Databases.SubscriptionsDb];
+            string[] requiredFiles = [
+                Constants.Databases.AvatarDb, 
+                Constants.Databases.Un8yDb,
+                Constants.Databases.EventsDb,
+                Constants.Databases.Iden8yDb, 
+                Constants.Databases.SubscriptionsDb
+            ];
 
             foreach (var file in requiredFiles)
             {
@@ -62,7 +67,7 @@ public partial class HomeViewModel : BaseViewModel
                 }
             }
 
-            this.avatarContextService.Avatar = await this.avatarRepository.GetByAsync(workingDirectory.Folder.Path);
+            this.avatarContextService.Avatar = await this.avatarItemReadRepository.GetByAsync(workingDirectory.Folder.Path);
             await Shell.Current.GoToAsync($"//IdentityAccessPage");
         }
         catch (Exception ex)

@@ -7,35 +7,33 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Avatars\avatar.sql" />
-    <None Remove="Avatars\d23.sql" />
-    <None Remove="Avatars\events.sql" />
-    <None Remove="Avatars\identity-access.sql" />
-    <None Remove="Avatars\subscriptions.sql" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Avatars\avatar.sql">
+    <Content Include="Avatars\02_av8r_.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Avatars\d23.sql">
+    <Content Include="Avatars\03_un8y_.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Avatars\events.sql">
+    <Content Include="Avatars\00_events.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Avatars\identity-access.sql">
+    <Content Include="Avatars\01_iden8y_.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Avatars\subscriptions.sql">
+    <Content Include="Avatars\04_subscriptions.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="ei8.Cortex.Coding" Version="0.0.8" />
+    <PackageReference Include="ei8.Cortex.Coding.d23.neurULization.Persistence" Version="0.1.3" />
+    <PackageReference Include="ei8.Cortex.Coding.Persistence" Version="0.1.7" />
+    <PackageReference Include="ei8.EventSourcing.Client" Version="0.3.7" />
+    <PackageReference Include="ei8.Extensions.DependencyInjection" Version="0.0.8" />
+    <PackageReference Include="ei8.Extensions.DependencyInjection.Coding.d23.neurULization" Version="0.0.2" />
     <PackageReference Include="LibGit2Sharp" Version="0.27.2" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="7.0.12" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
 	<PackageReference Include="Tomlyn" Version="0.16.2" />
   </ItemGroup>
 

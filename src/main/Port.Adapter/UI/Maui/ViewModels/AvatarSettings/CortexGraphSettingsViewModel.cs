@@ -3,12 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using ei8.Avatar.Installer.Application.Avatar;
 using ei8.Avatar.Installer.Common;
 using neurUL.Common.Domain.Model;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ei8.Avatar.Installer.Port.Adapter.UI.Maui.ViewModels.AvatarSettings;
 
@@ -54,7 +49,10 @@ public partial class CortexGraphSettingsViewModel : BaseViewModel
     public int defaultPage;
 
     [ObservableProperty]
-    public string arangoRootPassword;
+    public int defaultDepth;
+
+    [ObservableProperty]
+    public int defaultDirectionValues;
 
     [RelayCommand]
     private async Task GetAsync()
@@ -79,7 +77,8 @@ public partial class CortexGraphSettingsViewModel : BaseViewModel
             this.DefaultTerminalActiveValues = cortexGraphSettings.DefaultTerminalActiveValues;
             this.DefaultPageSize = cortexGraphSettings.DefaultPageSize;
             this.DefaultPage = cortexGraphSettings.DefaultPage;
-            this.ArangoRootPassword = cortexGraphSettings.ArangoRootPassword;
+            this.DefaultDepth = cortexGraphSettings.DefaultDepth;
+            this.DefaultDirectionValues = cortexGraphSettings.DefaultDirectionValues;
         }
         catch (Exception ex)
         {
@@ -124,7 +123,8 @@ public partial class CortexGraphSettingsViewModel : BaseViewModel
             avatarSettings.CortexGraph.DefaultTerminalActiveValues = this.DefaultTerminalActiveValues;
             avatarSettings.CortexGraph.DefaultPageSize = this.DefaultPageSize;
             avatarSettings.CortexGraph.DefaultPage = this.DefaultPage;
-            avatarSettings.CortexGraph.ArangoRootPassword = this.ArangoRootPassword;
+            avatarSettings.CortexGraph.DefaultDepth = this.DefaultDepth;
+            avatarSettings.CortexGraph.DefaultDirectionValues = this.DefaultDirectionValues;
 
             await this.avatarSettingsApplicationService.SaveAsync(avatarSettings);
 

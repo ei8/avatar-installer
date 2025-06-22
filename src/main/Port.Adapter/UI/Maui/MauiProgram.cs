@@ -17,6 +17,7 @@ using ei8.Avatar.Installer.Port.Adapter.UI.Maui.Views;
 using ei8.Avatar.Installer.Port.Adapter.UI.Maui.Views.AvatarSettings;
 using MetroLog.MicrosoftExtensions;
 using Microsoft.Extensions.Logging;
+using System.Reflection;
 
 namespace ei8.Avatar.Installer.Port.Adapter.UI.Maui;
 
@@ -46,12 +47,12 @@ public static class MauiProgram
 #endif
 
         builder.Logging.AddInMemoryLogger(
-                options =>
-                {
-                    options.MaxLines = 1024;
-                    options.MinLevel = LogLevel.Debug;
-                    options.MaxLevel = LogLevel.Critical;
-                });
+            options =>
+            {
+                options.MaxLines = 1024;
+                options.MinLevel = LogLevel.Debug;
+                options.MaxLevel = LogLevel.Critical;
+            });
 
         #region Pages
         builder.Services.AddSingleton<HomePage>();
@@ -69,10 +70,12 @@ public static class MauiProgram
         builder.Services.AddSingleton<AvatarApiSettingsPage>();
         builder.Services.AddSingleton<EventSourcingSettingsPage>();
         builder.Services.AddSingleton<CortexGraphSettingsPage>();
+        builder.Services.AddSingleton<CortexGraphPersistenceSettingsPage>();
         builder.Services.AddSingleton<AvatarApiSettingsPage>();
         builder.Services.AddSingleton<IdentityAccessSettingsPage>();
         builder.Services.AddSingleton<CortexLibrarySettingsPage>();
         builder.Services.AddSingleton<CortexDiaryNucleusSettingsPage>();
+        builder.Services.AddSingleton<CortexChatNucleusSettingsPage>();
         #endregion
 
         #region ViewModels
@@ -90,16 +93,19 @@ public static class MauiProgram
 
         builder.Services.AddSingleton<EventSourcingSettingsViewModel>();
         builder.Services.AddSingleton<CortexGraphSettingsViewModel>();
+        builder.Services.AddSingleton<CortexGraphPersistenceSettingsViewModel>();
         builder.Services.AddSingleton<AvatarApiSettingsViewModel>();
         builder.Services.AddSingleton<IdentityAccessSettingsViewModel>();
         builder.Services.AddSingleton<CortexLibrarySettingsViewModel>();
         builder.Services.AddSingleton<CortexDiaryNucleusSettingsViewModel>();
+        builder.Services.AddSingleton<CortexChatNucleusSettingsViewModel>();
         #endregion
 
         builder.Services
                 .AddScoped<ITemplateService, GithubTemplateService>()
                 .AddScoped<IConfigurationRepository, JsonConfigurationRepository>()
-                .AddScoped<IAvatarRepository, AvatarRepository>()
+                .AddScoped<IAvatarItemWriteRepository, AvatarItemWriteRepository>()
+                .AddScoped<IAvatarItemReadRepository, AvatarItemReadRepository>()
                 .AddScoped<IAvatarMapperService, AvatarMapperService>()
                 .AddScoped<IAvatarServerRepository, AvatarServerRepository>()
                 .AddScoped<IAvatarServerMapperService, AvatarServerMapperService>()

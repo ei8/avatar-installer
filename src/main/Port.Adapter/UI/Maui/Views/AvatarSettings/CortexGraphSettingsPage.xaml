@@ -40,8 +40,11 @@
                     <Label Margin="5" Text="Default Page:" />
                     <Entry Margin="0,0,0,10" Text="{Binding DefaultPage}" />
 
-                    <Label Margin="5" Text="Arango Root Password:" />
-                    <Entry Margin="0,0,0,10" Text="{Binding ArangoRootPassword}" />
+                    <Label Margin="5" Text="Default Depth:" />
+                    <Entry Margin="0,0,0,10" Text="{Binding DefaultDepth}" />
+
+                    <Label Margin="5" Text="Default Direction Values:" />
+                    <Entry Margin="0,0,0,10" Text="{Binding DefaultDirectionValues}" />
                 </StackLayout>
             </ScrollView>
         </Grid>

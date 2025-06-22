@@ -12,7 +12,8 @@ namespace ei8.Avatar.Installer.Application.Avatar
         private readonly IConfigurationRepository configurationRepository;
         private readonly IProgressService progressService;
         private readonly ILogger<AvatarApplicationService> logger;
-        private readonly IAvatarRepository avatarRepository;
+        private readonly IAvatarItemReadRepository avatarItemReadRepository;
+        private readonly IAvatarItemWriteRepository avatarItemWriteRepository;
         private readonly IAvatarMapperService avatarMapperService;
         private readonly ITemplateService templateService;
         private readonly IAvatarServerRepository avatarServerRepository;
@@ -22,7 +23,8 @@ namespace ei8.Avatar.Installer.Application.Avatar
             IConfigurationRepository configurationRepository,
             IProgressService progressService,
             ILogger<AvatarApplicationService> logger,
-            IAvatarRepository avatarRepository,
+            IAvatarItemReadRepository avatarItemReadRepository,
+            IAvatarItemWriteRepository avatarItemWriteRepository,
             IAvatarMapperService avatarMapperService,
             ITemplateService templateService,
             IAvatarServerRepository avatarServerRepository,
@@ -32,7 +34,8 @@ namespace ei8.Avatar.Installer.Application.Avatar
             this.configurationRepository = configurationRepository;
             this.progressService = progressService;
             this.logger = logger;
-            this.avatarRepository = avatarRepository;
+            this.avatarItemReadRepository = avatarItemReadRepository;
+            this.avatarItemWriteRepository = avatarItemWriteRepository;
             this.avatarMapperService = avatarMapperService;
             this.templateService = templateService;
             this.avatarServerRepository = avatarServerRepository;
@@ -64,11 +67,11 @@ namespace ei8.Avatar.Installer.Application.Avatar
                 else
                     templateService.DownloadTemplate(subdirectory, templateUrl);
 
-                var avatar = await avatarRepository.GetByAsync(subdirectory);
+                var avatar = await this.avatarItemReadRepository.GetByAsync(subdirectory);
 
                 var mappedAvatar = avatarMapperService.Apply(item, avatar);
 
-                await avatarRepository.SaveAsync(mappedAvatar);
+                await this.avatarItemWriteRepository.SaveAsync(mappedAvatar);
             }
 
             this.progressService.Update(0.5, "Mapping Avatar...");

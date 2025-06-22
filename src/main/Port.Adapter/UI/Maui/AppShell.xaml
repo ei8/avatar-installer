@@ -62,6 +62,12 @@
                 ContentTemplate="{DataTemplate views:AvatarSettings.CortexGraphSettingsPage}"
                 Route="CortexGraphSettingsPage" />
         </Tab>
+        <Tab Title="Cortex Graph Persistence">
+            <ShellContent
+                Title="Cortex Graph Persistence Settings"
+                ContentTemplate="{DataTemplate views:AvatarSettings.CortexGraphPersistenceSettingsPage}"
+                Route="CortexGraphPersistenceSettingsPage" />
+        </Tab>
         <Tab Title="Avatar Api">
             <ShellContent
                 Title="Avatar Api Settings"
@@ -85,6 +91,12 @@
                 Title="Cortex Diary Nucleus Settings"
                 ContentTemplate="{DataTemplate views:AvatarSettings.CortexDiaryNucleusSettingsPage}"
                 Route="CortexDiaryNucleusSettingsPage" />
+        </Tab>
+        <Tab Title="Cortex Chat Nucleus">
+            <ShellContent
+                Title="Cortex Chat Nucleus Settings"
+                ContentTemplate="{DataTemplate views:AvatarSettings.CortexChatNucleusSettingsPage}"
+                Route="CortexChatNucleusSettingsPage" />
         </Tab>
     </FlyoutItem>
 

@@ -42,7 +42,7 @@ public partial class AvatarApiSettingsViewModel : BaseViewModel
     public string apiSecret;
 
     [ObservableProperty]
-    public string tokenIssuerUrl;
+    public string tokenIssuerAddress;
 
     [ObservableProperty]
     public bool validateServerCertificate;
@@ -64,7 +64,7 @@ public partial class AvatarApiSettingsViewModel : BaseViewModel
             this.RequireAuthentication = avatarApiSettings.RequireAuthentication;
             this.AnonymousUserId = avatarApiSettings.AnonymousUserId.ToString();
             this.ProxyUserId = avatarApiSettings.ProxyUserId.ToString();
-            this.TokenIssuerUrl = avatarApiSettings.TokenIssuerUrl;
+            this.TokenIssuerAddress = avatarApiSettings.TokenIssuerAddress;
             this.ApiName = avatarApiSettings.ApiName;
             this.ApiSecret = avatarApiSettings.ApiSecret;
             this.ValidateServerCertificate = avatarApiSettings.ValidateServerCertificate;
@@ -88,16 +88,6 @@ public partial class AvatarApiSettingsViewModel : BaseViewModel
     {
         if (this.IsBusy)
             return;
-
-        if (!Guid.TryParse(this.AnonymousUserId, out var parsedAnonymousUserId))
-        {
-            await Shell.Current.DisplayAlert(
-                Constants.Statuses.Error,
-                $"{string.Format(Constants.Messages.MustBe, nameof(this.AnonymousUserId), nameof(Guid))}",
-                Constants.Prompts.Ok);
-
-            return;
-        }
 
         if (!Guid.TryParse(this.ProxyUserId, out var parsedProxyUserId))
         {
@@ -124,9 +114,9 @@ public partial class AvatarApiSettingsViewModel : BaseViewModel
 
             avatarSettings.AvatarApi.ResourceDatabasePath = this.ResourceDatabasePath;
             avatarSettings.AvatarApi.RequireAuthentication = this.RequireAuthentication;
-            avatarSettings.AvatarApi.AnonymousUserId = parsedAnonymousUserId;
+            avatarSettings.AvatarApi.AnonymousUserId = this.AnonymousUserId;
             avatarSettings.AvatarApi.ProxyUserId = parsedProxyUserId;
-            avatarSettings.AvatarApi.TokenIssuerUrl = this.TokenIssuerUrl;
+            avatarSettings.AvatarApi.TokenIssuerAddress = this.TokenIssuerAddress;
             avatarSettings.AvatarApi.ApiName = this.ApiName;
             avatarSettings.AvatarApi.ApiSecret = this.ApiSecret;
             avatarSettings.AvatarApi.ValidateServerCertificate = this.ValidateServerCertificate;

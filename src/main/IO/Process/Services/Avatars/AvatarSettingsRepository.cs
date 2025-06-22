@@ -98,8 +98,13 @@ public class AvatarSettingsRepository : IAvatarSettingsRepository
                     if (int.TryParse(value, out defaultPage))
                         avatarSettings.CortexGraph.DefaultPage = defaultPage;
                     break;
-                case Constants.CortexGraphSettingsEnv.ArangoRootPassword:
-                    avatarSettings.CortexGraph.ArangoRootPassword = value;
+                case Constants.CortexGraphSettingsEnv.DefaultDepth:
+                    if (int.TryParse(value, out int defaultDepth))
+                        avatarSettings.CortexGraph.DefaultDepth = defaultDepth;
+                    break;
+                case Constants.CortexGraphSettingsEnv.DefaultDirectionValues:
+                    if (int.TryParse(value, out int defaultDirectionValues))
+                        avatarSettings.CortexGraph.DefaultDirectionValues = defaultDirectionValues;
                     break;
                 #endregion
 
@@ -113,17 +118,15 @@ public class AvatarSettingsRepository : IAvatarSettingsRepository
                         avatarSettings.AvatarApi.RequireAuthentication = requireAuthentication;
                     break;
                 case Constants.AvatarApiSettingsEnv.AnonymousUserId:
-                    Guid anonymousUserId;
-                    if (Guid.TryParse(value, out anonymousUserId))
-                        avatarSettings.AvatarApi.AnonymousUserId = anonymousUserId;
+                    avatarSettings.AvatarApi.AnonymousUserId = value;
                     break;
                 case Constants.AvatarApiSettingsEnv.ProxyUserId:
                     Guid proxyUserId;
                     if (Guid.TryParse(value, out proxyUserId))
                         avatarSettings.AvatarApi.ProxyUserId = proxyUserId;
                     break;
-                case Constants.AvatarApiSettingsEnv.TokenIssuerUrl:
-                    avatarSettings.AvatarApi.TokenIssuerUrl = value;
+                case Constants.AvatarApiSettingsEnv.TokenIssuerAddress:
+                    avatarSettings.AvatarApi.TokenIssuerAddress = value;
                     break;
                 case Constants.AvatarApiSettingsEnv.ApiName:
                     avatarSettings.AvatarApi.ApiName = value;
@@ -201,6 +204,22 @@ public class AvatarSettingsRepository : IAvatarSettingsRepository
                     break;
                 #endregion
 
+                #region Cortex Chat Nucleus Settings
+                case Constants.CortexChatNucleusSettingsEnv.PageSize:
+                    if (int.TryParse(value, out int pageSize))
+                        avatarSettings.CortexChatNucleus.PageSize = pageSize;
+                    break;
+                case Constants.CortexChatNucleusSettingsEnv.AppUserId:
+                    avatarSettings.CortexChatNucleus.AppUserId = value;
+                    break;
+                #endregion
+
+                #region Cortex Graph Persistence Settings
+                case Constants.CortexGraphPersistenceSettingsEnv.ArangoRootPassword:
+                    avatarSettings.CortexGraphPersistence.ArangoRootPassword = value;
+                    break;
+                #endregion
+
                 default:
                     break;
             }
@@ -251,14 +270,15 @@ public class AvatarSettingsRepository : IAvatarSettingsRepository
         envVariables[Constants.CortexGraphSettingsEnv.DefaultTerminalActiveValues] = avatarSettings.CortexGraph.DefaultTerminalActiveValues.ToString();
         envVariables[Constants.CortexGraphSettingsEnv.DefaultPageSize] = avatarSettings.CortexGraph.DefaultPageSize.ToString();
         envVariables[Constants.CortexGraphSettingsEnv.DefaultPage] = avatarSettings.CortexGraph.DefaultPage.ToString();
-        envVariables[Constants.CortexGraphSettingsEnv.ArangoRootPassword] = avatarSettings.CortexGraph.ArangoRootPassword;
+        envVariables[Constants.CortexGraphSettingsEnv.DefaultDepth] = avatarSettings.CortexGraph.DefaultDepth.ToString();
+        envVariables[Constants.CortexGraphSettingsEnv.DefaultDirectionValues] = avatarSettings.CortexGraph.DefaultDirectionValues.ToString();
         #endregion
 
         #region AvatarApiSettingsEnv
         envVariables[Constants.AvatarApiSettingsEnv.ResourceDatabasePath] = avatarSettings.AvatarApi.ResourceDatabasePath;
         envVariables[Constants.AvatarApiSettingsEnv.RequireAuthentication] = avatarSettings.AvatarApi.RequireAuthentication.ToString();
         envVariables[Constants.AvatarApiSettingsEnv.AnonymousUserId] = avatarSettings.AvatarApi.AnonymousUserId.ToString();
-        envVariables[Constants.AvatarApiSettingsEnv.TokenIssuerUrl] = avatarSettings.AvatarApi.TokenIssuerUrl;
+        envVariables[Constants.AvatarApiSettingsEnv.TokenIssuerAddress] = avatarSettings.AvatarApi.TokenIssuerAddress;
         envVariables[Constants.AvatarApiSettingsEnv.ApiName] = avatarSettings.AvatarApi.ApiName;
         envVariables[Constants.AvatarApiSettingsEnv.ApiSecret] = avatarSettings.AvatarApi.ApiSecret;
         envVariables[Constants.AvatarApiSettingsEnv.ValidateServerCertificate] = avatarSettings.AvatarApi.ValidateServerCertificate.ToString();
@@ -287,6 +307,15 @@ public class AvatarSettingsRepository : IAvatarSettingsRepository
         envVariables[Constants.CortexDiaryNucleusSettingsEnv.SubscriptionsSmtpSenderUsername] = avatarSettings.CortexDiaryNucleus.SubscriptionsSmtpSenderUsername;
         envVariables[Constants.CortexDiaryNucleusSettingsEnv.SubscriptionsSmtpSenderPassword] = avatarSettings.CortexDiaryNucleus.SubscriptionsSmtpSenderPassword;
         envVariables[Constants.CortexDiaryNucleusSettingsEnv.SubscriptionsCortexGraphOutBaseUrl] = avatarSettings.CortexDiaryNucleus.SubscriptionsCortexGraphOutBaseUrl;
+        #endregion
+
+        #region CortexChatNucleusSettings
+        envVariables[Constants.CortexChatNucleusSettingsEnv.PageSize] = avatarSettings.CortexChatNucleus.PageSize.ToString();
+        envVariables[Constants.CortexChatNucleusSettingsEnv.AppUserId] = avatarSettings.CortexChatNucleus.AppUserId;
+        #endregion
+
+        #region CortexGraphPersistenceSettings
+        envVariables[Constants.CortexGraphPersistenceSettingsEnv.ArangoRootPassword] = avatarSettings.CortexGraphPersistence.ArangoRootPassword;
         #endregion
 
         // Write changes to the file
