@@ -116,9 +116,9 @@ Before proceeding, enable file extensions to ensure correct file handling:
 
 4. After choosing a configuration file, click `Create` and wait for it to finish.
 5. Once completed, you can now run your very own **Avatar Server**. Your saved files are in `Documents/ei8/Avatar`.
-
+<br>
 > [!NOTE]
-> If Avatar will be used for local testing, set [avatar]\un8y\variables.env\BASE_PATH to empty string.
+> If Avatar is being setup for local testing, set [avatar]\un8y\variables.env\BASE_PATH to an empty string.
 
 <br>
 
