@@ -198,7 +198,7 @@ COMMIT;
                     await tr.BeginAsync(authorNeuronId);
                     await container.Resolve<INetworkTransactionService>().SaveAsync(tr, nn);
 
-                    IEnumerable<object> initMirrorKeys = GetAppMirrorKeys();
+                    IEnumerable<object> initMirrorKeys = AvatarItemWriteRepository.GetAppMirrorKeys();
                     // initialize mirrors
                     var mr = container.Resolve<IMirrorRepository>();
                     var missingInitMirrorConfigs = await mr.GetAllMissingAsync(initMirrorKeys);
