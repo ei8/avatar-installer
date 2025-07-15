@@ -116,9 +116,12 @@ Before proceeding, enable file extensions to ensure correct file handling:
 
 4. After choosing a configuration file, click `Create` and wait for it to finish.
 5. Once completed, you can now run your very own **Avatar Server**. Your saved files are in `Documents/ei8/Avatar`.
+6. If you intend to use Un8y:
+    1. Download the [applicable plugins version](https://drive.google.com/drive/folders/1OdmTfYoyUtVXbF9-22Q7SOHS8R8k4FNy?usp=sharing).
+    2. Extract its contents to [avatar]\un8y\plugins\
 
 > [!NOTE]
-> If Avatar is being setup for local testing, set [avatar]\un8y\variables.env\BASE_PATH to an empty string.
+> If Avatar is being setup for local testing, set [avatar]\un8y\variables.env > BASE_PATH to an empty string.
 
 <br>
 
