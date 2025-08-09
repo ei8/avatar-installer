@@ -8,7 +8,8 @@ using ei8.Cortex.Coding.d23.neurULization.Persistence;
 using ei8.Cortex.Coding.Persistence;
 using ei8.EventSourcing.Application;
 using ei8.EventSourcing.Client;
-using ei8.Extensions.DependencyInjection;
+using ei8.Extensions.DependencyInjection.Cortex;
+using ei8.Extensions.DependencyInjection.EventSourcing;
 using ei8.Extensions.DependencyInjection.Coding.d23.neurULization;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Logging;
@@ -216,11 +217,16 @@ COMMIT;
                     container.Register<IAvatarWriteRepository, AvatarWriteRepository>();
 
                     // initialize avatar
-                    await container.Resolve<IAvatarWriteRepository>().Save(new Domain.Model.Avatars.Avatar()
-                    {
-                        Id = authorNeuronId,
-                        Name = avatarItem.OwnerName
-                    });
+                    DateTimeOffset now = DateTimeOffset.Now;
+                    await container.Resolve<IAvatarWriteRepository>().Save(
+                        new Domain.Model.Avatars.Avatar()
+                        {
+                            Id = authorNeuronId,
+                            Name = avatarItem.OwnerName,
+                            CreationTimestamp = now,
+                            LastModificationTimestamp = now
+                        }
+                    );
 
                     await tr.CommitAsync();
                 }
@@ -239,7 +245,9 @@ COMMIT;
             typeof(MirrorSet).GetProperties().Select(p => p.Name).Cast<object>()
                 .Concat(new object[] {
                     typeof(Domain.Model.Avatars.Avatar),
-                    typeof(Domain.Model.Avatars.Avatar).GetProperty(nameof(Domain.Model.Avatars.Avatar.Name))
+                    typeof(Domain.Model.Avatars.Avatar).GetProperty(nameof(Domain.Model.Avatars.Avatar.Name)),
+                    typeof(Domain.Model.Avatars.Avatar).GetProperty(nameof(Domain.Model.Avatars.Avatar.CreationTimestamp)),
+                    typeof(Domain.Model.Avatars.Avatar).GetProperty(nameof(Domain.Model.Avatars.Avatar.LastModificationTimestamp))
                 })
                 .Concat(new[] {
                     typeof(string),

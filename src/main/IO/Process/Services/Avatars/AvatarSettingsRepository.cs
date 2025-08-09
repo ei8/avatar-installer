@@ -1,13 +1,7 @@
-﻿using ei8.Avatar.Installer.Domain.Model.Avatars.Settings;
+﻿using ei8.Avatar.Installer.Common;
 using ei8.Avatar.Installer.Domain.Model;
-using neurUL.Common.Domain.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ei8.Avatar.Installer.Domain.Model.Avatars;
-using ei8.Avatar.Installer.Common;
+using neurUL.Common.Domain.Model;
 
 namespace ei8.Avatar.Installer.IO.Process.Services.Avatars;
 

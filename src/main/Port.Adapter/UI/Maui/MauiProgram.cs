@@ -17,7 +17,6 @@ using ei8.Avatar.Installer.Port.Adapter.UI.Maui.Views;
 using ei8.Avatar.Installer.Port.Adapter.UI.Maui.Views.AvatarSettings;
 using MetroLog.MicrosoftExtensions;
 using Microsoft.Extensions.Logging;
-using System.Reflection;
 
 namespace ei8.Avatar.Installer.Port.Adapter.UI.Maui;
 
