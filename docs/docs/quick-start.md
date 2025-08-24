@@ -106,6 +106,16 @@ Before proceeding, enable file extensions to ensure correct file handling:
 
 <img src="../images/save-sample-config.png" alt="Save sample config" style="display: block; margin: auto; max-width:100%;">
 
+4. If a PFX certificate needs to be generated:
+   1. Run the following in a command prompt, where
+     - "file" is the path where the certificate will be generated, eg: "C:\Users\john\Documents\ei8\Avatar\sample"
+     - "password" is the certificate password.
+```
+dotnet dev-certs https -ep [file] -p [password]
+```
+
+   2. Copy password used in previous step into the JSON node at "avatars \ un8y \ certificate_password".
+
 <br>
 
 #### 3️⃣ Download the Avatar Installer
