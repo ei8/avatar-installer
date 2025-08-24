@@ -1,0 +1,35 @@
+{
+  "server_name": "se",
+  "avatars": [
+    {
+      "name": "encr",
+      "owner_name": "Encryptor",
+      "owner_user_id": "id@sample.com",
+      "un8y": 
+      {
+        "oidc_authority_url": "https://192.168.1.100.nip.io:65102",
+        "client_id": "un8y-encr",
+        "requested_scopes": "openid,profile,email,avatarapi-encr,offline_access",
+        "base_path": "",
+        "certificate_password": ""
+      },
+      "orchestration": 
+      {
+        "avatar_ip": "192.168.1.100",
+        "un8y_ip": "192.168.1.100",
+        "avatar_in_port": 65101,
+        "un8y_blazor_port": 65103,
+        "keys_path": "/E/ei8/keys/sample"
+      },
+      "event_sourcing": 
+      {
+        "private_key_path": "/C/keys/private.key",
+        "in_process_private_key_path": "C:\\temp\\keys\\sample\\private.key",
+        "encryption_enabled": true,
+        "encrypted_events_key": ""
+      }
+    }
+  ],
+  "destination": "%USERPROFILE%\\Documents\\ei8\\Avatar",
+  "template_url": "https://github.com/ei8/avatar-template.git"
+}
