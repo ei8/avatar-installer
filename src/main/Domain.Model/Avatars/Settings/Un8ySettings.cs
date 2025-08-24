@@ -1,4 +1,6 @@
-﻿namespace ei8.Avatar.Installer.Domain.Model.Avatars.Settings;
+﻿using static System.Net.WebRequestMethods;
+
+namespace ei8.Avatar.Installer.Domain.Model.Avatars.Settings;
 
 public class Un8ySettings
 {
@@ -14,4 +16,10 @@ public class Un8ySettings
     public bool ValidateServerCertificate { get; set; }
     public string AppTitle { get; set; }
     public string AppIcon { get; set; }
+
+    [EnvironmentVariableKey("ASPNETCORE_Kestrel__Certificates__Default__Password")]
+    public string CertificatePassword { get; set; }
+
+    [EnvironmentVariableKey("ASPNETCORE_Kestrel__Certificates__Default__Path")]
+    public string CertificatePath { get; set; }
 }

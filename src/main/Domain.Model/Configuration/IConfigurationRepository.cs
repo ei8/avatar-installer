@@ -7,6 +7,6 @@
         /// </summary>
         /// <param name="id">The identifier for the configuration source</param>
         /// <returns></returns>
-        Task<AvatarConfiguration> GetByIdAsync(string id);
+        Task<AvatarServerConfiguration> GetByIdAsync(string id);
     }
 }

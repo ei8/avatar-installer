@@ -50,7 +50,7 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
                     case Common.Constants.Filenames.Env:
                         logger.LogInformation("Loading {file}", file);
 
-                        avatarItem.Network = DeserializeEnvironmentVariables<AvatarNetworkSettings>(
+                        avatarItem.OrchestrationSettings = DeserializeEnvironmentVariables<OrchestrationSettings>(
                             await GetEnvironmentVariablesFromFileAsync(file)
                         );
                         break;
@@ -66,7 +66,7 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
                         logger.LogInformation("Loading {file}", file);
 
                         var variables = await GetEnvironmentVariablesFromFileAsync(file);
-                        avatarItem.Un8y = DeserializeEnvironmentVariables<Un8ySettings>(variables);
+                        avatarItem.Un8ySettings = DeserializeEnvironmentVariables<Un8ySettings>(variables);
                         break;
                 }
             }

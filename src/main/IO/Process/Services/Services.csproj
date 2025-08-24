@@ -25,12 +25,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="ei8.Cortex.Coding" Version="0.0.8" />
-    <PackageReference Include="ei8.Cortex.Coding.d23.neurULization.Persistence" Version="0.1.4" />
-    <PackageReference Include="ei8.Cortex.Coding.Persistence" Version="0.1.8" />
-    <PackageReference Include="ei8.EventSourcing.Client" Version="0.3.7" />
-    <PackageReference Include="ei8.Extensions.DependencyInjection" Version="0.0.8" />
+    <PackageReference Include="ei8.Cortex.Coding" Version="0.0.9" />
+    <PackageReference Include="ei8.Cortex.Coding.d23.neurULization.Persistence" Version="0.1.7" />
+    <PackageReference Include="ei8.Cortex.Coding.Persistence" Version="0.2.2" />
     <PackageReference Include="ei8.Extensions.DependencyInjection.Coding.d23.neurULization" Version="0.0.2" />
+    <PackageReference Include="ei8.Extensions.DependencyInjection.Cortex" Version="0.0.2" />
+    <PackageReference Include="ei8.Extensions.DependencyInjection.EventSourcing" Version="0.0.2" />
     <PackageReference Include="LibGit2Sharp" Version="0.27.2" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="7.0.12" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
@@ -41,5 +41,9 @@
     <ProjectReference Include="..\..\..\Application\Application.csproj" />
     <ProjectReference Include="..\..\..\Domain.Model\Domain.Model.csproj" />
   </ItemGroup>
+
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
 
 </Project>

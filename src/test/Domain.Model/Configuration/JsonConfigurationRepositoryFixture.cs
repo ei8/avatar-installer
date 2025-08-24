@@ -17,6 +17,8 @@ namespace Domain.Model.Test.Configuration
             Assert.Single(result.Avatars);
             Assert.Equal("junvic", result.Avatars[0].Name);
 
+            Assert.Equal("neurul.net", result.Avatars[0].Routing!.neurULServerDomainName);
+
             // cortex_graph
             Assert.Equal("graph", result.Avatars[0].CortexGraph!.DbName);
             Assert.Equal("root", result.Avatars[0].CortexGraph!.DbUsername);
@@ -35,12 +37,21 @@ namespace Domain.Model.Test.Configuration
             Assert.Equal("https://www.example.com/oidc", result.Avatars[0].Un8y!.OidcAuthorityUrl);
             Assert.Equal("un8y-junvic", result.Avatars[0].Un8y!.ClientId);
             Assert.Equal("/junvic/un8y", result.Avatars[0].Un8y!.BasePath);
+            Assert.Equal("mypass", result.Avatars[0].Un8y!.CertificatePassword);
+            Assert.Equal("/mypath/my.pfx", result.Avatars[0].Un8y!.CertificatePath);
 
-            // avatar network
-            Assert.Equal("192.168.1.110", result.Avatars[0].Network!.LocalIp);
-            Assert.Equal(64101, result.Avatars[0].Network!.AvatarInPort);
-            Assert.Equal(64103, result.Avatars[0].Network!.Un8yBlazorPort);
-            Assert.Equal("neurul.net", result.Avatars[0].Network!.NeurULServer);
+            // orchestration
+            Assert.Equal("192.168.1.110", result.Avatars[0].Orchestration!.AvatarIp);
+            Assert.Equal("192.168.1.111", result.Avatars[0].Orchestration!.Un8yIp);
+            Assert.Equal(64101, result.Avatars[0].Orchestration!.AvatarInPort);
+            Assert.Equal(64103, result.Avatars[0].Orchestration!.Un8yBlazorPort);
+            Assert.Equal("my/keys", result.Avatars[0].Orchestration!.KeysPath);
+
+            // event sourcing
+            Assert.Equal("/key/path", result.Avatars[0].EventSourcing!.PrivateKeyPath);
+            Assert.Equal("/key/inprocesspath", result.Avatars[0].EventSourcing!.InProcessPrivateKeyPath);
+            Assert.True(result.Avatars[0].EventSourcing!.EncryptionEnabled);
+            Assert.Equal("encryptedkey", result.Avatars[0].EventSourcing!.EncryptedEventsKey);
 
             // root network
             Assert.Equal(60, result.Network!.Ssh!.ServerAliveInterval);
@@ -62,6 +73,8 @@ namespace Domain.Model.Test.Configuration
             Assert.Single(result.Avatars);
             Assert.Equal("valdez", result.Avatars[0].Name);
 
+            Assert.Equal("fibona.cc", result.Avatars[0].Routing!.neurULServerDomainName);
+
             // cortex_graph
             Assert.Equal("graph", result.Avatars[0].CortexGraph!.DbName);
             Assert.Equal("root", result.Avatars[0].CortexGraph!.DbUsername);
@@ -81,12 +94,21 @@ namespace Domain.Model.Test.Configuration
             Assert.Equal("https://login.fibona.cc", result.Avatars[0].Un8y!.OidcAuthorityUrl);
             Assert.Equal("un8y-valdez", result.Avatars[0].Un8y!.ClientId);
             Assert.Equal("/valdez/un8y", result.Avatars[0].Un8y!.BasePath);
+            Assert.Equal(string.Empty, result.Avatars[0].Un8y!.CertificatePassword);
+            Assert.Equal("/https/aspnetapp.pfx", result.Avatars[0].Un8y!.CertificatePath);
 
-            // network - should infer defaults
-            Assert.Equal("192.168.50.2", result.Avatars[0].Network!.LocalIp);
-            Assert.Equal(12345, result.Avatars[0].Network!.AvatarInPort);
-            Assert.Equal(64103, result.Avatars[0].Network!.Un8yBlazorPort);
-            Assert.Equal("fibona.cc", result.Avatars[0].Network!.NeurULServer);
+            // orchestration - should infer defaults
+            Assert.Equal("192.168.50.2", result.Avatars[0].Orchestration!.AvatarIp);
+            Assert.Equal("192.168.50.3", result.Avatars[0].Orchestration!.Un8yIp);
+            Assert.Equal(12345, result.Avatars[0].Orchestration!.AvatarInPort);
+            Assert.Equal(23456, result.Avatars[0].Orchestration!.Un8yBlazorPort);
+            Assert.Equal(string.Empty, result.Avatars[0].Orchestration!.KeysPath);
+
+            // event sourcing
+            Assert.Equal("/C/keys/private.key", result.Avatars[0].EventSourcing!.PrivateKeyPath);
+            Assert.Equal(string.Empty, result.Avatars[0].EventSourcing!.InProcessPrivateKeyPath);
+            Assert.False(result.Avatars[0].EventSourcing!.EncryptionEnabled);
+            Assert.Equal(string.Empty, result.Avatars[0].EventSourcing!.EncryptedEventsKey);
 
             // root network - should infer defaults
             Assert.Equal(90, result.Network!.Ssh!.ServerAliveInterval);
@@ -116,6 +138,9 @@ namespace Domain.Model.Test.Configuration
         {
             Assert.Equal(avatarName, avatar.Name);
 
+            // routing
+            Assert.Equal("fibona.cc", avatar.Routing!.neurULServerDomainName);
+
             // cortex_graph
             Assert.Equal("graph_" + avatarName, avatar.CortexGraph!.DbName);
             Assert.Equal("root", avatar.CortexGraph!.DbUsername);
@@ -134,12 +159,21 @@ namespace Domain.Model.Test.Configuration
             Assert.Equal("https://login.fibona.cc", avatar.Un8y!.OidcAuthorityUrl);
             Assert.Equal($"un8y-" + avatarName, avatar.Un8y!.ClientId);
             Assert.Equal($"/" + avatarName + "/un8y", avatar.Un8y!.BasePath);
+            Assert.Equal(string.Empty, avatar.Un8y!.CertificatePassword);
+            Assert.Equal("/https/aspnetapp.pfx", avatar.Un8y!.CertificatePath);
 
-            // network
-            Assert.Equal("192.168.1.110", avatar.Network!.LocalIp);
-            Assert.Equal(64101, avatar.Network!.AvatarInPort);
-            Assert.Equal(64103, avatar.Network!.Un8yBlazorPort);
-            Assert.Equal("fibona.cc", avatar.Network!.NeurULServer);
+            // event sourcing
+            Assert.Equal("/C/keys/private.key", avatar.EventSourcing!.PrivateKeyPath);
+            Assert.Equal(string.Empty, avatar.EventSourcing!.InProcessPrivateKeyPath);
+            Assert.False(avatar.EventSourcing!.EncryptionEnabled);
+            Assert.Equal(string.Empty, avatar.EventSourcing!.EncryptedEventsKey);
+
+            // orchestration
+            Assert.Equal("192.168.1.110", avatar.Orchestration!.AvatarIp);
+            Assert.Equal("192.168.1.110", avatar.Orchestration!.Un8yIp);
+            Assert.Equal(64101, avatar.Orchestration!.AvatarInPort);
+            Assert.Equal(64103, avatar.Orchestration!.Un8yBlazorPort);
+            Assert.Equal(string.Empty, avatar.Orchestration!.KeysPath);
         }
     }
 }

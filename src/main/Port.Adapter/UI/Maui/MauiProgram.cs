@@ -109,7 +109,7 @@ public static class MauiProgram
                 .AddScoped<IAvatarServerRepository, AvatarServerRepository>()
                 .AddScoped<IAvatarServerMapperService, AvatarServerMapperService>()
                 .AddScoped<IAvatarApplicationService, AvatarApplicationService>();
-        builder.Services.AddAutoMapper(typeof(AvatarAutoMapperProfile));
+        builder.Services.AddAutoMapper(cfg => { }, typeof(AvatarAutoMapperProfile));
 
         builder.Services.AddSingleton<IAvatarContextService, AvatarContextService>();
         builder.Services.AddSingleton<IProgressService, ProgressService>();

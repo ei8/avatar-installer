@@ -31,7 +31,7 @@ namespace ei8.Avatar.Installer.CLI
                                 .AddScoped<IAvatarServerMapperService, AvatarServerMapperService>()
                                 .AddScoped<IAvatarApplicationService, AvatarApplicationService>();
 
-                builder.Services.AddAutoMapper(typeof(AvatarAutoMapperProfile));
+                builder.Services.AddAutoMapper(cfg => { }, typeof(AvatarAutoMapperProfile));
 
                 builder.Logging.AddConsole();
 

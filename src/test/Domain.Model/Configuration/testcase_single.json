@@ -1,7 +1,11 @@
 {
     "avatars": [
         {
-            "name": "junvic",
+          "name": "junvic",
+
+          "routing": {
+            "neurul_server_domain_name": "neurul.net"
+          },
 
             "cortex_graph": {
                 "db_name": "graph",
@@ -20,18 +24,28 @@
                 "terminals_url": "http://fibona.cc/junvic/cortex/terminals"
             },
 
-            "un8y": {
-                "oidc_authority_url": "https://www.example.com/oidc",
-                "client_id": "un8y-junvic",
-                "base_path": "/junvic/un8y"
-            },
+          "un8y": {
+            "oidc_authority_url": "https://www.example.com/oidc",
+            "client_id": "un8y-junvic",
+            "base_path": "/junvic/un8y",
+            "certificate_password": "mypass",
+            "certificate_path": "/mypath/my.pfx"
+          },
 
-            "network": {
-                "local_ip": "192.168.1.110",
-                "avatar_in_port": 64101,
-                "un8y_blazor_port": 64103,
-                "neurul_server": "neurul.net"
-            }
+          "event_sourcing": {
+            "private_key_path": "/key/path",
+            "in_process_private_key_path": "/key/inprocesspath",
+            "encryption_enabled": true,
+            "encrypted_events_key": "encryptedkey"
+          },
+
+          "orchestration": {
+            "avatar_ip": "192.168.1.110",
+            "un8y_ip": "192.168.1.111",
+            "avatar_in_port": 64101,
+            "un8y_blazor_port": 64103,
+            "keys_path": "my/keys"
+          }
         }
     ],
     "destination": "./sample",

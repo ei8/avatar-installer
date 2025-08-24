@@ -10,10 +10,12 @@
                 "arango_root_password": ""
             },
 
-            "network": {
-                "local_ip": "192.168.50.2",
-                "avatar_in_port": 12345
-            }
+          "orchestration": {
+            "avatar_ip": "192.168.50.2",
+            "avatar_in_port": 12345,
+            "un8y_ip": "192.168.50.3",
+            "un8y_blazor_port": 23456
+          }
         }
     ],
     "destination": "./sample",

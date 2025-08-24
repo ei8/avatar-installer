@@ -26,6 +26,10 @@ namespace ei8.Avatar.Installer.Domain.Model.Mapping
         {
             CreateMap<AvatarConfigurationItem, AvatarItem>()
                 .ForPath(
+                    dest => dest.RoutingSettings,
+                    opt => opt.MapFrom(src => src.Routing)
+                )
+                .ForPath(
                     dest => dest.Settings.CortexGraphPersistence,
                     opt => opt.MapFrom(src => src.CortexGraphPersistence)
                 )
@@ -42,25 +46,35 @@ namespace ei8.Avatar.Installer.Domain.Model.Mapping
                     opt => opt.MapFrom(src => src.CortexLibrary)
                 )
                 .ForPath(
+                    dest => dest.OrchestrationSettings,
+                    opt => opt.MapFrom(src => src.Orchestration)
+                )
+                .ForPath(
                     dest => dest.Settings.CortexChatNucleus,
                     opt => opt.MapFrom(src => src.CortexChatNucleus)
+                )
+                .ForPath(
+                    dest => dest.Un8ySettings,
+                    opt => opt.MapFrom(src => src.Un8y)
+                )
+                .ForPath(
+                    dest => dest.Settings.EventSourcing,
+                    opt => opt.MapFrom(src => src.EventSourcing)
                 );
 
+            CreateMap<RoutingConfiguration, RoutingSettings>();
             CreateMap<CortexGraphPersistenceConfiguration, CortexGraphPersistenceSettings>();
             CreateMap<CortexGraphConfiguration, CortexGraphSettings>();
             CreateMap<AvatarApiConfiguration, AvatarApiSettings>();
             CreateMap<CortexLibraryConfiguration, CortexLibrarySettings>();
+            CreateMap<OrchestrationConfiguration, OrchestrationSettings>();
+            CreateMap<CortexChatNucleusConfiguration, CortexChatNucleusSettings>();
             CreateMap<Un8yConfiguration, Un8ySettings>()
                 .ForMember(
                     dest => dest.OidcAuthority,
                     opt => opt.MapFrom(src => src.OidcAuthorityUrl)
                 );
-
-            CreateMap<NetworkConfiguration, AvatarNetworkSettings>()
-                .ForMember(dest => dest.AvatarIp, opt => opt.MapFrom(src => src.LocalIp))
-                .ForMember(dest => dest.Un8yIp, opt => opt.MapFrom(src => src.LocalIp));
-
-            CreateMap<CortexChatNucleusConfiguration, CortexChatNucleusSettings>();
+            CreateMap<EventSourcingConfiguration, EventSourcingSettings>();
         }
     }
 }

@@ -2,6 +2,7 @@
 
 namespace ei8.Avatar.Installer.Domain.Model.Avatars;
 
+// TODO:0 settings that are not part of variables.env (eg. un8y/variables.env) should be part of avatar item
 public class AvatarSettings
 {
     public EventSourcingSettings EventSourcing { get; set; } = new();

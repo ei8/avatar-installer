@@ -6,7 +6,7 @@ namespace ei8.Avatar.Installer.Domain.Model.Mapping
     public class AvatarServerMapperService : IAvatarServerMapperService
     {
         // TODO: Add unit tests
-        public AvatarServer Apply(AvatarConfiguration configuration, AvatarServer item)
+        public AvatarServer Apply(AvatarServerConfiguration configuration, AvatarServer item)
         {
             if (item == null)
                 return null;
@@ -17,7 +17,7 @@ namespace ei8.Avatar.Installer.Domain.Model.Mapping
             return item;
         }
 
-        private TraefikSettings ApplyTraefikSettings(AvatarConfiguration configuration, TraefikSettings item)
+        private TraefikSettings ApplyTraefikSettings(AvatarServerConfiguration configuration, TraefikSettings item)
         {
             if (item == null)
             {
@@ -51,12 +51,12 @@ namespace ei8.Avatar.Installer.Domain.Model.Mapping
                 foreach (var avatar in configuration.Avatars)
                 {
                     var avatarRouteName = $"{avatar.Name}avatar";
-                    var avatarLocalUrl = $"http://{configuration.Network.LocalIp}:{avatar.Network.AvatarInPort}";
-                    item.AddRoute(avatarRouteName, $"PathPrefixStrip:/{avatar.Network.NeurULServer}/{avatar.Name}", avatarLocalUrl);
+                    var avatarLocalUrl = $"http://{configuration.Network.LocalIp}:{avatar.Orchestration.AvatarInPort}";
+                    item.AddRoute(avatarRouteName, $"PathPrefixStrip:/{avatar.Routing.neurULServerDomainName}/{avatar.Name}", avatarLocalUrl);
 
                     var un8yRouteName = $"{avatar.Name}un8y";
-                    var un8yLocalUrl = $"http://{configuration.Network.LocalIp}:{avatar.Network.Un8yBlazorPort}";
-                    item.AddRoute(un8yRouteName, $"PathPrefixStrip:/{avatar.Network.NeurULServer}/{avatar.Name}/un8y", un8yLocalUrl);
+                    var un8yLocalUrl = $"http://{configuration.Network.LocalIp}:{avatar.Orchestration.Un8yBlazorPort}";
+                    item.AddRoute(un8yRouteName, $"PathPrefixStrip:/{avatar.Routing.neurULServerDomainName}/{avatar.Name}/un8y", un8yLocalUrl);
                 }
             }
 

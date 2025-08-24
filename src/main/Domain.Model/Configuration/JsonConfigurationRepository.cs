@@ -5,14 +5,14 @@ namespace ei8.Avatar.Installer.Domain.Model.Configuration
 {
     public class JsonConfigurationRepository : IConfigurationRepository
     {
-        public async Task<AvatarConfiguration> GetByIdAsync(string id)
+        public async Task<AvatarServerConfiguration> GetByIdAsync(string id)
         {
             if (!File.Exists(id))
                 throw new FileNotFoundException($"{id} does not exist.");
 
             using var file = File.OpenRead(id);
 
-            var avatarConfiguration = await JsonSerializer.DeserializeAsync<AvatarConfiguration>(
+            var avatarConfiguration = await JsonSerializer.DeserializeAsync<AvatarServerConfiguration>(
                 file,
                 new JsonSerializerOptions { PropertyNamingPolicy = new SnakeCaseNamingPolicy() }
             );

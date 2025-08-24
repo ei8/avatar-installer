@@ -18,6 +18,14 @@ using Nancy.TinyIoc;
 using neurUL.Common.Domain.Model;
 using System.Reflection;
 using System.Text.Json;
+using Microsoft.Extensions.DependencyInjection;
+using ei8.EventSourcing.Port.Adapter.IO.Persistence.Events.SQLite;
+using Microsoft.AspNetCore.DataProtection;
+using ei8.EventSourcing.Domain.Model;
+using ei8.Avatar.Installer.Domain.Model;
+using ei8.Avatar.Installer.Domain.Model.Avatars.Settings;
+using neurUL.Common;
+using System.IO;
 
 namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
 {
@@ -42,7 +50,14 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
 
             foreach (var property in settings.GetType().GetProperties())
             {
-                var environmentVariableKey = property.Name.ToMacroCase();
+                var ieva = property.GetCustomAttributes<IgnoreEnvironmentVariableAttribute>();
+
+                if (ieva.Any())
+                    continue;
+
+                var evka = property.GetCustomAttributes<EnvironmentVariableKeyAttribute>();
+
+                var environmentVariableKey = evka.SingleOrDefault() == null ? property.Name.ToMacroCase() : evka.SingleOrDefault().Key;
                 var environmentVariableValue = property.GetValue(settings);
 
                 if (property == typeof(bool))
@@ -75,11 +90,11 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
             await File.WriteAllLinesAsync(Path.Combine(avatarItem.Id, Common.Constants.Filenames.VariablesEnv), variablesLines);
 
             logger.LogInformation("Serializing un8y/variables.env");
-            var un8yLines = SerializeEnvironmentVariables(avatarItem.Un8y);
+            var un8yLines = SerializeEnvironmentVariables(avatarItem.Un8ySettings);
             await File.WriteAllLinesAsync(Path.Combine(avatarItem.Id, Common.Constants.Directories.Un8y, Common.Constants.Filenames.VariablesEnv), un8yLines);
 
             logger.LogInformation("Serializing .env");
-            var envLines = SerializeEnvironmentVariables(avatarItem.Network);
+            var envLines = SerializeEnvironmentVariables(avatarItem.OrchestrationSettings);
             await File.WriteAllLinesAsync(Path.Combine(avatarItem.Id, Common.Constants.Filenames.Env), envLines);
         }
 
@@ -170,7 +185,33 @@ COMMIT;
                     var settings = JsonSerializer.Deserialize<SettingsService>(File.ReadAllText(av8rSettingsPath));
                     container.Register(settings.Mirrors);
                     container.Register(Options.Create(container.Resolve<IEnumerable<MirrorConfig>>().ToList()));
+
+                    // Add DataProtector for EventStore
+                    var services = new ServiceCollection();
+                    services.AddDataProtection();
+                    var sp = services.BuildServiceProvider();
+
+                    container.Register(sp.GetRequiredService<IDataProtectionProvider>().CreateProtector(typeof(EventStore).FullName));
                     container.AddInProcessTransactions();
+                    container.Register<IKeyService, KeyService>();
+                    var ss = container.Resolve<ISettingsService>();
+                    ss.EncryptionEnabled = avatarItem.Settings.EventSourcing.EncryptionEnabled;
+
+                    if (ss.EncryptionEnabled)
+                    {
+                        AssertionConcern.AssertStateTrue(
+                            IOHelper.IsPathValidRootedLocal(avatarItem.Settings.EventSourcing.InProcessPrivateKeyPath),
+                            "A valid 'InProcessPrivateKeyPath' is required if encryption is enabled."
+                        );
+
+                        ss.PrivateKeyPath = avatarItem.Settings.EventSourcing.InProcessPrivateKeyPath;
+                        await container.Resolve<IKeyService>().Load(
+                            avatarItem.Settings.EventSourcing.EncryptedEventsKey,
+                            ss.PrivateKeyPath,
+                            ss,
+                            ss.GetKeyPropertyPair()
+                        );
+                    }
                     container.Register<IMirrorRepository, InitializingMirrorRepository>();
                     container.AddDataAdapters();
                     container.Register<INetworkTransactionData, NetworkTransactionData>();
