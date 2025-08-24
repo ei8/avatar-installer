@@ -97,6 +97,8 @@ Before proceeding, enable file extensions to ensure correct file handling:
   }
 }
 ```
+> [!NOTE]
+> More sample config files available [here](https://github.com/ei8/avatar-installer/tree/9a9aed8d23eb9fd5c63d919924af05945ad91b0a/src/test/Domain.Model/Configuration).
 
 3. Save the file as `ei8_sample_config.json` in your `Downloads` folder
    - Make sure to select `All Files` in the `Save as type` dropdown
