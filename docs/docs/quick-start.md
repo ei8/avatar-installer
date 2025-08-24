@@ -106,7 +106,7 @@ Before proceeding, enable file extensions to ensure correct file handling:
 
 <img src="../images/save-sample-config.png" alt="Save sample config" style="display: block; margin: auto; max-width:100%;">
 
-4. If a PFX certificate needs to be generated, nun the following in a command prompt, where:
+4. If a PFX certificate needs to be generated, run the following in a command prompt, where:
   - "file" is the path where the certificate will be generated, eg: "C:\Users\john\Documents\ei8\Avatar\sample"
   - "password" is the certificate password.
 ```
