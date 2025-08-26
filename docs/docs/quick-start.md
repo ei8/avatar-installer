@@ -106,7 +106,7 @@ Where:
         - "avatars\orchestration\keys_path"
         - "avatars\event_sourcing\in_process_private_key_path"
     5. Update JSON config node at "avatars\event_sourcing\private_key_path" to use the correct relative path of private key file.
-    6. Update JSON config node at "avatars\event_sourcing\encrypted_events_key" to use the AES key that was encrypted using the public key generated in step 5.2.
+    6. Update JSON config node at "avatars\event_sourcing\encrypted_events_key" to use an AES key that was encrypted using the public key generated in step 5.2.
 
 > [!NOTE]
 > The avatar-specific keys folder in step 5.3 should ideally be in a secure location that can be physically detached from the server (eg. external USB drive):
