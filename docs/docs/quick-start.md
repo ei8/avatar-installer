@@ -103,7 +103,7 @@ Where:
     2. Generate an RSA key pair (using a [tool](https://raskeyconverter.azurewebsites.net/)).
     3. Save the keys in two separate files (ie. public.key, private.key) in an avatar-specific folder (see note below).
     4. Copy the path in the previous step to the JSON config nodes at (use the format in the sample above, ie. slashes, drive separator etc.):
-        - "avatars\encryption\keys_path"
+        - "avatars\orchestration\keys_path"
         - "avatars\event_sourcing\in_process_private_key_path"
     5. Update JSON config node at "avatars\event_sourcing\private_key_path" to use the correct relative path of private key file.
     6. Update JSON config node at "avatars\event_sourcing\encrypted_events_key" to use the AES key that was encrypted using the public key generated in step 5.2.
