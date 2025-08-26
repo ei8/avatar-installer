@@ -46,55 +46,39 @@ Before proceeding, enable file extensions to ensure correct file handling:
 
 ```json
 {
+  "server_name": "myserver",
   "avatars": [
     {
       "name": "sample",
-      "owner_name": "owner sample",
-
-      "cortex_graph": {
-        "db_name": "graph-sample",
-        "db_username": "root",
-        "db_url": "http://host.docker.internal:8529",
-        "arango_root_password": ""
+      "owner_name": "John Doe",
+      "owner_user_id": "john@sample.com",
+      "un8y": 
+      {
+        "oidc_authority_url": "https://192.168.1.100.nip.io:65102",
+        "client_id": "un8y-sample",
+        "requested_scopes": "openid,profile,email,avatarapi-sample,offline_access",
+        "base_path": "",
+        "certificate_password": ""
       },
-
-      "avatar_api": {
-        "token_issuer_url": "https://login.fibona.cc",
-        "api_name": "avatarapi-sample"
+      "orchestration": 
+      {
+        "avatar_ip": "192.168.1.100",
+        "un8y_ip": "192.168.1.100",
+        "avatar_in_port": 65101,
+        "un8y_blazor_port": 65103,
+        "keys_path": "/e/ei8/keys/sample"
       },
-
-      "cortex_library": {
-        "neurons_url": "http://fibona.cc/sample/cortex/neurons",
-        "terminals_url": "http://fibona.cc/sample/cortex/terminals"
-      },
-
-      "d23": {
-        "oidc_authority_url": "https://login.fibona.cc",
-        "client_id": "d23-sample",
-        "base_path": "/sample/d23"
-      },
-
-      "network": {
-        "local_ip": "192.168.50.2",
-        "avatar_in_port": 64101,
-        "d23_blazor_port": 64103,
-        "neurul_server": "fibona.cc"
+      "event_sourcing": 
+      {
+        "private_key_path": "/C/keys/private.key",
+        "in_process_private_key_path": "e:\\ei8\\keys\\sample\\private.key",
+        "encryption_enabled": true,
+        "encrypted_events_key": ""
       }
     }
   ],
   "destination": "%USERPROFILE%\\Documents\\ei8\\Avatar",
-  "template_url": "https://github.com/ei8/avatar-template.git",
-  "network": {
-    "local_ip": "192.168.50.2",
-    "ssh": {
-      "server_alive_interval": 60,
-      "server_alive_count_max": 525600,
-      "port": 2222,
-      "host_name": "ei8.host",
-      "remote_forward": "sample:80 192.168.50.2:9393",
-      "local_port": 9393
-    }
-  }
+  "template_url": "https://github.com/ei8/avatar-template.git"
 }
 ```
 > [!NOTE]
@@ -106,13 +90,26 @@ Before proceeding, enable file extensions to ensure correct file handling:
 
 <img src="../images/save-sample-config.png" alt="Save sample config" style="display: block; margin: auto; max-width:100%;">
 
-4. If a PFX certificate needs to be generated, run the following in a command prompt, where:
-  - "file" is the path where the certificate will be generated, eg: "C:\Users\john\Documents\ei8\Avatar\sample"
-  - "password" is the certificate password.
+4. If a PFX certificate needs to be generated, run the following in a command prompt:
 ```
 dotnet dev-certs https -ep [file] -p [password]
 ```
-5. Copy the password used in previous step into the JSON node at "avatars \ un8y \ certificate_password".
+Where:
+- "file" is the absolute path where the certificate will be generated, eg: "C:\Users\john\Documents\ei8\Avatar\sample"
+- "password" is the certificate password. This should be copied to the JSON config node at "avatars\un8y\certificate_password".
+
+5. If using encryption at rest:
+    1. Set JSON config node at "avatars\event_sourcing\encryption_enabled" to true.
+    2. Generate an RSA key pair (using a [tool](https://raskeyconverter.azurewebsites.net/)).
+    3. Save the keys in two separate files (ie. public.key, private.key) in an avatar-specific folder.
+       > [!NOTE]
+       > Ideally in a secure location that can be physically detached from the server (eg. external USB drive):
+       > "e:\ei8\keys\sample"
+    4. Copy the path in the previous step to the JSON config nodes at (use the format in the sample above, ie. slashes, drive separator etc.):
+        - "avatars\encryption\keys_path"
+        - "avatars\event_sourcing\in_process_private_key_path"
+    5. Update JSON config node at "avatars\event_sourcing\private_key_path" to use the correct relative path of private key file.
+    6. Update JSON config node at "avatars\event_sourcing\encrypted_events_key" to use the AES key that was encrypted using the public key generated in a previous step.
 
 <br>
 
@@ -131,7 +128,7 @@ dotnet dev-certs https -ep [file] -p [password]
     2. Extract its contents to [avatar]\un8y\plugins\
 
 > [!NOTE]
-> If Avatar is being setup for local testing, set [avatar]\un8y\variables.env > BASE_PATH to an empty string.
+> If Avatar is being setup for local testing, ensure that [avatar]\un8y\variables.env > BASE_PATH is set to an empty string.
 
 <br>
 
