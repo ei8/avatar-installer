@@ -95,7 +95,7 @@ Before proceeding, enable file extensions to ensure correct file handling:
 dotnet dev-certs https -ep [file] -p [password]
 ```
 Where:
-- "file" is the absolute path where the certificate will be generated, eg: "C:\Users\john\Documents\ei8\Avatar\sample"
+- "file" is the absolute path where the certificate will be generated, eg: "C:\Users\john\Documents\ei8\Avatar\sample". Make sure to use "aspnetapp.pfx" as the name of the certificate file.
 - "password" is the certificate password. This should be copied to the JSON config node at "avatars\un8y\certificate_password".
 
 5. If using encryption at rest:
@@ -129,6 +129,7 @@ Where:
 6. If you intend to use Un8y:
     1. Download the [applicable plugins version](https://drive.google.com/drive/folders/1OdmTfYoyUtVXbF9-22Q7SOHS8R8k4FNy?usp=sharing).
     2. Extract its contents to [avatar]\un8y\plugins\
+7. Copy the PFX file generated earlier into the https folder of the generated avatar folder.
 
 > [!NOTE]
 > If Avatar is being setup for local testing, ensure that [avatar]\un8y\variables.env > BASE_PATH is set to an empty string.
