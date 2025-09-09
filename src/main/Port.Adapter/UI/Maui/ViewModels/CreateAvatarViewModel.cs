@@ -54,25 +54,25 @@ public partial class CreateAvatarViewModel : BaseViewModel
 
     partial void OnNameChanged(string value)
     {
-        if (AvatarServerConfiguration?.Avatars?.Count() > 0)
+        if (this.AvatarServerConfiguration?.Avatars?.Count() > 0)
         {
-            AvatarServerConfiguration.Avatars[0].Name = value;
+            this.AvatarServerConfiguration.Avatars[0].Name = value;
         }
     }
 
     partial void OnOwnerNameChanged(string value)
     {
-        if (AvatarServerConfiguration?.Avatars?.Count() > 0)
+        if (this.AvatarServerConfiguration?.Avatars?.Count() > 0)
         {
-            AvatarServerConfiguration.Avatars[0].OwnerName = value;
+            this.AvatarServerConfiguration.Avatars[0].OwnerName = value;
         }
     }
 
     partial void OnOwnerUserIdChanged(string value)
     {
-        if (AvatarServerConfiguration?.Avatars?.Count() > 0)
+        if (this.AvatarServerConfiguration?.Avatars?.Count() > 0)
         {
-            AvatarServerConfiguration.Avatars[0].OwnerUserId = value;
+            this.AvatarServerConfiguration.Avatars[0].OwnerUserId = value;
         }
     }
     [ObservableProperty]
@@ -116,8 +116,12 @@ public partial class CreateAvatarViewModel : BaseViewModel
                 return;
             }
 
-            ConfigPath = configFile.FullPath;
-            this.AvatarServerConfiguration = await avatarApplicationService.ReadAvatarConfiguration(ConfigPath);
+            this.ConfigPath = configFile.FullPath;
+            this.AvatarServerConfiguration = await this.avatarApplicationService.ReadAvatarConfiguration(this.ConfigPath);
+            
+            AssertionConcern.AssertArgumentNotNull(this.AvatarServerConfiguration.Avatars, nameof(this.AvatarServerConfiguration.Avatars));
+            AssertionConcern.AssertArgumentTrue(this.AvatarServerConfiguration.Avatars.Count() > 0, "AvatarServerConfiguration must contain at least one avatar");
+            
             this.Name = this.AvatarServerConfiguration.Avatars[0].Name;
             this.OwnerName = this.AvatarServerConfiguration.Avatars[0].OwnerName;
             this.OwnerUserId = this.AvatarServerConfiguration.Avatars[0].OwnerUserId;
@@ -143,14 +147,14 @@ public partial class CreateAvatarViewModel : BaseViewModel
 
         try
         {
-            EditorLogs = string.Empty;
+            this.EditorLogs = string.Empty;
 
-            if (string.IsNullOrEmpty(ConfigPath))
+            if (string.IsNullOrEmpty(this.ConfigPath))
             {
                 await Shell.Current.DisplayAlert(Constants.Statuses.Invalid, Constants.Messages.ChooseConfig, Constants.Prompts.Ok);
                 return;
             }
-            await avatarApplicationService.CreateAvatarAsync(AvatarServerConfiguration);
+            await this.avatarApplicationService.CreateAvatarAsync(this.AvatarServerConfiguration);
             await Shell.Current.DisplayAlert(Constants.Statuses.Success, Constants.Messages.AvatarInstalled, Constants.Prompts.Ok);
         }
         catch (Exception ex)
@@ -160,9 +164,9 @@ public partial class CreateAvatarViewModel : BaseViewModel
         }
         finally
         {
-            var logList = await logController.GetLogList();
+            var logList = await this.logController.GetLogList();
             logList!.Reverse();
-            EditorLogs = string.Join(Environment.NewLine, logList);
+            this.EditorLogs = string.Join(Environment.NewLine, logList);
 
             this.IsBusy = false;
         }
