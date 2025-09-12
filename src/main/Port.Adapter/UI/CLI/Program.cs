@@ -41,7 +41,9 @@ namespace ei8.Avatar.Installer.CLI
 
                     var configPath = builder.Configuration.GetValue<string>("config");
 
-                    await avatarApplicationService.CreateAvatarAsync(configPath);
+                    var configObject = await avatarApplicationService.ReadAvatarConfiguration(configPath);
+
+                    await avatarApplicationService.CreateAvatarAsync(configObject);
                 }
             }
             catch (Exception ex)

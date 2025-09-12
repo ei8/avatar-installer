@@ -41,15 +41,21 @@ namespace ei8.Avatar.Installer.Application.Avatar
             this.avatarServerRepository = avatarServerRepository;
             this.avatarServerMapperService = avatarServerMapperService;
         }
-
-        public async Task CreateAvatarAsync(string id)
+        public async Task<AvatarServerConfiguration> ReadAvatarConfiguration(string configPath)
         {
-            AssertionConcern.AssertArgumentNotNull(id, nameof(id));
+            AssertionConcern.AssertArgumentNotNull(configPath, nameof(configPath));
 
             this.progressService.Reset();
             this.progressService.Update(0.1, "Creating Avatar...");
 
-            var configObject = await configurationRepository.GetByIdAsync(id);
+            var configObject = await configurationRepository.GetByIdAsync(configPath);
+
+            return configObject;
+        }
+
+        public async Task CreateAvatarAsync(AvatarServerConfiguration configObject)
+        {
+            AssertionConcern.AssertArgumentNotNull(configObject, nameof(configObject));
 
             this.progressService.Update(0.3, "Configuring Avatar...");
             foreach (var item in configObject.Avatars)
@@ -83,5 +89,6 @@ namespace ei8.Avatar.Installer.Application.Avatar
 
             this.progressService.Update(1.0, "Finished Creating Avatar!");
         }
+        
     }
 }

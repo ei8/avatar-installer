@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using ei8.Avatar.Installer.Application;
 using ei8.Avatar.Installer.Application.Avatar;
 using ei8.Avatar.Installer.Common;
+using ei8.Avatar.Installer.Domain.Model.Configuration;
 using ei8.Avatar.Installer.Port.Adapter.UI.Maui.Views;
 using MetroLog.Maui;
 using neurUL.Common.Domain.Model;
@@ -20,6 +21,7 @@ public partial class CreateAvatarViewModel : BaseViewModel
     private readonly LogController logController = new();
     private readonly IAvatarApplicationService avatarApplicationService;
     private readonly IProgressService progressService;
+    private AvatarServerConfiguration avatarServerConfiguration = new(string.Empty);
 
     public CreateAvatarViewModel(IAvatarApplicationService avatarApplicationService, IProgressService progressService) 
     {
@@ -43,6 +45,36 @@ public partial class CreateAvatarViewModel : BaseViewModel
         this.CreationProgress = this.progressService.Progress;
     }
 
+    [ObservableProperty]
+    private string name = string.Empty;
+    [ObservableProperty]
+    private string ownerName = string.Empty;
+    [ObservableProperty]
+    private string ownerUserId = string.Empty;
+
+    partial void OnNameChanged(string value)
+    {
+        if (this.avatarServerConfiguration?.Avatars?.Count() > 0)
+        {
+            this.avatarServerConfiguration.Avatars[0].Name = value;
+        }
+    }
+
+    partial void OnOwnerNameChanged(string value)
+    {
+        if (this.avatarServerConfiguration?.Avatars?.Count() > 0)
+        {
+            this.avatarServerConfiguration.Avatars[0].OwnerName = value;
+        }
+    }
+
+    partial void OnOwnerUserIdChanged(string value)
+    {
+        if (this.avatarServerConfiguration?.Avatars?.Count() > 0)
+        {
+            this.avatarServerConfiguration.Avatars[0].OwnerUserId = value;
+        }
+    }
     [ObservableProperty]
     private string configPath = string.Empty;
 
@@ -84,7 +116,15 @@ public partial class CreateAvatarViewModel : BaseViewModel
                 return;
             }
 
-            ConfigPath = configFile.FullPath;
+            this.ConfigPath = configFile.FullPath;
+            this.avatarServerConfiguration = await this.avatarApplicationService.ReadAvatarConfiguration(this.ConfigPath);
+            
+            AssertionConcern.AssertArgumentNotNull(this.avatarServerConfiguration.Avatars, nameof(this.avatarServerConfiguration.Avatars));
+            AssertionConcern.AssertArgumentTrue(this.avatarServerConfiguration.Avatars.Count() > 0, "AvatarServerConfiguration must contain at least one avatar");
+            
+            this.Name = this.avatarServerConfiguration.Avatars[0].Name;
+            this.OwnerName = this.avatarServerConfiguration.Avatars[0].OwnerName;
+            this.OwnerUserId = this.avatarServerConfiguration.Avatars[0].OwnerUserId;
         }
         catch (Exception ex)
         {
@@ -107,15 +147,14 @@ public partial class CreateAvatarViewModel : BaseViewModel
 
         try
         {
-            EditorLogs = string.Empty;
+            this.EditorLogs = string.Empty;
 
-            if (string.IsNullOrEmpty(ConfigPath))
+            if (string.IsNullOrEmpty(this.ConfigPath))
             {
                 await Shell.Current.DisplayAlert(Constants.Statuses.Invalid, Constants.Messages.ChooseConfig, Constants.Prompts.Ok);
                 return;
             }
-
-            await avatarApplicationService.CreateAvatarAsync(ConfigPath);
+            await this.avatarApplicationService.CreateAvatarAsync(this.avatarServerConfiguration);
             await Shell.Current.DisplayAlert(Constants.Statuses.Success, Constants.Messages.AvatarInstalled, Constants.Prompts.Ok);
         }
         catch (Exception ex)
@@ -125,11 +164,12 @@ public partial class CreateAvatarViewModel : BaseViewModel
         }
         finally
         {
-            var logList = await logController.GetLogList();
+            var logList = await this.logController.GetLogList();
             logList!.Reverse();
-            EditorLogs = string.Join(Environment.NewLine, logList);
+            this.EditorLogs = string.Join(Environment.NewLine, logList);
 
             this.IsBusy = false;
         }
     }
+
 }

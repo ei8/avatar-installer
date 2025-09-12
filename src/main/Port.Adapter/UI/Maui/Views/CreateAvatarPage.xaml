@@ -9,48 +9,74 @@
     Shell.FlyoutBehavior="Disabled"
     Shell.NavBarIsVisible="False">
 
-    <Grid RowDefinitions="*,2*,*">
-        <Grid ColumnDefinitions="3*,*">
-            <Entry
-                Margin="40"
-                IsReadOnly="True"
-                Text="{Binding ConfigPath}" />
-            <Button
-                Grid.Column="1"
-                Margin="30"
-                Command="{Binding ChooseConfigurationCommand}"
-                CornerRadius="30"
-                Text="Choose File" />
-        </Grid>
+    <Grid RowDefinitions="Auto,*,Auto">
+        <ScrollView Grid.Row="0">
+            <StackLayout Padding="15" Spacing="10">
+                <Grid ColumnDefinitions="3*,*">
+                    <Entry
+                        Margin="0,0,8,0"
+                        IsReadOnly="True"
+                        Text="{Binding ConfigPath}"
+                        Placeholder="Configuration file path"
+                        FontSize="14" />
+                    <Button
+                        Grid.Column="1"
+                        Command="{Binding ChooseConfigurationCommand}"
+                        CornerRadius="20"
+                        Text="Choose File"
+                        FontSize="12" />
+                </Grid>
+                
+                <Label Text="Avatar Details" FontSize="16" FontAttributes="Bold" Margin="0,5,0,0" />
+                
+                <Entry
+                    Text="{Binding Name}"
+                    Placeholder="Avatar Name"
+                    FontSize="14" />
+                    
+                <Entry
+                    Text="{Binding OwnerName}"
+                    Placeholder="Owner Name"
+                    FontSize="14" />
+                    
+                <Entry
+                    Text="{Binding OwnerUserId}"
+                    Placeholder="Owner User ID"
+                    FontSize="14" />
+            </StackLayout>
+        </ScrollView>
 
-        <Grid Grid.Row="1" RowDefinitions="4*,*,*">
+        <Grid Grid.Row="1" RowDefinitions="*,Auto,Auto" Margin="5">
             <Editor
                 Grid.Row="0"
-                Margin="10,0"
                 BackgroundColor="Black"
                 IsReadOnly="True"
                 IsTextPredictionEnabled="False"
                 Placeholder="Logs here"
                 Text="{Binding EditorLogs}"
-                TextColor="White" />
+                TextColor="White"
+                FontSize="12" />
             <ProgressBar
                 Grid.Row="1"
-                Margin="20"
+                Margin="10,5"
                 BackgroundColor="White"
-                HeightRequest="10"
+                HeightRequest="8"
                 HorizontalOptions="FillAndExpand"
-                Progress="{Binding CreationProgress}"
-                VerticalOptions="FillAndExpand" />
+                Progress="{Binding CreationProgress}" />
             <Label
                 Grid.Row="2"
                 HorizontalOptions="Center"
-                Text="{Binding LoadingText}" />
+                Text="{Binding LoadingText}"
+                FontSize="12"
+                Margin="0,2" />
         </Grid>
 
         <Button
             Grid.Row="2"
-            Margin="10"
+            Margin="15,5"
             Command="{Binding CreateAvatarCommand}"
-            Text="Create" />
+            Text="Create Avatar"
+            FontSize="14"
+            HeightRequest="40" />
     </Grid>
 </ContentPage>
