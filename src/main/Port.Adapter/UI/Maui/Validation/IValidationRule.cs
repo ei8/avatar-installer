@@ -1,0 +1,7 @@
+namespace ei8.Avatar.Installer.Port.Adapter.UI.Maui.Validation;
+
+public interface IValidationRule<T>
+{
+    string ValidationMessage { get; set; }
+    bool Check(T value);
+}

@@ -13,16 +13,16 @@
         <StackLayout Padding="20" Spacing="15">
             <!-- Configuration File Section -->
             <Label Text="Configuration File" FontSize="18" FontAttributes="Bold" Margin="0,0,0,10" />
-            <Grid ColumnDefinitions="3*,*">
-                <Entry
+        <Grid ColumnDefinitions="3*,*">
+            <Entry
                     Margin="0,0,8,0"
-                    IsReadOnly="True"
+                IsReadOnly="True"
                     Text="{Binding ConfigPath}"
                     Placeholder="Configuration file path"
                     FontSize="14" />
-                <Button
-                    Grid.Column="1"
-                    Command="{Binding ChooseConfigurationCommand}"
+            <Button
+                Grid.Column="1"
+                Command="{Binding ChooseConfigurationCommand}"
                     CornerRadius="20"
                     Text="Choose File"
                     FontSize="12" />
@@ -76,7 +76,7 @@
                     CornerRadius="20"
                     Text="Browse"
                     FontSize="12" />
-            </Grid>
+        </Grid>
 
             <!-- Avatar Section -->
             <Label Text="Avatar" FontSize="18" FontAttributes="Bold" Margin="0,20,0,10" />
@@ -100,49 +100,85 @@
             <Label Text="Orchestration" FontSize="18" FontAttributes="Bold" Margin="0,20,0,10" />
             <Label Text="Avatar IP *" FontSize="14" FontAttributes="Bold" Margin="0,0,0,5" />
             <Entry
-                Text="{Binding AvatarIp}"
+                Text="{Binding AvatarIp.Value, Mode=TwoWay}"
                 Placeholder="Enter avatar IP address (e.g., 172.20.10.4)"
-                FontSize="14" />
+                FontSize="14">
+                <Entry.Triggers>
+                    <DataTrigger 
+                        TargetType="Entry"
+                        Binding="{Binding AvatarIp.IsValid}"
+                        Value="False">
+                        <Setter Property="BackgroundColor" Value="LightPink" />
+                    </DataTrigger>
+                </Entry.Triggers>
+            </Entry>
             <Label
-                Text="{Binding AvatarIpError}"
+                Text="{Binding AvatarIp.Errors, Converter={StaticResource FirstValidationErrorConverter}}"
                 FontSize="12"
                 TextColor="Red"
-                IsVisible="{Binding AvatarIpError, Converter={StaticResource StringToVisibilityConverter}}"
+                IsVisible="{Binding AvatarIp.Errors, Converter={StaticResource StringToVisibilityConverter}}"
                 Margin="0,2,0,5" />
             <Label Text="Avatar In Port *" FontSize="14" FontAttributes="Bold" Margin="0,10,0,5" />
             <Entry
-                Text="{Binding AvatarInPort}"
+                Text="{Binding AvatarInPort.Value, Mode=TwoWay}"
                 Placeholder="Enter avatar port (1-65535)"
                 FontSize="14"
-                Keyboard="Numeric" />
+                Keyboard="Numeric">
+                <Entry.Triggers>
+                    <DataTrigger 
+                        TargetType="Entry"
+                        Binding="{Binding AvatarInPort.IsValid}"
+                        Value="False">
+                        <Setter Property="BackgroundColor" Value="LightPink" />
+                    </DataTrigger>
+                </Entry.Triggers>
+            </Entry>
             <Label
-                Text="{Binding AvatarInPortError}"
+                Text="{Binding AvatarInPort.Errors, Converter={StaticResource FirstValidationErrorConverter}}"
                 FontSize="12"
                 TextColor="Red"
-                IsVisible="{Binding AvatarInPortError, Converter={StaticResource StringToVisibilityConverter}}"
+                IsVisible="{Binding AvatarInPort.Errors, Converter={StaticResource StringToVisibilityConverter}}"
                 Margin="0,2,0,5" />
             <Label Text="Un8y IP *" FontSize="14" FontAttributes="Bold" Margin="0,10,0,5" />
             <Entry
-                Text="{Binding Un8yIp}"
+                Text="{Binding Un8yIp.Value, Mode=TwoWay}"
                 Placeholder="Enter Un8y IP address (e.g., 172.20.10.4)"
-                FontSize="14" />
+                FontSize="14">
+                <Entry.Triggers>
+                    <DataTrigger 
+                        TargetType="Entry"
+                        Binding="{Binding Un8yIp.IsValid}"
+                        Value="False">
+                        <Setter Property="BackgroundColor" Value="LightPink" />
+                    </DataTrigger>
+                </Entry.Triggers>
+            </Entry>
             <Label
-                Text="{Binding Un8yIpError}"
+                Text="{Binding Un8yIp.Errors, Converter={StaticResource FirstValidationErrorConverter}}"
                 FontSize="12"
                 TextColor="Red"
-                IsVisible="{Binding Un8yIpError, Converter={StaticResource StringToVisibilityConverter}}"
+                IsVisible="{Binding Un8yIp.Errors, Converter={StaticResource StringToVisibilityConverter}}"
                 Margin="0,2,0,5" />
             <Label Text="Un8y Blazor Port *" FontSize="14" FontAttributes="Bold" Margin="0,10,0,5" />
             <Entry
-                Text="{Binding Un8yBlazorPort}"
+                Text="{Binding Un8yBlazorPort.Value, Mode=TwoWay}"
                 Placeholder="Enter Un8y Blazor port (1-65535)"
                 FontSize="14"
-                Keyboard="Numeric" />
+                Keyboard="Numeric">
+                <Entry.Triggers>
+                    <DataTrigger 
+                        TargetType="Entry"
+                        Binding="{Binding Un8yBlazorPort.IsValid}"
+                        Value="False">
+                        <Setter Property="BackgroundColor" Value="LightPink" />
+                    </DataTrigger>
+                </Entry.Triggers>
+            </Entry>
             <Label
-                Text="{Binding Un8yBlazorPortError}"
+                Text="{Binding Un8yBlazorPort.Errors, Converter={StaticResource FirstValidationErrorConverter}}"
                 FontSize="12"
                 TextColor="Red"
-                IsVisible="{Binding Un8yBlazorPortError, Converter={StaticResource StringToVisibilityConverter}}"
+                IsVisible="{Binding Un8yBlazorPort.Errors, Converter={StaticResource StringToVisibilityConverter}}"
                 Margin="0,2,0,5" />
             <Label Text="Keys Path" FontSize="14" FontAttributes="Bold" Margin="0,10,0,5">
                 <Label.Triggers>
@@ -158,9 +194,18 @@
                 <Entry
                     Margin="0,0,8,0"
                     IsReadOnly="True"
-                    Text="{Binding KeysPath}"
+                    Text="{Binding KeysPath.Value}"
                     Placeholder="Select keys folder"
-                    FontSize="14" />
+                    FontSize="14">
+                    <Entry.Triggers>
+                        <DataTrigger 
+                            TargetType="Entry"
+                            Binding="{Binding KeysPath.IsValid}"
+                            Value="False">
+                            <Setter Property="BackgroundColor" Value="LightPink" />
+                        </DataTrigger>
+                    </Entry.Triggers>
+                </Entry>
                 <Button
                     Grid.Column="1"
                     Command="{Binding ChooseKeysPathCommand}"
@@ -169,10 +214,10 @@
                     FontSize="12" />
             </Grid>
             <Label
-                Text="{Binding KeysPathError}"
+                Text="{Binding KeysPath.Errors, Converter={StaticResource FirstValidationErrorConverter}}"
                 FontSize="12"
                 TextColor="Red"
-                IsVisible="{Binding KeysPathError, Converter={StaticResource StringToVisibilityConverter}}"
+                IsVisible="{Binding KeysPath.Errors, Converter={StaticResource StringToVisibilityConverter}}"
                 Margin="0,2,0,5" />
 
             <!-- Un8y Section -->
@@ -217,9 +262,18 @@
                 <Entry
                     Margin="0,0,8,0"
                     IsReadOnly="True"
-                    Text="{Binding InProcessPrivateKeyPath}"
+                    Text="{Binding InProcessPrivateKeyPath.Value}"
                     Placeholder="Select private key file"
-                    FontSize="14" />
+                    FontSize="14">
+                    <Entry.Triggers>
+                        <DataTrigger 
+                            TargetType="Entry"
+                            Binding="{Binding InProcessPrivateKeyPath.IsValid}"
+                            Value="False">
+                            <Setter Property="BackgroundColor" Value="LightPink" />
+                        </DataTrigger>
+                    </Entry.Triggers>
+                </Entry>
                 <Button
                     Grid.Column="1"
                     Command="{Binding ChooseInProcessPrivateKeyPathCommand}"
@@ -228,10 +282,10 @@
                     FontSize="12" />
             </Grid>
             <Label
-                Text="{Binding InProcessPrivateKeyPathError}"
+                Text="{Binding InProcessPrivateKeyPath.Errors, Converter={StaticResource FirstValidationErrorConverter}}"
                 FontSize="12"
                 TextColor="Red"
-                IsVisible="{Binding InProcessPrivateKeyPathError, Converter={StaticResource StringToVisibilityConverter}}"
+                IsVisible="{Binding InProcessPrivateKeyPath.Errors, Converter={StaticResource StringToVisibilityConverter}}"
                 Margin="0,2,0,5" />
             
             <Label Text="Private Key Path (Computed)" FontSize="14" FontAttributes="Bold" Margin="0,10,0,5">
@@ -262,15 +316,24 @@
                 </Label.Triggers>
             </Label>
             <Editor
-                Text="{Binding EncryptedEventsKey}"
+                Text="{Binding EncryptedEventsKey.Value, Mode=TwoWay}"
                 Placeholder="Enter encrypted events key"
                 FontSize="14"
-                HeightRequest="80" />
+                HeightRequest="80">
+                <Editor.Triggers>
+                    <DataTrigger 
+                        TargetType="Editor"
+                        Binding="{Binding EncryptedEventsKey.IsValid}"
+                        Value="False">
+                        <Setter Property="BackgroundColor" Value="LightPink" />
+                    </DataTrigger>
+                </Editor.Triggers>
+            </Editor>
             <Label
-                Text="{Binding EncryptedEventsKeyError}"
+                Text="{Binding EncryptedEventsKey.Errors, Converter={StaticResource FirstValidationErrorConverter}}"
                 FontSize="12"
                 TextColor="Red"
-                IsVisible="{Binding EncryptedEventsKeyError, Converter={StaticResource StringToVisibilityConverter}}"
+                IsVisible="{Binding EncryptedEventsKey.Errors, Converter={StaticResource StringToVisibilityConverter}}"
                 Margin="0,2,0,5" />
 
             <Button
@@ -287,24 +350,24 @@
             <StackLayout IsVisible="{Binding IsLogTabSelected}" Spacing="15">
                 <Label Text="Avatar Creation Log" FontSize="18" FontAttributes="Bold" Margin="0,0,0,10" />
                 
-                <Editor
-                    BackgroundColor="Black"
-                    IsReadOnly="True"
-                    IsTextPredictionEnabled="False"
+            <Editor
+                BackgroundColor="Black"
+                IsReadOnly="True"
+                IsTextPredictionEnabled="False"
                     Placeholder="Logs will appear here..."
-                    Text="{Binding EditorLogs}"
+                Text="{Binding EditorLogs}"
                     TextColor="White"
                     FontSize="12"
                     HeightRequest="300" />
                 
-                <ProgressBar
-                    BackgroundColor="White"
-                    HeightRequest="10"
-                    HorizontalOptions="FillAndExpand"
+            <ProgressBar
+                BackgroundColor="White"
+                HeightRequest="10"
+                HorizontalOptions="FillAndExpand"
                     Progress="{Binding CreationProgress}" />
                 
-                <Label
-                    HorizontalOptions="Center"
+            <Label
+                HorizontalOptions="Center"
                     Text="{Binding LoadingText}"
                     FontSize="14"
                     Margin="0,5" />

@@ -17,8 +17,8 @@
             <converters:BoolToColorConverter x:Key="BoolToColorConverter" />
             
             <!-- Validation Converters -->
-            <converters:StringToColorConverter x:Key="StringToColorConverter" />
             <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
+            <converters:FirstValidationErrorConverter x:Key="FirstValidationErrorConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>
