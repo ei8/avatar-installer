@@ -471,37 +471,42 @@ public partial class CreateAvatarViewModel : BaseViewModel
     // Helper method to eliminate folder picking code duplication
     private async Task<string> PickFolderAsync()
     {
+        string result = string.Empty;
+        
         try
         {
             var folder = await FolderPicker.PickAsync(default);
-            return folder.Folder?.Path ?? string.Empty;
+            result = folder.Folder?.Path ?? string.Empty;
         }
         catch (Exception ex)
         {
             Debug.WriteLine(ex);
             await Shell.Current.DisplayAlert(Constants.Statuses.Error, ex.ToString(), Constants.Prompts.Ok);
-            return string.Empty;
         }
+        
+        return result;
     }
 
     [RelayCommand]
     private async Task ChooseDestinationAsync()
     {
         var folderPath = await this.PickFolderAsync();
-        if (!string.IsNullOrEmpty(folderPath))
-        {
-            this.Destination = folderPath;
-        }
+        
+        if (string.IsNullOrEmpty(folderPath))
+            return;
+            
+        this.Destination = folderPath;
     }
 
     [RelayCommand]
     private async Task ChooseKeysPathAsync()
     {
         var folderPath = await this.PickFolderAsync();
-        if (!string.IsNullOrEmpty(folderPath))
-        {
-            this.KeysPath.Value = folderPath;
-        }
+        
+        if (string.IsNullOrEmpty(folderPath))
+            return;
+            
+        this.KeysPath.Value = folderPath;
     }
 
     [RelayCommand]
@@ -513,10 +518,11 @@ public partial class CreateAvatarViewModel : BaseViewModel
             {
                 PickerTitle = "Select Private Key File"
             });
-            if (file != null)
-            {
-                this.InProcessPrivateKeyPath.Value = file.FullPath;
-            }
+            
+            if (file == null)
+                return;
+                
+            this.InProcessPrivateKeyPath.Value = file.FullPath;
         }
         catch (Exception ex)
         {
