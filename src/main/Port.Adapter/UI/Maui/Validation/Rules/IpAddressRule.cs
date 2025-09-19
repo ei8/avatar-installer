@@ -9,16 +9,20 @@ public class IpAddressRule<T> : IValidationRule<T>
 
     public bool Check(T value)
     {
-        if (value is not string ipAddress || string.IsNullOrWhiteSpace(ipAddress))
-            return false;
-
-        // Use regex to validate IP format (0-255.0-255.0-255.0-255)
-        var ipPattern = @"^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
+        bool result = false;
         
-        if (!Regex.IsMatch(ipAddress, ipPattern))
-            return false;
-
-        // Additional validation using IPAddress.TryParse
-        return IPAddress.TryParse(ipAddress, out _);
+        if (value is string ipAddress && !string.IsNullOrWhiteSpace(ipAddress))
+        {
+            // Use regex to validate IP format (0-255.0-255.0-255.0-255)
+            var ipPattern = @"^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
+            
+            if (Regex.IsMatch(ipAddress, ipPattern))
+            {
+                // Additional validation using IPAddress.TryParse
+                result = IPAddress.TryParse(ipAddress, out _);
+            }
+        }
+        
+        return result;
     }
 }

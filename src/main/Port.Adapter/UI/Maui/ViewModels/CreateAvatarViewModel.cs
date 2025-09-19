@@ -24,10 +24,37 @@ namespace ei8.Avatar.Installer.Port.Adapter.UI.Maui.ViewModels;
 
 public partial class CreateAvatarViewModel : BaseViewModel
 {
+    #region Constants
+    private const string ReadyToCreateAvatar = "Ready to create avatar...";
+    private const string StartingAvatarCreation = "Starting avatar creation...";
+    private const string AvatarCreationCompleted = "Avatar creation completed successfully!";
+    private const string AvatarCreationFailed = "Avatar creation failed!";
+    private const string SelectPrivateKeyFile = "Select Private Key File";
+    private const string FixValidationErrors = "Please fix validation errors before creating avatar";
+    private const string AvatarServerConfigurationMustContainAvatar = "AvatarServerConfiguration must contain at least one avatar";
+    private const string PrivateKeyPathTemplate = "/C/keys/{0}";
+    private const string JsonFileExtension = "json";
+    
+    // Validation Messages
+    private const string AvatarIpRequired = "Avatar IP address is required";
+    private const string InvalidIpFormat = "Invalid IP address format (e.g., 172.20.10.4)";
+    private const string Un8yIpRequired = "Un8y IP address is required";
+    private const string AvatarPortRequired = "Avatar port is required";
+    private const string PortRangeInvalid = "Port must be between 1 and 65535";
+    private const string Un8yBlazorPortRequired = "Un8y Blazor port is required";
+    private const string KeysPathRequiredWhenEncryptionEnabled = "Keys path is required when encryption is enabled";
+    private const string InProcessPrivateKeyPathRequired = "In Process Private Key Path is required when encryption is enabled";
+    private const string PrivateKeyFileExtensionInvalid = "Private key file must have .key, .pem, .p12, or .pfx extension";
+    private const string EncryptedEventsKeyRequired = "Encrypted Events Key is required when encryption is enabled";
+    #endregion
+
+    #region Fields
     private readonly IAvatarApplicationService avatarApplicationService;
     private readonly IProgressService progressService;
     private AvatarServerConfiguration avatarServerConfiguration = new(string.Empty);
+    #endregion
 
+    #region Constructors
     public CreateAvatarViewModel(IAvatarApplicationService avatarApplicationService, IProgressService progressService) 
     {
         AssertionConcern.AssertArgumentNotNull(avatarApplicationService, nameof(avatarApplicationService));
@@ -42,17 +69,9 @@ public partial class CreateAvatarViewModel : BaseViewModel
         // Initialize ValidatableObject properties
         this.InitializeValidation();
     }
+    #endregion
 
-    private void ProgressService_DescriptionChanged(object sender, EventArgs e)
-    {
-        this.LoadingText = this.progressService.Description;
-    }
-
-    private void ProgressService_ProgressChanged(object sender, EventArgs e)
-    {
-        this.CreationProgress = this.progressService.Progress;
-    }
-
+    #region Properties
     // Server Properties
     [ObservableProperty]
     private string serverName = string.Empty;
@@ -104,9 +123,21 @@ public partial class CreateAvatarViewModel : BaseViewModel
     [ObservableProperty]
     private double creationProgress = 0.0;
     [ObservableProperty]
-    private string loadingText = "Ready to create avatar...";
+    private string loadingText = ReadyToCreateAvatar;
 
     // Note: Validation errors are now handled by ValidatableObject<T>.Errors property
+    #endregion
+
+    #region Methods
+    private void ProgressService_DescriptionChanged(object sender, EventArgs e)
+    {
+        this.LoadingText = this.progressService.Description;
+    }
+
+    private void ProgressService_ProgressChanged(object sender, EventArgs e)
+    {
+        this.CreationProgress = this.progressService.Progress;
+    }
 
     // Initialize validation for ValidatableObject properties
     private void InitializeValidation()
@@ -132,39 +163,39 @@ public partial class CreateAvatarViewModel : BaseViewModel
         // IP Address validation rules
         this.AvatarIp.Validations.Add(new IsNotNullOrEmptyRule<string> 
         { 
-            ValidationMessage = "Avatar IP address is required" 
+            ValidationMessage = AvatarIpRequired 
         });
         this.AvatarIp.Validations.Add(new IpAddressRule<string> 
         { 
-            ValidationMessage = "Invalid IP address format (e.g., 172.20.10.4)" 
+            ValidationMessage = InvalidIpFormat 
         });
 
         this.Un8yIp.Validations.Add(new IsNotNullOrEmptyRule<string> 
         { 
-            ValidationMessage = "Un8y IP address is required" 
+            ValidationMessage = Un8yIpRequired 
         });
         this.Un8yIp.Validations.Add(new IpAddressRule<string> 
         { 
-            ValidationMessage = "Invalid IP address format (e.g., 172.20.10.4)" 
+            ValidationMessage = InvalidIpFormat 
         });
 
         // Port validation rules
         this.AvatarInPort.Validations.Add(new IsNotNullOrEmptyRule<string> 
         { 
-            ValidationMessage = "Avatar port is required" 
+            ValidationMessage = AvatarPortRequired 
         });
         this.AvatarInPort.Validations.Add(new PortNumberRule<string> 
         { 
-            ValidationMessage = "Port must be between 1 and 65535" 
+            ValidationMessage = PortRangeInvalid 
         });
 
         this.Un8yBlazorPort.Validations.Add(new IsNotNullOrEmptyRule<string> 
         { 
-            ValidationMessage = "Un8y Blazor port is required" 
+            ValidationMessage = Un8yBlazorPortRequired 
         });
         this.Un8yBlazorPort.Validations.Add(new PortNumberRule<string> 
         { 
-            ValidationMessage = "Port must be between 1 and 65535" 
+            ValidationMessage = PortRangeInvalid 
         });
 
         // Conditional validation for encryption-related fields
@@ -172,7 +203,7 @@ public partial class CreateAvatarViewModel : BaseViewModel
             () => this.EncryptionEnabled,
             new IsNotNullOrEmptyRule<string> 
             { 
-                ValidationMessage = "Keys path is required when encryption is enabled" 
+                ValidationMessage = KeysPathRequiredWhenEncryptionEnabled 
             }
         ));
 
@@ -180,14 +211,14 @@ public partial class CreateAvatarViewModel : BaseViewModel
             () => this.EncryptionEnabled,
             new IsNotNullOrEmptyRule<string> 
             { 
-                ValidationMessage = "In Process Private Key Path is required when encryption is enabled" 
+                ValidationMessage = InProcessPrivateKeyPathRequired 
             }
         ));
         this.InProcessPrivateKeyPath.Validations.Add(new ConditionalRule<string>(
             () => this.EncryptionEnabled,
             new FileExtensionRule<string>(".key", ".pem", ".p12", ".pfx") 
             { 
-                ValidationMessage = "Private key file must have .key, .pem, .p12, or .pfx extension" 
+                ValidationMessage = PrivateKeyFileExtensionInvalid 
             }
         ));
 
@@ -195,7 +226,7 @@ public partial class CreateAvatarViewModel : BaseViewModel
             () => this.EncryptionEnabled,
             new IsNotNullOrEmptyRule<string> 
             { 
-                ValidationMessage = "Encrypted Events Key is required when encryption is enabled" 
+                ValidationMessage = EncryptedEventsKeyRequired 
             }
         ));
     }
@@ -255,7 +286,7 @@ public partial class CreateAvatarViewModel : BaseViewModel
                 if (!string.IsNullOrEmpty(this.InProcessPrivateKeyPath.Value))
                 {
                     var fileName = Path.GetFileName(this.InProcessPrivateKeyPath.Value);
-                    this.PrivateKeyPath = $"/C/keys/{fileName}";
+                    this.PrivateKeyPath = string.Format(PrivateKeyPathTemplate, fileName);
                 }
                 else
                 {
@@ -305,7 +336,7 @@ public partial class CreateAvatarViewModel : BaseViewModel
         }
     }
 
-    private void UpdateAvatarDirectProperty(Action<AvatarConfigurationItem> updateAction)
+    private void UpdateAvatarIfExists(Action<AvatarConfigurationItem> updateAction)
     {
         if (this.avatarServerConfiguration?.Avatars?.Count() > 0)
         {
@@ -316,17 +347,17 @@ public partial class CreateAvatarViewModel : BaseViewModel
     // Property change handlers for automatic configuration updates
     partial void OnNameChanged(string value)
     {
-        this.UpdateAvatarDirectProperty(a => a.Name = value);
+        this.UpdateAvatarIfExists(a => a.Name = value);
     }
 
     partial void OnOwnerNameChanged(string value)
     {
-        this.UpdateAvatarDirectProperty(a => a.OwnerName = value);
+        this.UpdateAvatarIfExists(a => a.OwnerName = value);
     }
 
     partial void OnOwnerUserIdChanged(string value)
     {
-        this.UpdateAvatarDirectProperty(a => a.OwnerUserId = value);
+        this.UpdateAvatarIfExists(a => a.OwnerUserId = value);
     }
 
     partial void OnServerNameChanged(string value)
@@ -412,7 +443,7 @@ public partial class CreateAvatarViewModel : BaseViewModel
                 return;
             }
 
-            if (!configFile.FileName.EndsWith("json", StringComparison.OrdinalIgnoreCase))
+            if (!configFile.FileName.EndsWith(JsonFileExtension, StringComparison.OrdinalIgnoreCase))
             {
                 await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Invalid,
                     Constants.Messages.InvalidConfig, Constants.Prompts.Ok);
@@ -423,7 +454,7 @@ public partial class CreateAvatarViewModel : BaseViewModel
             this.avatarServerConfiguration = await this.avatarApplicationService.ReadAvatarConfiguration(this.ConfigPath);
             
             AssertionConcern.AssertArgumentNotNull(this.avatarServerConfiguration.Avatars, nameof(this.avatarServerConfiguration.Avatars));
-            AssertionConcern.AssertArgumentTrue(this.avatarServerConfiguration.Avatars.Count() > 0, "AvatarServerConfiguration must contain at least one avatar");
+            AssertionConcern.AssertArgumentTrue(this.avatarServerConfiguration.Avatars.Count() > 0, AvatarServerConfigurationMustContainAvatar);
             
             // Populate all fields from configuration
             this.ServerName = this.avatarServerConfiguration.ServerName;
@@ -516,7 +547,7 @@ public partial class CreateAvatarViewModel : BaseViewModel
         {
             var file = await FilePicker.PickAsync(new PickOptions
             {
-                PickerTitle = "Select Private Key File"
+                PickerTitle = SelectPrivateKeyFile
             });
             
             if (file == null)
@@ -565,7 +596,7 @@ public partial class CreateAvatarViewModel : BaseViewModel
             // Validate all fields before creating avatar
             if (!this.ValidateAllFields())
             {
-                await Shell.Current.DisplayAlert(Constants.Statuses.Invalid, "Please fix validation errors before creating avatar", Constants.Prompts.Ok);
+                await Shell.Current.DisplayAlert(Constants.Statuses.Invalid, FixValidationErrors, Constants.Prompts.Ok);
                 return;
             }
 
@@ -591,17 +622,17 @@ public partial class CreateAvatarViewModel : BaseViewModel
         try
         {
             this.EditorLogs = string.Empty;
-            this.LoadingText = "Starting avatar creation...";
+            this.LoadingText = StartingAvatarCreation;
 
             await this.avatarApplicationService.CreateAvatarAsync(this.avatarServerConfiguration);
             
-            this.LoadingText = "Avatar creation completed successfully!";
+            this.LoadingText = AvatarCreationCompleted;
             await Shell.Current.DisplayAlert(Constants.Statuses.Success, Constants.Messages.AvatarInstalled, Constants.Prompts.Ok);
         }
         catch (Exception ex)
         {
             Debug.WriteLine(ex);
-            this.LoadingText = "Avatar creation failed!";
+            this.LoadingText = AvatarCreationFailed;
             await Shell.Current.DisplayAlert(Constants.Statuses.Error, ex.ToString(), Constants.Prompts.Ok);
         }
         finally
@@ -613,4 +644,5 @@ public partial class CreateAvatarViewModel : BaseViewModel
             this.EditorLogs = string.Join(Environment.NewLine, logList);
         }
     }
+    #endregion
 }

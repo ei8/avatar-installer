@@ -6,12 +6,16 @@ public class PortNumberRule<T> : IValidationRule<T>
 
     public bool Check(T value)
     {
-        if (value is not string port || string.IsNullOrWhiteSpace(port))
-            return false;
-
-        if (!int.TryParse(port, out int portNumber))
-            return false;
-
-        return portNumber >= 1 && portNumber <= 65535;
+        bool result = false;
+        
+        if (value is string port && !string.IsNullOrWhiteSpace(port))
+        {
+            if (int.TryParse(port, out int portNumber))
+            {
+                result = portNumber >= 1 && portNumber <= 65535;
+            }
+        }
+        
+        return result;
     }
 }

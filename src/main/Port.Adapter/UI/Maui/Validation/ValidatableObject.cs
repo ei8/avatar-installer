@@ -4,34 +4,34 @@ namespace ei8.Avatar.Installer.Port.Adapter.UI.Maui.Validation;
 
 public class ValidatableObject<T> : ObservableObject, IValidity
 {
-    private IEnumerable<string> _errors;
-    private bool _isValid;
-    private T _value;
+    private IEnumerable<string> errors;
+    private bool isValid;
+    private T value;
 
     public List<IValidationRule<T>> Validations { get; } = new();
 
     public IEnumerable<string> Errors
     {
-        get => _errors;
-        private set => SetProperty(ref _errors, value);
+        get => this.errors;
+        private set => SetProperty(ref this.errors, value);
     }
 
     public bool IsValid
     {
-        get => _isValid;
-        private set => SetProperty(ref _isValid, value);
+        get => this.isValid;
+        private set => SetProperty(ref this.isValid, value);
     }
 
     public T Value
     {
-        get => _value;
-        set => SetProperty(ref _value, value);
+        get => this.value;
+        set => SetProperty(ref this.value, value);
     }
 
     public ValidatableObject()
     {
-        _isValid = true;
-        _errors = Enumerable.Empty<string>();
+        this.isValid = true;
+        this.errors = Enumerable.Empty<string>();
     }
 
     public bool Validate()
