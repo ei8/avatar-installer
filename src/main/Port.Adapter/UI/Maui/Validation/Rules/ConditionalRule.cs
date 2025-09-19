@@ -11,7 +11,7 @@ public class ConditionalRule<T> : IValidationRule<T>
     {
         this.conditionFunc = conditionFunc;
         this.innerRule = innerRule;
-        ValidationMessage = innerRule.ValidationMessage;
+        this.ValidationMessage = innerRule.ValidationMessage;
     }
 
     public bool Check(T value)

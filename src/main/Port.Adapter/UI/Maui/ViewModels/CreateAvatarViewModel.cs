@@ -47,6 +47,7 @@ public partial class CreateAvatarViewModel : BaseViewModel
         public const string KeysPathRequiredWhenEncryptionEnabled = "Keys path is required when encryption is enabled";
         public const string InProcessPrivateKeyPathRequired = "In Process Private Key Path is required when encryption is enabled";
         public const string PrivateKeyFileExtensionInvalid = "Private key file must have .key, .pem, .p12, or .pfx extension";
+        public static readonly string[] PrivateKeyFileExtensions = { ".key", ".pem", ".p12", ".pfx" };
         public const string EncryptedEventsKeyRequired = "Encrypted Events Key is required when encryption is enabled";
     }
     #endregion
@@ -219,7 +220,7 @@ public partial class CreateAvatarViewModel : BaseViewModel
         ));
         this.InProcessPrivateKeyPath.Validations.Add(new ConditionalRule<string>(
             () => this.EncryptionEnabled,
-            new FileExtensionRule<string>(".key", ".pem", ".p12", ".pfx") 
+            new FileExtensionRule<string>(CreateAvatarConstants.PrivateKeyFileExtensions) 
             { 
                 ValidationMessage = CreateAvatarConstants.PrivateKeyFileExtensionInvalid 
             }
@@ -583,40 +584,45 @@ public partial class CreateAvatarViewModel : BaseViewModel
     [RelayCommand]
     private async Task CreateAvatarAsync()
     {
-        if (this.IsBusy)
-            return;
+        bool shouldProceed = false;
 
-        this.IsBusy = true;
-
-        try
+        if (!this.IsBusy)
         {
-            if (string.IsNullOrEmpty(this.ConfigPath))
+            this.IsBusy = true;
+
+            try
             {
-                await Shell.Current.DisplayAlert(Constants.Statuses.Invalid, Constants.Messages.ChooseConfig, Constants.Prompts.Ok);
-                return;
+                if (!string.IsNullOrEmpty(this.ConfigPath))
+                {
+                    // Validate all fields before creating avatar
+                    if (this.ValidateAllFields())
+                    {
+                        // Switch to log tab to show progress
+                        this.SelectLogTab();
+                        
+                        // Start avatar creation directly
+                        await this.StartAvatarCreationAsync();
+                        shouldProceed = true;
+                    }
+                    else
+                    {
+                        await Shell.Current.DisplayAlert(Constants.Statuses.Invalid, CreateAvatarConstants.FixValidationErrors, Constants.Prompts.Ok);
+                    }
+                }
+                else
+                {
+                    await Shell.Current.DisplayAlert(Constants.Statuses.Invalid, Constants.Messages.ChooseConfig, Constants.Prompts.Ok);
+                }
             }
-
-            // Validate all fields before creating avatar
-            if (!this.ValidateAllFields())
+            catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert(Constants.Statuses.Invalid, CreateAvatarConstants.FixValidationErrors, Constants.Prompts.Ok);
-                return;
+                Debug.WriteLine(ex);
+                await Shell.Current.DisplayAlert(Constants.Statuses.Error, ex.ToString(), Constants.Prompts.Ok);
             }
-
-            // Switch to log tab to show progress
-            this.SelectLogTab();
-            
-            // Start avatar creation directly
-            await this.StartAvatarCreationAsync();
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine(ex);
-            await Shell.Current.DisplayAlert(Constants.Statuses.Error, ex.ToString(), Constants.Prompts.Ok);
-        }
-        finally
-        {
-            this.IsBusy = false;
+            finally
+            {
+                this.IsBusy = false;
+            }
         }
     }
 

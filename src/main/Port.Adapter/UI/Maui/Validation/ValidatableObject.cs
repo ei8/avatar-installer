@@ -36,13 +36,13 @@ public class ValidatableObject<T> : ObservableObject, IValidity
 
     public bool Validate()
     {
-        Errors = Validations
-            ?.Where(v => !v.Check(Value))
+        this.Errors = Validations
+            ?.Where(v => !v.Check(this.Value))
             ?.Select(v => v.ValidationMessage)
             ?.ToArray()
             ?? Enumerable.Empty<string>();
 
-        IsValid = !Errors.Any();
-        return IsValid;
+        this.IsValid = !this.Errors.Any();
+        return this.IsValid;
     }
 }
