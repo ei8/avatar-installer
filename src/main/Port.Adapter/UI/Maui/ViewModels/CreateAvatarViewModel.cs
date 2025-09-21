@@ -586,8 +586,6 @@ public partial class CreateAvatarViewModel : BaseViewModel
     [RelayCommand]
     private async Task CreateAvatarAsync()
     {
-        bool shouldProceed = false;
-
         if (!this.IsBusy)
         {
             this.IsBusy = true;
@@ -604,7 +602,6 @@ public partial class CreateAvatarViewModel : BaseViewModel
                         
                         // Start avatar creation directly
                         await this.StartAvatarCreationAsync();
-                        shouldProceed = true;
                     }
                     else
                     {
