@@ -428,78 +428,80 @@ public partial class CreateAvatarViewModel : BaseViewModel
     [RelayCommand]
     private async Task ChooseConfigurationAsync()
     {
-        if (IsBusy)
-            return;
-
-        this.IsBusy = true;
-
-        try
+        if (!this.IsBusy)
         {
-            var configFile = await FilePicker.PickAsync(new PickOptions
-            {
-                PickerTitle = ei8.Avatar.Installer.Common.Constants.Messages.ChooseConfig
-            });
+            this.IsBusy = true;
 
-            if (configFile is null)
+            try
             {
-                await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Cancelled,
-                    Constants.Messages.ChooseConfig, Constants.Prompts.Ok);
-                return;
-            }
+                var configFile = await FilePicker.PickAsync(new PickOptions
+                {
+                    PickerTitle = ei8.Avatar.Installer.Common.Constants.Messages.ChooseConfig
+                });
 
-            if (!configFile.FileName.EndsWith(CreateAvatarConstants.JsonFileExtension, StringComparison.OrdinalIgnoreCase))
-            {
-                await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Invalid,
-                    Constants.Messages.InvalidConfig, Constants.Prompts.Ok);
-                return;
+                if (configFile is not null)
+                {
+                    if (configFile.FileName.EndsWith(CreateAvatarConstants.JsonFileExtension, StringComparison.OrdinalIgnoreCase))
+                    {
+                        this.ConfigPath = configFile.FullPath;
+                        this.avatarServerConfiguration = await this.avatarApplicationService.ReadAvatarConfiguration(this.ConfigPath);
+                        
+                        AssertionConcern.AssertArgumentNotNull(this.avatarServerConfiguration.Avatars, nameof(this.avatarServerConfiguration.Avatars));
+                        AssertionConcern.AssertArgumentTrue(this.avatarServerConfiguration.Avatars.Count() > 0, CreateAvatarConstants.AvatarServerConfigurationMustContainAvatar);
+                        
+                        // Populate all fields from configuration
+                        this.ServerName = this.avatarServerConfiguration.ServerName;
+                        this.Destination = this.avatarServerConfiguration.Destination;
+                        
+                        var avatar = this.avatarServerConfiguration.Avatars[0];
+                        this.Name = avatar.Name;
+                        this.OwnerName = avatar.OwnerName;
+                        this.OwnerUserId = avatar.OwnerUserId;
+                        
+                        if (avatar.Orchestration != null)
+                        {
+                            this.AvatarIp.Value = avatar.Orchestration.AvatarIp;
+                            this.Un8yIp.Value = avatar.Orchestration.Un8yIp;
+                            this.AvatarInPort.Value = avatar.Orchestration.AvatarInPort.ToString();
+                            this.Un8yBlazorPort.Value = avatar.Orchestration.Un8yBlazorPort.ToString();
+                            this.KeysPath.Value = avatar.Orchestration.KeysPath;
+                        }
+                        
+                        if (avatar.Un8y != null)
+                        {
+                            this.CertificatePassword = avatar.Un8y.CertificatePassword;
+                            this.BasePath = avatar.Un8y.BasePath;
+                        }
+                        
+                        if (avatar.EventSourcing != null)
+                        {
+                            this.EncryptionEnabled = avatar.EventSourcing.EncryptionEnabled;
+                            this.InProcessPrivateKeyPath.Value = avatar.EventSourcing.InProcessPrivateKeyPath;
+                            this.PrivateKeyPath = avatar.EventSourcing.PrivateKeyPath;
+                            this.EncryptedEventsKey.Value = avatar.EventSourcing.EncryptedEventsKey;
+                        }
+                    }
+                    else
+                    {
+                        await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Invalid,
+                            Constants.Messages.InvalidConfig, Constants.Prompts.Ok);
+                    }
+                }
+                else
+                {
+                    await Shell.Current.CurrentPage.DisplayAlert(Constants.Statuses.Cancelled,
+                        Constants.Messages.ChooseConfig, Constants.Prompts.Ok);
+                }
             }
-
-            this.ConfigPath = configFile.FullPath;
-            this.avatarServerConfiguration = await this.avatarApplicationService.ReadAvatarConfiguration(this.ConfigPath);
-            
-            AssertionConcern.AssertArgumentNotNull(this.avatarServerConfiguration.Avatars, nameof(this.avatarServerConfiguration.Avatars));
-            AssertionConcern.AssertArgumentTrue(this.avatarServerConfiguration.Avatars.Count() > 0, CreateAvatarConstants.AvatarServerConfigurationMustContainAvatar);
-            
-            // Populate all fields from configuration
-            this.ServerName = this.avatarServerConfiguration.ServerName;
-            this.Destination = this.avatarServerConfiguration.Destination;
-            
-            var avatar = this.avatarServerConfiguration.Avatars[0];
-            this.Name = avatar.Name;
-            this.OwnerName = avatar.OwnerName;
-            this.OwnerUserId = avatar.OwnerUserId;
-            
-            if (avatar.Orchestration != null)
+            catch (Exception ex)
             {
-                this.AvatarIp.Value = avatar.Orchestration.AvatarIp;
-                this.Un8yIp.Value = avatar.Orchestration.Un8yIp;
-                this.AvatarInPort.Value = avatar.Orchestration.AvatarInPort.ToString();
-                this.Un8yBlazorPort.Value = avatar.Orchestration.Un8yBlazorPort.ToString();
-                this.KeysPath.Value = avatar.Orchestration.KeysPath;
+                Debug.WriteLine(ex);
+                await Shell.Current.DisplayAlert(Constants.Statuses.Error, ex.ToString(), Constants.Prompts.Ok);
             }
-            
-            if (avatar.Un8y != null)
+            finally
             {
-                this.CertificatePassword = avatar.Un8y.CertificatePassword;
-                this.BasePath = avatar.Un8y.BasePath;
+                this.IsBusy = false;
             }
-            
-            if (avatar.EventSourcing != null)
-            {
-                this.EncryptionEnabled = avatar.EventSourcing.EncryptionEnabled;
-                this.InProcessPrivateKeyPath.Value = avatar.EventSourcing.InProcessPrivateKeyPath;
-                this.PrivateKeyPath = avatar.EventSourcing.PrivateKeyPath;
-                this.EncryptedEventsKey.Value = avatar.EventSourcing.EncryptedEventsKey;
-            }
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine(ex);
-            await Shell.Current.DisplayAlert(Constants.Statuses.Error, ex.ToString(), Constants.Prompts.Ok);
-        }
-        finally
-        {
-            this.IsBusy = false;
         }
     }
 
@@ -527,10 +529,10 @@ public partial class CreateAvatarViewModel : BaseViewModel
     {
         var folderPath = await this.PickFolderAsync();
         
-        if (string.IsNullOrEmpty(folderPath))
-            return;
-            
-        this.Destination = folderPath;
+        if (!string.IsNullOrEmpty(folderPath))
+        {
+            this.Destination = folderPath;
+        }
     }
 
     [RelayCommand]
@@ -538,10 +540,10 @@ public partial class CreateAvatarViewModel : BaseViewModel
     {
         var folderPath = await this.PickFolderAsync();
         
-        if (string.IsNullOrEmpty(folderPath))
-            return;
-            
-        this.KeysPath.Value = folderPath;
+        if (!string.IsNullOrEmpty(folderPath))
+        {
+            this.KeysPath.Value = folderPath;
+        }
     }
 
     [RelayCommand]
@@ -554,10 +556,10 @@ public partial class CreateAvatarViewModel : BaseViewModel
                 PickerTitle = CreateAvatarConstants.SelectPrivateKeyFile
             });
             
-            if (file == null)
-                return;
-                
-            this.InProcessPrivateKeyPath.Value = file.FullPath;
+            if (file is not null)
+            {
+                this.InProcessPrivateKeyPath.Value = file.FullPath;
+            }
         }
         catch (Exception ex)
         {

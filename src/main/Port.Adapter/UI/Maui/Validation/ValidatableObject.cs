@@ -13,19 +13,19 @@ public class ValidatableObject<T> : ObservableObject, IValidity
     public IEnumerable<string> Errors
     {
         get => this.errors;
-        private set => SetProperty(ref this.errors, value);
+        private set => this.SetProperty(ref this.errors, value);
     }
 
     public bool IsValid
     {
         get => this.isValid;
-        private set => SetProperty(ref this.isValid, value);
+        private set => this.SetProperty(ref this.isValid, value);
     }
 
     public T Value
     {
         get => this.value;
-        set => SetProperty(ref this.value, value);
+        set => this.SetProperty(ref this.value, value);
     }
 
     public ValidatableObject()
