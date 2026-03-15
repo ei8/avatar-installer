@@ -106,6 +106,7 @@ namespace ei8.Avatar.Installer.Common
         public sealed class Directories
         {
             public const string Un8y = "un8y";
+            public static readonly string Un8yPlugins = Path.Combine(Un8y, "plugins");
             public const string Av8r = "av8r";
             public const string Iden8y = "iden8y";
         }
@@ -196,7 +197,6 @@ namespace ei8.Avatar.Installer.Common
         public sealed class Urls
         {
             public const string DefaultTemplateDownloadUrl = "https://github.com/ei8/avatar-template.git";
-            public const string DefaultPluginsDownloadUrl = "https://github.com/ei8/avatar-plugins/releases/latest/download/plugins.zip";
         }
 
         public sealed class BatchFileTemplates

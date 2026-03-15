@@ -19,11 +19,8 @@
           "plugins": [
             {
               "name": "cortex-diary",
-              "url": "https://download-directory.github.io/?url=https%3A%2F%2Fgithub.com%2Fei8%2Fcortex-diary%2Ftree%2Fmaster%2Fplugins"
-            },
-            {
-              "name": "cortex-chat",
-              "url": "https://download-directory.github.io/?url=https%3A%2F%2Fgithub.com%2Fei8%2Fcortex-diary%2Ftree%2Fmaster%2Fplugins"
+              "url": "https://github.com/ei8/cortex-diary/archive/refs/heads/master.zip",
+              "path": "plugins"
             }
           ]
         },

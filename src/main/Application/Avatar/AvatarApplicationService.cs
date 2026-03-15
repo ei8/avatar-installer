@@ -74,10 +74,7 @@ namespace ei8.Avatar.Installer.Application.Avatar
 
                 foreach (var plugin in item.Un8y.Plugins)
                 {
-                    if (string.IsNullOrWhiteSpace(plugin.Name) || string.IsNullOrWhiteSpace(plugin.Url))
-                        continue;
-
-                    var pluginDirectory = Path.Combine(subdirectory, "un8y", "plugins", plugin.Name);
+                    var pluginDirectory = Path.Combine(subdirectory, Common.Constants.Directories.Un8yPlugins, plugin.Name);
                     if (Directory.Exists(pluginDirectory) && Directory.GetFiles(pluginDirectory).Any())
                         logger.LogInformation(
                             "{pluginDirectory} is not empty. Using existing plugin '{pluginName}'.",
@@ -85,7 +82,7 @@ namespace ei8.Avatar.Installer.Application.Avatar
                             plugin.Name
                         );
                     else
-                        await pluginsService.DownloadAndExtractAsync(pluginDirectory, plugin.Url);
+                        await pluginsService.DownloadAndExtractAsync(pluginDirectory, plugin.Url, plugin.Path);
                 }
 
                 var avatar = await this.avatarItemReadRepository.GetByAsync(subdirectory);
