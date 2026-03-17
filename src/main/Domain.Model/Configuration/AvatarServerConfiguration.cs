@@ -176,7 +176,7 @@ namespace ei8.Avatar.Installer.Domain.Model.Configuration
             {
                 AssertionConcern.AssertArgumentNotNull(value, nameof(Name));
                 AssertionConcern.AssertArgumentNotEmpty(value, $"'{nameof(Name)}' cannot be empty.", nameof(Name));
-                name = value;
+                this.name = value;
             }
         }
 
@@ -187,21 +187,15 @@ namespace ei8.Avatar.Installer.Domain.Model.Configuration
             {
                 AssertionConcern.AssertArgumentNotNull(value, nameof(Url));
                 AssertionConcern.AssertArgumentNotEmpty(value, $"'{nameof(Url)}' cannot be empty.", nameof(Url));
-                url = value;
+                this.url = value;
             }
         }
-
-        /// <summary>
-        /// Subfolder to extract from the downloaded archive. Leave empty to extract everything.
-        /// </summary>
-        public string Path { get; set; }
 
         [JsonConstructor]
         public PluginConfiguration()
         {
             this.name = string.Empty;
             this.url = string.Empty;
-            this.Path = string.Empty;
         }
     }
 

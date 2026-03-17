@@ -14,7 +14,7 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Plugins
             this.logger = logger;
         }
 
-        public async Task DownloadAndExtractAsync(string destinationPath, string url, string subPath)
+        public async Task DownloadAndExtractAsync(string destinationPath, string url)
         {
             AssertionConcern.AssertArgumentNotNull(destinationPath, nameof(destinationPath));
             AssertionConcern.AssertArgumentNotNull(url, nameof(url));
@@ -39,21 +39,8 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Plugins
                 this.logger.LogInformation("Extracting archive...");
                 ZipFile.ExtractToDirectory(tempZipPath, tempExtractDir);
 
-                // Archives often have a single root folder; detect it
-                var rootEntries = Directory.GetDirectories(tempExtractDir);
-                var effectiveRoot = rootEntries.Length == 1 ? rootEntries[0] : tempExtractDir;
-
-                var sourcePath = string.IsNullOrWhiteSpace(subPath)
-                    ? effectiveRoot
-                    : Path.Combine(effectiveRoot, subPath.Replace('/', Path.DirectorySeparatorChar));
-
-                if (!Directory.Exists(sourcePath))
-                    throw new DirectoryNotFoundException(
-                        $"Path '{subPath}' not found in the downloaded archive."
-                    );
-
                 this.logger.LogInformation("Copying plugins to {destinationPath}...", destinationPath);
-                PluginsService.CopyDirectory(sourcePath, destinationPath);
+                PluginsService.CopyDirectory(tempExtractDir, destinationPath);
 
                 this.logger.LogInformation("Plugins installed successfully to {destinationPath}.", destinationPath);
             }

@@ -4,8 +4,7 @@ namespace ei8.Avatar.Installer.Domain.Model.Plugins
     {
         /// <summary>
         /// Download a ZIP archive from <paramref name="url"/> and extract its contents into <paramref name="destinationPath"/>.
-        /// When <paramref name="subPath"/> is specified, only that subfolder from the archive is extracted.
         /// </summary>
-        Task DownloadAndExtractAsync(string destinationPath, string url, string subPath);
+        Task DownloadAndExtractAsync(string destinationPath, string url);
     }
 }

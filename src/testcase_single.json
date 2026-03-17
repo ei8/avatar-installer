@@ -19,8 +19,7 @@
           "plugins": [
             {
               "name": "cortex-diary",
-              "url": "https://github.com/ei8/cortex-diary/archive/refs/heads/master.zip",
-              "path": "plugins"
+              "url": "https://github.com/ei8/cortex-diary/archive/refs/heads/master.zip"
             }
           ]
         },

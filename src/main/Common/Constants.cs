@@ -106,7 +106,7 @@ namespace ei8.Avatar.Installer.Common
         public sealed class Directories
         {
             public const string Un8y = "un8y";
-            public static readonly string Un8yPlugins = Path.Combine(Un8y, "plugins");
+            public const string Un8yPlugins = "plugins";
             public const string Av8r = "av8r";
             public const string Iden8y = "iden8y";
         }
