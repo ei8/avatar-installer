@@ -1,4 +1,4 @@
-﻿namespace ei8.Avatar.Installer.Common
+namespace ei8.Avatar.Installer.Common
 {
     public sealed class Constants
     {
@@ -106,6 +106,7 @@
         public sealed class Directories
         {
             public const string Un8y = "un8y";
+            public const string Un8yPlugins = "plugins";
             public const string Av8r = "av8r";
             public const string Iden8y = "iden8y";
         }

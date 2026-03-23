@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+using neurUL.Common.Domain.Model;
+using System.Text.Json.Serialization;
 
 namespace ei8.Avatar.Installer.Domain.Model.Configuration
 {
@@ -97,9 +98,9 @@ namespace ei8.Avatar.Installer.Domain.Model.Configuration
         [JsonConstructor]
         public CortexGraphConfiguration()
         {
-            DbName = "graph_${AVATAR_NAME}";
-            DbUsername = "root";
-            DbUrl = "http://cortex.graph.persistence:8529";
+            this.DbName = "graph_${AVATAR_NAME}";
+            this.DbUsername = "root";
+            this.DbUrl = "http://cortex.graph.persistence:8529";
         }
     }
 
@@ -115,9 +116,9 @@ namespace ei8.Avatar.Installer.Domain.Model.Configuration
         [JsonConstructor]
         public AvatarApiConfiguration()
         {
-            AnonymousUserId = "Guest";
-            TokenIssuerAddress = @"https://login.fibona.cc";
-            ApiName = "avatarapi-${AVATAR_NAME}";
+            this.AnonymousUserId = "Guest";
+            this.TokenIssuerAddress = @"https://login.fibona.cc";
+            this.ApiName = "avatarapi-${AVATAR_NAME}";
         }
     }
 
@@ -132,8 +133,8 @@ namespace ei8.Avatar.Installer.Domain.Model.Configuration
         [JsonConstructor]
         public CortexLibraryConfiguration()
         {
-            NeuronsUrl = @"https://fibona.cc/${AVATAR_NAME}/cortex/neurons";
-            TerminalsUrl = @"https://fibona.cc/${AVATAR_NAME}/cortex/terminals";
+            this.NeuronsUrl = @"https://fibona.cc/${AVATAR_NAME}/cortex/neurons";
+            this.TerminalsUrl = @"https://fibona.cc/${AVATAR_NAME}/cortex/terminals";
         }
     }
 
@@ -145,6 +146,7 @@ namespace ei8.Avatar.Installer.Domain.Model.Configuration
         public string BasePath { get; set; }
         public string CertificatePassword { get; set; }
         public string CertificatePath { get; set; }
+        public PluginConfiguration[] Plugins { get; set; }
 
         /// <summary>
         /// Initialize with defaults
@@ -152,12 +154,48 @@ namespace ei8.Avatar.Installer.Domain.Model.Configuration
         [JsonConstructor]
         public Un8yConfiguration()
         {
-            OidcAuthorityUrl = @"https://login.fibona.cc";
-            ClientId = "un8y-${AVATAR_NAME}";
-            RequestedScopes = "openid,profile,email,avatarapi-${AVATAR_NAME},offline_access";
-            BasePath = "/${AVATAR_NAME}/un8y";
-            CertificatePassword = string.Empty;
-            CertificatePath = "/https/aspnetapp.pfx";
+            this.OidcAuthorityUrl = @"https://login.fibona.cc";
+            this.ClientId = "un8y-${AVATAR_NAME}";
+            this.RequestedScopes = "openid,profile,email,avatarapi-${AVATAR_NAME},offline_access";
+            this.BasePath = "/${AVATAR_NAME}/un8y";
+            this.CertificatePassword = string.Empty;
+            this.CertificatePath = "/https/aspnetapp.pfx";
+            this.Plugins = Array.Empty<PluginConfiguration>();
+        }
+    }
+
+    public class PluginConfiguration
+    {
+        private string name;
+        private string url;
+
+        public string Name
+        {
+            get => name;
+            set
+            {
+                AssertionConcern.AssertArgumentNotNull(value, nameof(Name));
+                AssertionConcern.AssertArgumentNotEmpty(value, $"'{nameof(Name)}' cannot be empty.", nameof(Name));
+                this.name = value;
+            }
+        }
+
+        public string Url
+        {
+            get => url;
+            set
+            {
+                AssertionConcern.AssertArgumentNotNull(value, nameof(Url));
+                AssertionConcern.AssertArgumentNotEmpty(value, $"'{nameof(Url)}' cannot be empty.", nameof(Url));
+                this.url = value;
+            }
+        }
+
+        [JsonConstructor]
+        public PluginConfiguration()
+        {
+            this.name = string.Empty;
+            this.url = string.Empty;
         }
     }
 
