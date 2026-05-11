@@ -8,6 +8,8 @@ using ei8.Avatar.Installer.Domain.Model.Configuration;
 using ei8.Avatar.Installer.Port.Adapter.UI.Maui.Validation;
 using ei8.Avatar.Installer.Port.Adapter.UI.Maui.Validation.Rules;
 using MetroLog.Maui;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using neurUL.Common.Domain.Model;
 using System.Diagnostics;
 
@@ -23,13 +25,15 @@ public partial class CreateAvatarViewModel : BaseViewModel
         public const string AvatarCreationCompleted = "Avatar creation completed successfully!";
         public const string AvatarCreationFailed = "Avatar creation failed!";
         public const string SelectPrivateKeyFile = "Select Private Key File";
-        public const string FixValidationErrors = "Please fix validation errors before creating avatar";
+        public const string FixValidationErrors = "Please fix validation errors before creating avatar!";
         public const string AvatarServerConfigurationMustContainAvatar = "AvatarServerConfiguration must contain at least one avatar";
         public const string PrivateKeyPathTemplate = "/C/keys/{0}";
         public const string JsonFileExtension = "json";
 
         // Validation Messages
         public const string AvatarNameRequired = "Avatar Name is required";
+        public const string OwnerNameRequired = "Owner Name is required";
+        public const string OwnerUserIdRequired = "Owner User ID is required";
         public const string TunnelLocalPortRequired = "Tunnel Local Port is required";
         public const string InvalidIpFormat = "Invalid IP address format (e.g., 172.20.10.4)";
         public const string PortRangeInvalid = "Port must be between 1 and 65535";
@@ -39,23 +43,31 @@ public partial class CreateAvatarViewModel : BaseViewModel
         public const string PrivateKeyFileExtensionInvalid = "Private key file must have .key, .pem, .p12, or .pfx extension";
         public static readonly string[] PrivateKeyFileExtensions = { ".key", ".pem", ".p12", ".pfx" };
         public const string EncryptedEventsKeyRequired = "Encrypted Events Key is required when encryption is enabled";
+        public const string CertificatePasswordRequired = "Certificate password is required when certificate path is set";
+        public const string InProcessPrivateKeyFileNotFound = "In Process Private Key file was not found at resolved avatar path";
     }
     #endregion
 
     #region Fields
     private readonly IAvatarApplicationService avatarApplicationService;
     private readonly IProgressService progressService;
+    private readonly ILogger<CreateAvatarViewModel> logger;
     private AvatarServerConfiguration avatarServerConfiguration = new();
     #endregion
 
     #region Constructors
-    public CreateAvatarViewModel(IAvatarApplicationService avatarApplicationService, IProgressService progressService) 
+    public CreateAvatarViewModel(
+        IAvatarApplicationService avatarApplicationService,
+        IProgressService progressService,
+        ILogger<CreateAvatarViewModel> logger
+    )
     {
         AssertionConcern.AssertArgumentNotNull(avatarApplicationService, nameof(avatarApplicationService));
         AssertionConcern.AssertArgumentNotNull(progressService, nameof(progressService));
 
         this.avatarApplicationService = avatarApplicationService;
         this.progressService = progressService;
+        this.logger = logger ?? NullLogger<CreateAvatarViewModel>.Instance;
 
         this.progressService.ProgressChanged += this.ProgressService_ProgressChanged;
         this.progressService.DescriptionChanged += this.ProgressService_DescriptionChanged;
@@ -357,9 +369,49 @@ public partial class CreateAvatarViewModel : BaseViewModel
         this.UpdateAvatarIfExists(a => a.EventSourcing, e => e.PrivateKeyPath = value);
     }
 
+    private string ResolveInProcessPrivateKeyPathForValidation()
+    {
+        var configuredPath = this.InProcessPrivateKeyPath.Value;
+        if (string.IsNullOrWhiteSpace(configuredPath))
+        {
+            return string.Empty;
+        }
+
+        var trimmedPath = configuredPath.Trim();
+        var hasDriveLetter = trimmedPath.Length >= 2 && trimmedPath[1] == ':';
+        var isUncPath = trimmedPath.StartsWith(@"\\");
+
+        if (hasDriveLetter || isUncPath)
+        {
+            return trimmedPath;
+        }
+
+        if (this.avatarServerConfiguration?.Avatars?.Count() == 0 || string.IsNullOrWhiteSpace(this.Destination))
+        {
+            return string.Empty;
+        }
+
+        var avatarName = this.avatarServerConfiguration.Avatars[0].Orchestration?.AvatarName;
+        if (string.IsNullOrWhiteSpace(avatarName))
+        {
+            return string.Empty;
+        }
+
+        var normalizedRelativePath = trimmedPath
+            .TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
+            .Replace('/', Path.DirectorySeparatorChar)
+            .Replace('\\', Path.DirectorySeparatorChar);
+
+        var avatarDirectory = Path.Combine(this.Destination, avatarName);
+        return Path.GetFullPath(Path.Combine(avatarDirectory, normalizedRelativePath));
+    }
+
 
     private bool ValidateAllFields()
     {
+        bool isOwnerNameValid = !string.IsNullOrWhiteSpace(this.OwnerName);
+        bool isOwnerUserIdValid = !string.IsNullOrWhiteSpace(this.OwnerUserId);
+
         // Validate all ValidatableObject properties
         bool isAvatarNameValid = this.AvatarName.Validate();
         bool isTunnelLocalPortValid = this.TunnelLocalPort.Validate();
@@ -367,9 +419,83 @@ public partial class CreateAvatarViewModel : BaseViewModel
         bool isGraphPersistencePortValid = this.GraphPersistencePort.Validate();
         bool isInProcessPrivateKeyPathValid = this.InProcessPrivateKeyPath.Validate();
         bool isEncryptedEventsKeyValid = this.EncryptedEventsKey.Validate();
+        bool isInProcessPrivateKeyFileExists = true;
+        bool isCertificatePasswordValid = true;
 
-        return isAvatarNameValid && isTunnelLocalPortValid &&
-               isGraphPersistencePortValid && isKeysPathValid && isInProcessPrivateKeyPathValid && isEncryptedEventsKeyValid;
+        if (this.EncryptionEnabled && isInProcessPrivateKeyPathValid)
+        {
+            var resolvedPath = this.ResolveInProcessPrivateKeyPathForValidation();
+            if (!string.IsNullOrWhiteSpace(resolvedPath))
+            {
+                isInProcessPrivateKeyFileExists = File.Exists(resolvedPath);
+            }
+        }
+
+        if (this.avatarServerConfiguration?.Avatars?.Count() > 0)
+        {
+            var un8y = this.avatarServerConfiguration.Avatars[0].Un8y;
+            if (un8y != null &&
+                !string.IsNullOrWhiteSpace(un8y.CertificatePath) &&
+                string.IsNullOrWhiteSpace(un8y.CertificatePassword))
+            {
+                isCertificatePasswordValid = false;
+            }
+        }
+
+        return isOwnerNameValid && isOwnerUserIdValid &&
+               isAvatarNameValid && isTunnelLocalPortValid &&
+               isGraphPersistencePortValid && isKeysPathValid && isInProcessPrivateKeyPathValid &&
+               isEncryptedEventsKeyValid && isInProcessPrivateKeyFileExists && isCertificatePasswordValid;
+    }
+
+    private List<string> GetValidationFailures()
+    {
+        var failures = new List<string>();
+
+        if (string.IsNullOrWhiteSpace(this.OwnerName))
+            failures.Add($"Owner Name: {CreateAvatarConstants.OwnerNameRequired}");
+
+        if (string.IsNullOrWhiteSpace(this.OwnerUserId))
+            failures.Add($"Owner User ID: {CreateAvatarConstants.OwnerUserIdRequired}");
+
+        if (!this.AvatarName.IsValid)
+            failures.Add($"Avatar IP: {string.Join("; ", this.AvatarName.Errors)}");
+
+        if (!this.TunnelLocalPort.IsValid)
+            failures.Add($"Tunnel Local Port: {string.Join("; ", this.TunnelLocalPort.Errors)}");
+
+        if (!this.GraphPersistencePort.IsValid)
+            failures.Add($"Graph Persistence Port: {string.Join("; ", this.GraphPersistencePort.Errors)}");
+
+        if (!this.KeysPath.IsValid)
+            failures.Add($"Keys Path: {string.Join("; ", this.KeysPath.Errors)}");
+
+        if (!this.InProcessPrivateKeyPath.IsValid)
+            failures.Add($"In Process Private Key Path: {string.Join("; ", this.InProcessPrivateKeyPath.Errors)}");
+        else if (this.EncryptionEnabled)
+        {
+            var resolvedPath = this.ResolveInProcessPrivateKeyPathForValidation();
+            if (!string.IsNullOrWhiteSpace(resolvedPath) && !File.Exists(resolvedPath))
+            {
+                failures.Add($"In Process Private Key Path: {CreateAvatarConstants.InProcessPrivateKeyFileNotFound} ('{resolvedPath}')");
+            }
+        }
+
+        if (!this.EncryptedEventsKey.IsValid)
+            failures.Add($"Encrypted Events Key: {string.Join("; ", this.EncryptedEventsKey.Errors)}");
+
+        if (this.avatarServerConfiguration?.Avatars?.Count() > 0)
+        {
+            var un8y = this.avatarServerConfiguration.Avatars[0].Un8y;
+            if (un8y != null &&
+                !string.IsNullOrWhiteSpace(un8y.CertificatePath) &&
+                string.IsNullOrWhiteSpace(un8y.CertificatePassword))
+            {
+                failures.Add($"Certificate Password: {CreateAvatarConstants.CertificatePasswordRequired}");
+            }
+        }
+
+        return failures;
     }
 
 
@@ -550,7 +676,20 @@ public partial class CreateAvatarViewModel : BaseViewModel
                     }
                     else
                     {
-                        await Shell.Current.DisplayAlert(Constants.Statuses.Invalid, CreateAvatarConstants.FixValidationErrors, Constants.Prompts.Ok);
+                        var failures = this.GetValidationFailures();
+                        if (failures.Any())
+                        {
+                            this.logger.LogWarning(
+                                "Create avatar validation failed. Missing/invalid fields: {failures}",
+                                string.Join(" | ", failures)
+                            );
+                        }
+
+                        var message = failures.Any()
+                            ? $"{CreateAvatarConstants.FixValidationErrors}{Environment.NewLine}- {string.Join($"{Environment.NewLine}- ", failures)}"
+                            : CreateAvatarConstants.FixValidationErrors;
+
+                        await Shell.Current.DisplayAlert(Constants.Statuses.Invalid, message, Constants.Prompts.Ok);
                     }
                 }
                 else

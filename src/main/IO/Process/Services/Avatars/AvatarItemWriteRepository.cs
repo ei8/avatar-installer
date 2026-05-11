@@ -26,6 +26,7 @@ using Nancy.TinyIoc;
 using neurUL.Common;
 using neurUL.Common.Domain.Model;
 using System.Reflection;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 
@@ -40,6 +41,100 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
         )
         {
             this.logger = logger;
+        }
+
+        private static string ResolveInProcessPrivateKeyPath(AvatarItem avatarItem)
+        {
+            var configuredPath = avatarItem.Settings.EventSourcing.InProcessPrivateKeyPath;
+
+            if (string.IsNullOrWhiteSpace(configuredPath))
+            {
+                return string.Empty;
+            }
+
+            var trimmedPath = configuredPath.Trim();
+            var hasDriveLetter = trimmedPath.Length >= 2 && trimmedPath[1] == ':';
+            var isUncPath = trimmedPath.StartsWith(@"\\");
+
+            if (hasDriveLetter || isUncPath)
+            {
+                return trimmedPath;
+            }
+
+            var normalizedRelativePath = trimmedPath
+                .TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
+                .Replace('/', Path.DirectorySeparatorChar)
+                .Replace('\\', Path.DirectorySeparatorChar);
+
+            return Path.GetFullPath(Path.Combine(avatarItem.Id, normalizedRelativePath));
+        }
+
+        private void ValidateEncryptionPreflight(AvatarItem avatarItem)
+        {
+            if (!avatarItem.Settings.EventSourcing.EncryptionEnabled)
+            {
+                return;
+            }
+
+            var resolvedPrivateKeyPath = ResolveInProcessPrivateKeyPath(avatarItem);
+            AssertionConcern.AssertStateTrue(
+                !string.IsNullOrWhiteSpace(resolvedPrivateKeyPath),
+                "Encryption preflight failed: 'InProcessPrivateKeyPath' is required when encryption is enabled."
+            );
+
+            AssertionConcern.AssertStateTrue(
+                File.Exists(resolvedPrivateKeyPath),
+                $"Encryption preflight failed: private key file does not exist at '{resolvedPrivateKeyPath}'."
+            );
+
+            string privateKeyContent;
+            try
+            {
+                privateKeyContent = File.ReadAllText(resolvedPrivateKeyPath);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException(
+                    $"Encryption preflight failed: unable to read private key file '{resolvedPrivateKeyPath}'.",
+                    ex
+                );
+            }
+
+            AssertionConcern.AssertStateTrue(
+                !string.IsNullOrWhiteSpace(privateKeyContent),
+                $"Encryption preflight failed: private key file '{resolvedPrivateKeyPath}' is empty."
+            );
+
+            var encryptedEventsKey = avatarItem.Settings.EventSourcing.EncryptedEventsKey;
+            AssertionConcern.AssertStateTrue(
+                !string.IsNullOrWhiteSpace(encryptedEventsKey),
+                "Encryption preflight failed: 'EncryptedEventsKey' is required when encryption is enabled."
+            );
+
+            try
+            {
+                _ = Convert.FromBase64String(encryptedEventsKey.Trim());
+            }
+            catch (FormatException ex)
+            {
+                throw new InvalidOperationException(
+                    "Encryption preflight failed: 'EncryptedEventsKey' is not valid Base64.",
+                    ex
+                );
+            }
+        }
+
+        private static void ValidateAvatarIdentityPreflight(AvatarItem avatarItem)
+        {
+            AssertionConcern.AssertStateTrue(
+                !string.IsNullOrWhiteSpace(avatarItem.OwnerName),
+                "Avatar preflight failed: 'OwnerName' is required."
+            );
+
+            AssertionConcern.AssertStateTrue(
+                !string.IsNullOrWhiteSpace(avatarItem.OwnerUserId),
+                "Avatar preflight failed: 'OwnerUserId' is required."
+            );
         }
 
         private List<string> SerializeEnvironmentVariables<T>(T settings)
@@ -153,6 +248,9 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
             var exeDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             Directory.SetCurrentDirectory(exeDirectory);
 
+            ValidateAvatarIdentityPreflight(avatarItem);
+            this.ValidateEncryptionPreflight(avatarItem);
+
             var authorNeuronId = Guid.NewGuid();
             var anonymousNeuronId = Guid.NewGuid();
 
@@ -243,18 +341,30 @@ COMMIT;
 
                     if (ss.EncryptionEnabled)
                     {
+                        var resolvedInProcessPrivateKeyPath = ResolveInProcessPrivateKeyPath(avatarItem);
+
                         AssertionConcern.AssertStateTrue(
-                            IOHelper.IsPathValidRootedLocal(avatarItem.Settings.EventSourcing.InProcessPrivateKeyPath),
+                            IOHelper.IsPathValidRootedLocal(resolvedInProcessPrivateKeyPath),
                             "A valid 'InProcessPrivateKeyPath' is required if encryption is enabled."
                         );
 
-                        ss.PrivateKeyPath = avatarItem.Settings.EventSourcing.InProcessPrivateKeyPath;
-                        await container.Resolve<IKeyService>().Load(
-                            avatarItem.Settings.EventSourcing.EncryptedEventsKey,
-                            ss.PrivateKeyPath,
-                            ss,
-                            ss.GetKeyPropertyPair()
-                        );
+                        ss.PrivateKeyPath = resolvedInProcessPrivateKeyPath;
+                        try
+                        {
+                            await container.Resolve<IKeyService>().Load(
+                                avatarItem.Settings.EventSourcing.EncryptedEventsKey,
+                                ss.PrivateKeyPath,
+                                ss,
+                                ss.GetKeyPropertyPair()
+                            );
+                        }
+                        catch (CryptographicException ex)
+                        {
+                            throw new InvalidOperationException(
+                                $"Failed to decrypt 'EncryptedEventsKey' using private key '{resolvedInProcessPrivateKeyPath}'. Ensure the encrypted key was produced with the matching public key and has not been altered.",
+                                ex
+                            );
+                        }
                     }
                     container.Register<IMirrorRepository, InProcessMirrorRepository>();
                     container.AddDataAdapters();
