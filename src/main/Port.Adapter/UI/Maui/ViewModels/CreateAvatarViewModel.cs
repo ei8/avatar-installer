@@ -369,41 +369,58 @@ public partial class CreateAvatarViewModel : BaseViewModel
         this.UpdateAvatarIfExists(a => a.EventSourcing, e => e.PrivateKeyPath = value);
     }
 
-    private string ResolveInProcessPrivateKeyPathForValidation()
+    private static bool IsRootedOrUncPath(string path)
     {
-        var configuredPath = this.InProcessPrivateKeyPath.Value;
-        if (string.IsNullOrWhiteSpace(configuredPath))
-        {
-            return string.Empty;
-        }
+        var isRootedPath = Path.IsPathRooted(path);
+        var isUncPath = Uri.TryCreate(path, UriKind.Absolute, out var uri) && uri.IsUnc;
 
-        var trimmedPath = configuredPath.Trim();
-        var hasDriveLetter = trimmedPath.Length >= 2 && trimmedPath[1] == ':';
-        var isUncPath = trimmedPath.StartsWith(@"\\");
+        return isRootedPath || isUncPath;
+    }
 
-        if (hasDriveLetter || isUncPath)
-        {
-            return trimmedPath;
-        }
-
-        if (this.avatarServerConfiguration?.Avatars?.Count() == 0 || string.IsNullOrWhiteSpace(this.Destination))
-        {
-            return string.Empty;
-        }
-
-        var avatarName = this.avatarServerConfiguration.Avatars[0].Orchestration?.AvatarName;
-        if (string.IsNullOrWhiteSpace(avatarName))
-        {
-            return string.Empty;
-        }
-
-        var normalizedRelativePath = trimmedPath
+    private static string NormalizeRelativePath(string configuredPath) =>
+        configuredPath
             .TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
             .Replace('/', Path.DirectorySeparatorChar)
             .Replace('\\', Path.DirectorySeparatorChar);
 
-        var avatarDirectory = Path.Combine(this.Destination, avatarName);
-        return Path.GetFullPath(Path.Combine(avatarDirectory, normalizedRelativePath));
+    private string ResolvePathAgainstAvatarDirectory(string relativePath)
+    {
+        var resolvedPath = string.Empty;
+
+        if (this.avatarServerConfiguration?.Avatars?.Count() > 0 && !string.IsNullOrWhiteSpace(this.Destination))
+        {
+            var avatarName = this.avatarServerConfiguration.Avatars[0].Orchestration?.AvatarName;
+            if (!string.IsNullOrWhiteSpace(avatarName))
+            {
+                var avatarDirectory = Path.Combine(this.Destination, avatarName);
+                resolvedPath = Path.GetFullPath(Path.Combine(avatarDirectory, relativePath));
+            }
+        }
+
+        return resolvedPath;
+    }
+
+    private string ResolveInProcessPrivateKeyPathForValidation()
+    {
+        var configuredPath = this.InProcessPrivateKeyPath.Value;
+        var resolvedPath = string.Empty;
+
+        if (!string.IsNullOrWhiteSpace(configuredPath))
+        {
+            var trimmedPath = configuredPath.Trim();
+
+            if (IsRootedOrUncPath(trimmedPath))
+            {
+                resolvedPath = trimmedPath;
+            }
+            else
+            {
+                var normalizedRelativePath = NormalizeRelativePath(trimmedPath);
+                resolvedPath = this.ResolvePathAgainstAvatarDirectory(normalizedRelativePath);
+            }
+        }
+
+        return resolvedPath;
     }
 
 

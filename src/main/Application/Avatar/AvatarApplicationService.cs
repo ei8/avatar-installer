@@ -111,68 +111,69 @@ namespace ei8.Avatar.Installer.Application.Avatar
         {
             if (un8yConfiguration == null)
             {
-                return;
+                throw new ArgumentNullException(nameof(un8yConfiguration));
             }
 
-            if (string.IsNullOrWhiteSpace(un8yConfiguration.CertificatePath))
+            if (!string.IsNullOrWhiteSpace(un8yConfiguration.CertificatePath))
+            {
+                if (string.IsNullOrWhiteSpace(un8yConfiguration.CertificatePassword))
+                {
+                    logger.LogInformation(
+                        "Skipping HTTPS certificate generation for '{certificatePath}' because certificate password is empty.",
+                        un8yConfiguration.CertificatePath
+                    );
+                }
+                else
+                {
+                    var normalizedCertificatePath = NormalizeRelativePath(un8yConfiguration.CertificatePath);
+                    var certificateFilePath = Path.Combine(avatarDirectory, normalizedCertificatePath);
+                    var certificateDirectory = Path.GetDirectoryName(certificateFilePath);
+
+                    if (!string.IsNullOrWhiteSpace(certificateDirectory))
+                    {
+                        Directory.CreateDirectory(certificateDirectory);
+                    }
+
+                    logger.LogInformation("Generating HTTPS development certificate at '{certificateFilePath}'.", certificateFilePath);
+
+                    var processStartInfo = new ProcessStartInfo
+                    {
+                        FileName = "dotnet",
+                        Arguments = $"dev-certs https -ep \"{certificateFilePath}\" -p \"{un8yConfiguration.CertificatePassword}\"",
+                        RedirectStandardOutput = true,
+                        RedirectStandardError = true,
+                        UseShellExecute = false,
+                        CreateNoWindow = true
+                    };
+
+                    using var process = new Process { StartInfo = processStartInfo };
+                    process.Start();
+                    await process.WaitForExitAsync();
+
+                    var standardOutput = await process.StandardOutput.ReadToEndAsync();
+                    var standardError = await process.StandardError.ReadToEndAsync();
+
+                    if (process.ExitCode != 0)
+                    {
+                        throw new InvalidOperationException(
+                            $"Failed to generate HTTPS development certificate. Command: dotnet dev-certs https -ep \"{certificateFilePath}\" -p \"{un8yConfiguration.CertificatePassword}\". Error: {standardError}"
+                        );
+                    }
+
+                    logger.LogInformation("HTTPS development certificate generated successfully. {stdout}", standardOutput);
+                }
+            }
+            else
             {
                 logger.LogInformation("Skipping HTTPS certificate generation because no certificate path was provided.");
-                return;
             }
+        }
 
-            if (string.IsNullOrWhiteSpace(un8yConfiguration.CertificatePassword))
-            {
-                logger.LogInformation(
-                    "Skipping HTTPS certificate generation for '{certificatePath}' because certificate password is empty.",
-                    un8yConfiguration.CertificatePath
-                );
-                return;
-            }
-
-            var normalizedCertificatePath = un8yConfiguration.CertificatePath
+        private static string NormalizeRelativePath(string configuredPath) =>
+            configuredPath
                 .TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
                 .Replace('/', Path.DirectorySeparatorChar)
                 .Replace('\\', Path.DirectorySeparatorChar);
-            var certificateFilePath = Path.Combine(avatarDirectory, normalizedCertificatePath);
-            var certificateDirectory = Path.GetDirectoryName(certificateFilePath);
-
-            if (!string.IsNullOrWhiteSpace(certificateDirectory))
-            {
-                Directory.CreateDirectory(certificateDirectory);
-            }
-
-            logger.LogInformation("Generating HTTPS development certificate at '{certificateFilePath}'.", certificateFilePath);
-
-            var processStartInfo = new ProcessStartInfo
-            {
-                FileName = "dotnet",
-                Arguments = $"dev-certs https -ep \"{certificateFilePath}\" -p \"{un8yConfiguration.CertificatePassword}\"",
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                UseShellExecute = false,
-                CreateNoWindow = true
-            };
-
-            using var process = new Process { StartInfo = processStartInfo };
-            process.Start();
-
-            var standardOutputTask = process.StandardOutput.ReadToEndAsync();
-            var standardErrorTask = process.StandardError.ReadToEndAsync();
-
-            await process.WaitForExitAsync();
-
-            var standardOutput = await standardOutputTask;
-            var standardError = await standardErrorTask;
-
-            if (process.ExitCode != 0)
-            {
-                throw new InvalidOperationException(
-                    $"Failed to generate HTTPS development certificate. Command: dotnet dev-certs https -ep \"{certificateFilePath}\" -p \"{un8yConfiguration.CertificatePassword}\". Error: {standardError}"
-                );
-            }
-
-            logger.LogInformation("HTTPS development certificate generated successfully. {stdout}", standardOutput);
-        }
 
     }
 }

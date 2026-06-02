@@ -46,81 +46,83 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
         private static string ResolveInProcessPrivateKeyPath(AvatarItem avatarItem)
         {
             var configuredPath = avatarItem.Settings.EventSourcing.InProcessPrivateKeyPath;
+            var resolvedPath = string.Empty;
 
-            if (string.IsNullOrWhiteSpace(configuredPath))
+            if (!string.IsNullOrWhiteSpace(configuredPath))
             {
-                return string.Empty;
+                var trimmedPath = configuredPath.Trim();
+
+                var isRootedPath = Path.IsPathRooted(trimmedPath);
+                var isUncPath = Uri.TryCreate(trimmedPath, UriKind.Absolute, out var uri) && uri.IsUnc;
+
+                if (isRootedPath || isUncPath)
+                {
+                    resolvedPath = trimmedPath;
+                }
+                else
+                {
+                    var normalizedRelativePath = trimmedPath
+                        .TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
+                        .Replace('/', Path.DirectorySeparatorChar)
+                        .Replace('\\', Path.DirectorySeparatorChar);
+
+                    resolvedPath = Path.GetFullPath(Path.Combine(avatarItem.Id, normalizedRelativePath));
+                }
             }
 
-            var trimmedPath = configuredPath.Trim();
-            var hasDriveLetter = trimmedPath.Length >= 2 && trimmedPath[1] == ':';
-            var isUncPath = trimmedPath.StartsWith(@"\\");
-
-            if (hasDriveLetter || isUncPath)
-            {
-                return trimmedPath;
-            }
-
-            var normalizedRelativePath = trimmedPath
-                .TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
-                .Replace('/', Path.DirectorySeparatorChar)
-                .Replace('\\', Path.DirectorySeparatorChar);
-
-            return Path.GetFullPath(Path.Combine(avatarItem.Id, normalizedRelativePath));
+            return resolvedPath;
         }
 
         private void ValidateEncryptionPreflight(AvatarItem avatarItem)
         {
-            if (!avatarItem.Settings.EventSourcing.EncryptionEnabled)
+            if (avatarItem.Settings.EventSourcing.EncryptionEnabled)
             {
-                return;
-            }
-
-            var resolvedPrivateKeyPath = ResolveInProcessPrivateKeyPath(avatarItem);
-            AssertionConcern.AssertStateTrue(
-                !string.IsNullOrWhiteSpace(resolvedPrivateKeyPath),
-                "Encryption preflight failed: 'InProcessPrivateKeyPath' is required when encryption is enabled."
-            );
-
-            AssertionConcern.AssertStateTrue(
-                File.Exists(resolvedPrivateKeyPath),
-                $"Encryption preflight failed: private key file does not exist at '{resolvedPrivateKeyPath}'."
-            );
-
-            string privateKeyContent;
-            try
-            {
-                privateKeyContent = File.ReadAllText(resolvedPrivateKeyPath);
-            }
-            catch (Exception ex)
-            {
-                throw new InvalidOperationException(
-                    $"Encryption preflight failed: unable to read private key file '{resolvedPrivateKeyPath}'.",
-                    ex
+                var resolvedPrivateKeyPath = AvatarItemWriteRepository.ResolveInProcessPrivateKeyPath(avatarItem);
+                AssertionConcern.AssertStateTrue(
+                    !string.IsNullOrWhiteSpace(resolvedPrivateKeyPath),
+                    "Encryption preflight failed: 'InProcessPrivateKeyPath' is required when encryption is enabled."
                 );
-            }
 
-            AssertionConcern.AssertStateTrue(
-                !string.IsNullOrWhiteSpace(privateKeyContent),
-                $"Encryption preflight failed: private key file '{resolvedPrivateKeyPath}' is empty."
-            );
-
-            var encryptedEventsKey = avatarItem.Settings.EventSourcing.EncryptedEventsKey;
-            AssertionConcern.AssertStateTrue(
-                !string.IsNullOrWhiteSpace(encryptedEventsKey),
-                "Encryption preflight failed: 'EncryptedEventsKey' is required when encryption is enabled."
-            );
-
-            try
-            {
-                _ = Convert.FromBase64String(encryptedEventsKey.Trim());
-            }
-            catch (FormatException ex)
-            {
-                throw new InvalidOperationException(
-                    "Encryption preflight failed: 'EncryptedEventsKey' is not valid Base64.",
-                    ex
+                AssertionConcern.AssertStateTrue(
+                    File.Exists(resolvedPrivateKeyPath),
+                    $"Encryption preflight failed: private key file does not exist at '{resolvedPrivateKeyPath}'."
                 );
+
+                string privateKeyContent;
+                try
+                {
+                    privateKeyContent = File.ReadAllText(resolvedPrivateKeyPath);
+                }
+                catch (Exception ex)
+                {
+                    throw new InvalidOperationException(
+                        $"Encryption preflight failed: unable to read private key file '{resolvedPrivateKeyPath}'.",
+                        ex
+                    );
+                }
+
+                AssertionConcern.AssertStateTrue(
+                    !string.IsNullOrWhiteSpace(privateKeyContent),
+                    $"Encryption preflight failed: private key file '{resolvedPrivateKeyPath}' is empty."
+                );
+
+                var encryptedEventsKey = avatarItem.Settings.EventSourcing.EncryptedEventsKey;
+                AssertionConcern.AssertStateTrue(
+                    !string.IsNullOrWhiteSpace(encryptedEventsKey),
+                    "Encryption preflight failed: 'EncryptedEventsKey' is required when encryption is enabled."
+                );
+
+                try
+                {
+                    _ = Convert.FromBase64String(encryptedEventsKey.Trim());
+                }
+                catch (FormatException ex)
+                {
+                    throw new InvalidOperationException(
+                        "Encryption preflight failed: 'EncryptedEventsKey' is not valid Base64.",
+                        ex
+                    );
+                }
             }
         }
 
@@ -248,7 +250,7 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
             var exeDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             Directory.SetCurrentDirectory(exeDirectory);
 
-            ValidateAvatarIdentityPreflight(avatarItem);
+            AvatarItemWriteRepository.ValidateAvatarIdentityPreflight(avatarItem);
             this.ValidateEncryptionPreflight(avatarItem);
 
             var authorNeuronId = Guid.NewGuid();
@@ -341,7 +343,7 @@ COMMIT;
 
                     if (ss.EncryptionEnabled)
                     {
-                        var resolvedInProcessPrivateKeyPath = ResolveInProcessPrivateKeyPath(avatarItem);
+                        var resolvedInProcessPrivateKeyPath = AvatarItemWriteRepository.ResolveInProcessPrivateKeyPath(avatarItem);
 
                         AssertionConcern.AssertStateTrue(
                             IOHelper.IsPathValidRootedLocal(resolvedInProcessPrivateKeyPath),
