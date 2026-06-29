@@ -15,5 +15,27 @@ namespace ei8.Avatar.Installer.Common
                 .TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
                 .Replace('/', Path.DirectorySeparatorChar)
                 .Replace('\\', Path.DirectorySeparatorChar);
+
+        public static string ResolveInProcessPrivateKeyPath(string configuredPath, string avatarDirectory)
+        {
+            var resolvedPath = string.Empty;
+
+            if (!string.IsNullOrWhiteSpace(configuredPath))
+            {
+                var trimmedPath = configuredPath.Trim();
+
+                if (IsRootedOrUncPath(trimmedPath))
+                {
+                    resolvedPath = trimmedPath;
+                }
+                else if (!string.IsNullOrWhiteSpace(avatarDirectory))
+                {
+                    var normalizedRelativePath = NormalizeRelativePath(trimmedPath);
+                    resolvedPath = Path.GetFullPath(Path.Combine(avatarDirectory, normalizedRelativePath));
+                }
+            }
+
+            return resolvedPath;
+        }
     }
 }

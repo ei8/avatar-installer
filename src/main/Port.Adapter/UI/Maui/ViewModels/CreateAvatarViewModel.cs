@@ -428,45 +428,27 @@ public partial class CreateAvatarViewModel : BaseViewModel
         this.UpdateAvatarIfExists(a => a.EventSourcing, e => e.PrivateKeyPath = value);
     }
 
-    private string ResolvePathAgainstAvatarDirectory(string relativePath)
+    private string GetAvatarDirectoryForValidation()
     {
-        var resolvedPath = string.Empty;
+        var avatarDirectory = string.Empty;
 
         if (this.avatarServerConfiguration?.Avatars?.Count() > 0 && !string.IsNullOrWhiteSpace(this.Destination))
         {
             var avatarName = this.avatarServerConfiguration.Avatars[0].Orchestration?.AvatarName;
             if (!string.IsNullOrWhiteSpace(avatarName))
             {
-                var avatarDirectory = Path.Combine(this.Destination, avatarName);
-                resolvedPath = Path.GetFullPath(Path.Combine(avatarDirectory, relativePath));
+                avatarDirectory = Path.Combine(this.Destination, avatarName);
             }
         }
 
-        return resolvedPath;
+        return avatarDirectory;
     }
 
-    private string ResolveInProcessPrivateKeyPathForValidation()
-    {
-        var configuredPath = this.InProcessPrivateKeyPath.Value;
-        var resolvedPath = string.Empty;
-
-        if (!string.IsNullOrWhiteSpace(configuredPath))
-        {
-            var trimmedPath = configuredPath.Trim();
-
-            if (PathHelper.IsRootedOrUncPath(trimmedPath))
-            {
-                resolvedPath = trimmedPath;
-            }
-            else
-            {
-                var normalizedRelativePath = PathHelper.NormalizeRelativePath(trimmedPath);
-                resolvedPath = this.ResolvePathAgainstAvatarDirectory(normalizedRelativePath);
-            }
-        }
-
-        return resolvedPath;
-    }
+    private string ResolveInProcessPrivateKeyPathForValidation() =>
+        PathHelper.ResolveInProcessPrivateKeyPath(
+            this.InProcessPrivateKeyPath.Value,
+            this.GetAvatarDirectoryForValidation()
+        );
 
 
     private bool ValidateAllFields() =>

@@ -43,34 +43,14 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
             this.logger = logger;
         }
 
-        private static string ResolveInProcessPrivateKeyPath(AvatarItem avatarItem)
-        {
-            var configuredPath = avatarItem.Settings.EventSourcing.InProcessPrivateKeyPath;
-            var resolvedPath = string.Empty;
-
-            if (!string.IsNullOrWhiteSpace(configuredPath))
-            {
-                var trimmedPath = configuredPath.Trim();
-
-                if (PathHelper.IsRootedOrUncPath(trimmedPath))
-                {
-                    resolvedPath = trimmedPath;
-                }
-                else
-                {
-                    var normalizedRelativePath = PathHelper.NormalizeRelativePath(trimmedPath);
-                    resolvedPath = Path.GetFullPath(Path.Combine(avatarItem.Id, normalizedRelativePath));
-                }
-            }
-
-            return resolvedPath;
-        }
-
         private void ValidateEncryptionPreflight(AvatarItem avatarItem)
         {
             if (avatarItem.Settings.EventSourcing.EncryptionEnabled)
             {
-                var resolvedPrivateKeyPath = AvatarItemWriteRepository.ResolveInProcessPrivateKeyPath(avatarItem);
+                var resolvedPrivateKeyPath = PathHelper.ResolveInProcessPrivateKeyPath(
+                    avatarItem.Settings.EventSourcing.InProcessPrivateKeyPath,
+                    avatarItem.Id
+                );
                 AssertionConcern.AssertStateTrue(
                     !string.IsNullOrWhiteSpace(resolvedPrivateKeyPath),
                     "Encryption preflight failed: 'InProcessPrivateKeyPath' is required when encryption is enabled."
@@ -336,7 +316,10 @@ COMMIT;
 
                     if (ss.EncryptionEnabled)
                     {
-                        var resolvedInProcessPrivateKeyPath = AvatarItemWriteRepository.ResolveInProcessPrivateKeyPath(avatarItem);
+                        var resolvedInProcessPrivateKeyPath = PathHelper.ResolveInProcessPrivateKeyPath(
+                            avatarItem.Settings.EventSourcing.InProcessPrivateKeyPath,
+                            avatarItem.Id
+                        );
 
                         AssertionConcern.AssertStateTrue(
                             IOHelper.IsPathValidRootedLocal(resolvedInProcessPrivateKeyPath),
