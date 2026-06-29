@@ -1,3 +1,4 @@
+using ei8.Avatar.Installer.Common;
 using ei8.Avatar.Installer.Domain.Model.Avatars;
 using ei8.Avatar.Installer.Domain.Model.Configuration;
 using ei8.Avatar.Installer.Domain.Model.Mapping;
@@ -125,7 +126,7 @@ namespace ei8.Avatar.Installer.Application.Avatar
                 }
                 else
                 {
-                    var normalizedCertificatePath = NormalizeRelativePath(un8yConfiguration.CertificatePath);
+                    var normalizedCertificatePath = PathHelper.NormalizeRelativePath(un8yConfiguration.CertificatePath);
                     var certificateFilePath = Path.Combine(avatarDirectory, normalizedCertificatePath);
                     var certificateDirectory = Path.GetDirectoryName(certificateFilePath);
 
@@ -168,12 +169,6 @@ namespace ei8.Avatar.Installer.Application.Avatar
                 logger.LogInformation("Skipping HTTPS certificate generation because no certificate path was provided.");
             }
         }
-
-        private static string NormalizeRelativePath(string configuredPath) =>
-            configuredPath
-                .TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
-                .Replace('/', Path.DirectorySeparatorChar)
-                .Replace('\\', Path.DirectorySeparatorChar);
 
     }
 }

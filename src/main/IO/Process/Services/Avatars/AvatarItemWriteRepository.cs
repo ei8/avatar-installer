@@ -52,20 +52,13 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
             {
                 var trimmedPath = configuredPath.Trim();
 
-                var isRootedPath = Path.IsPathRooted(trimmedPath);
-                var isUncPath = Uri.TryCreate(trimmedPath, UriKind.Absolute, out var uri) && uri.IsUnc;
-
-                if (isRootedPath || isUncPath)
+                if (PathHelper.IsRootedOrUncPath(trimmedPath))
                 {
                     resolvedPath = trimmedPath;
                 }
                 else
                 {
-                    var normalizedRelativePath = trimmedPath
-                        .TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
-                        .Replace('/', Path.DirectorySeparatorChar)
-                        .Replace('\\', Path.DirectorySeparatorChar);
-
+                    var normalizedRelativePath = PathHelper.NormalizeRelativePath(trimmedPath);
                     resolvedPath = Path.GetFullPath(Path.Combine(avatarItem.Id, normalizedRelativePath));
                 }
             }
