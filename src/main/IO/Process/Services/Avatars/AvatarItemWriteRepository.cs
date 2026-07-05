@@ -112,7 +112,7 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
             );
         }
 
-        private List<string> SerializeEnvironmentVariables<T>(T settings)
+        private static List<string> SerializeEnvironmentVariables<T>(T settings)
             where T : class, new()
         {
             if (settings == null)
@@ -143,16 +143,16 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
 
         public async Task SaveAsync(AvatarItem avatarItem)
         {
-            await SaveEnvironmentVariablesAsync(avatarItem);
-            await CreateSqliteDatabasesAsync(avatarItem);
+            await this.SaveEnvironmentVariablesAsync(avatarItem);
+            await this.CreateSqliteDatabasesAsync(avatarItem);
 
-            await SerializeSshSettingsFileAsync(
+            await AvatarItemWriteRepository.SerializeSshSettingsFileAsync(
                 Path.Combine(avatarItem.Id, Common.Constants.Filenames.SshConfig), 
                 avatarItem.Settings.Ssh!,
                 this.logger
             );
 
-            await CreateBatchFilesAsync(avatarItem.Id, this.logger);
+            await AvatarItemWriteRepository.CreateBatchFilesAsync(avatarItem.Id, this.logger);
         }
 
         private static async Task CreateBatchFilesAsync(string path, ILogger<AvatarItemWriteRepository> logger)
@@ -193,22 +193,22 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
         {
             logger.LogInformation("Serializing variables.env");
             var variablesLines = new List<string>();
-            variablesLines.AddRange(SerializeEnvironmentVariables(avatarItem.Settings.EventSourcing));
-            variablesLines.AddRange(SerializeEnvironmentVariables(avatarItem.Settings.CortexGraph));
-            variablesLines.AddRange(SerializeEnvironmentVariables(avatarItem.Settings.AvatarApi));
-            variablesLines.AddRange(SerializeEnvironmentVariables(avatarItem.Settings.IdentityAccess));
-            variablesLines.AddRange(SerializeEnvironmentVariables(avatarItem.Settings.CortexLibrary));
-            variablesLines.AddRange(SerializeEnvironmentVariables(avatarItem.Settings.CortexDiaryNucleus));
-            variablesLines.AddRange(SerializeEnvironmentVariables(avatarItem.Settings.CortexChatNucleus));
-            variablesLines.AddRange(SerializeEnvironmentVariables(avatarItem.Settings.CortexGraphPersistence));
+            variablesLines.AddRange(AvatarItemWriteRepository.SerializeEnvironmentVariables(avatarItem.Settings.EventSourcing));
+            variablesLines.AddRange(AvatarItemWriteRepository.SerializeEnvironmentVariables(avatarItem.Settings.CortexGraph));
+            variablesLines.AddRange(AvatarItemWriteRepository.SerializeEnvironmentVariables(avatarItem.Settings.AvatarApi));
+            variablesLines.AddRange(AvatarItemWriteRepository.SerializeEnvironmentVariables(avatarItem.Settings.IdentityAccess));
+            variablesLines.AddRange(AvatarItemWriteRepository.SerializeEnvironmentVariables(avatarItem.Settings.CortexLibrary));
+            variablesLines.AddRange(AvatarItemWriteRepository.SerializeEnvironmentVariables(avatarItem.Settings.CortexDiaryNucleus));
+            variablesLines.AddRange(AvatarItemWriteRepository.SerializeEnvironmentVariables(avatarItem.Settings.CortexChatNucleus));
+            variablesLines.AddRange(AvatarItemWriteRepository.SerializeEnvironmentVariables(avatarItem.Settings.CortexGraphPersistence));
             await File.WriteAllLinesAsync(Path.Combine(avatarItem.Id, Common.Constants.Filenames.VariablesEnv), variablesLines);
 
             logger.LogInformation("Serializing un8y/variables.env");
-            var un8yLines = SerializeEnvironmentVariables(avatarItem.Un8ySettings);
+            var un8yLines = AvatarItemWriteRepository.SerializeEnvironmentVariables(avatarItem.Un8ySettings);
             await File.WriteAllLinesAsync(Path.Combine(avatarItem.Id, Common.Constants.Directories.Un8y, Common.Constants.Filenames.VariablesEnv), un8yLines);
 
             logger.LogInformation("Serializing .env");
-            var envLines = SerializeEnvironmentVariables(avatarItem.OrchestrationSettings);
+            var envLines = AvatarItemWriteRepository.SerializeEnvironmentVariables(avatarItem.OrchestrationSettings);
             await File.WriteAllLinesAsync(Path.Combine(avatarItem.Id, Common.Constants.Filenames.Env), envLines);
         }
 

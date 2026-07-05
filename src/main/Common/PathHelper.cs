@@ -24,13 +24,13 @@ namespace ei8.Avatar.Installer.Common
             {
                 var trimmedPath = configuredPath.Trim();
 
-                if (IsRootedOrUncPath(trimmedPath))
+                if (PathHelper.IsRootedOrUncPath(trimmedPath))
                 {
                     resolvedPath = trimmedPath;
                 }
                 else if (!string.IsNullOrWhiteSpace(avatarDirectory))
                 {
-                    var normalizedRelativePath = NormalizeRelativePath(trimmedPath);
+                    var normalizedRelativePath = PathHelper.NormalizeRelativePath(trimmedPath);
                     resolvedPath = Path.GetFullPath(Path.Combine(avatarDirectory, normalizedRelativePath));
                 }
             }
