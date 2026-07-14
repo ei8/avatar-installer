@@ -8,6 +8,8 @@ using ei8.Avatar.Installer.Domain.Model.Configuration;
 using ei8.Avatar.Installer.Port.Adapter.UI.Maui.Validation;
 using ei8.Avatar.Installer.Port.Adapter.UI.Maui.Validation.Rules;
 using MetroLog.Maui;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using neurUL.Common.Domain.Model;
 using System.Diagnostics;
 
@@ -23,13 +25,15 @@ public partial class CreateAvatarViewModel : BaseViewModel
         public const string AvatarCreationCompleted = "Avatar creation completed successfully!";
         public const string AvatarCreationFailed = "Avatar creation failed!";
         public const string SelectPrivateKeyFile = "Select Private Key File";
-        public const string FixValidationErrors = "Please fix validation errors before creating avatar";
+        public const string FixValidationErrors = "Please fix validation errors before creating avatar!";
         public const string AvatarServerConfigurationMustContainAvatar = "AvatarServerConfiguration must contain at least one avatar";
         public const string PrivateKeyPathTemplate = "/C/keys/{0}";
         public const string JsonFileExtension = "json";
 
         // Validation Messages
         public const string AvatarNameRequired = "Avatar Name is required";
+        public const string OwnerNameRequired = "Owner Name is required";
+        public const string OwnerUserIdRequired = "Owner User ID is required";
         public const string TunnelLocalPortRequired = "Tunnel Local Port is required";
         public const string InvalidIpFormat = "Invalid IP address format (e.g., 172.20.10.4)";
         public const string PortRangeInvalid = "Port must be between 1 and 65535";
@@ -39,23 +43,31 @@ public partial class CreateAvatarViewModel : BaseViewModel
         public const string PrivateKeyFileExtensionInvalid = "Private key file must have .key, .pem, .p12, or .pfx extension";
         public static readonly string[] PrivateKeyFileExtensions = { ".key", ".pem", ".p12", ".pfx" };
         public const string EncryptedEventsKeyRequired = "Encrypted Events Key is required when encryption is enabled";
+        public const string CertificatePasswordRequired = "Certificate password is required when certificate path is set";
+        public const string InProcessPrivateKeyFileNotFound = "In Process Private Key file was not found at resolved avatar path";
     }
     #endregion
 
     #region Fields
     private readonly IAvatarApplicationService avatarApplicationService;
     private readonly IProgressService progressService;
+    private readonly ILogger<CreateAvatarViewModel> logger;
     private AvatarServerConfiguration avatarServerConfiguration = new();
     #endregion
 
     #region Constructors
-    public CreateAvatarViewModel(IAvatarApplicationService avatarApplicationService, IProgressService progressService) 
+    public CreateAvatarViewModel(
+        IAvatarApplicationService avatarApplicationService,
+        IProgressService progressService,
+        ILogger<CreateAvatarViewModel> logger
+    )
     {
         AssertionConcern.AssertArgumentNotNull(avatarApplicationService, nameof(avatarApplicationService));
         AssertionConcern.AssertArgumentNotNull(progressService, nameof(progressService));
 
         this.avatarApplicationService = avatarApplicationService;
         this.progressService = progressService;
+        this.logger = logger ?? NullLogger<CreateAvatarViewModel>.Instance;
 
         this.progressService.ProgressChanged += this.ProgressService_ProgressChanged;
         this.progressService.DescriptionChanged += this.ProgressService_DescriptionChanged;
@@ -70,10 +82,8 @@ public partial class CreateAvatarViewModel : BaseViewModel
     private string destination = string.Empty;
 
     // Avatar Properties
-    [ObservableProperty]
-    private string ownerName = string.Empty;
-    [ObservableProperty]
-    private string ownerUserId = string.Empty;
+    public ValidatableObject<string> OwnerName { get; private set; }
+    public ValidatableObject<string> OwnerUserId { get; private set; }
 
     // Orchestration Properties (with validation)
     public ValidatableObject<string> AvatarName { get; private set; }
@@ -82,8 +92,7 @@ public partial class CreateAvatarViewModel : BaseViewModel
     public ValidatableObject<string> KeysPath { get; private set; }
 
     // Un8y Properties
-    [ObservableProperty]
-    private string certificatePassword = string.Empty;
+    public ValidatableObject<string> CertificatePassword { get; private set; }
     [ObservableProperty]
     private string basePath = string.Empty;
 
@@ -131,12 +140,15 @@ public partial class CreateAvatarViewModel : BaseViewModel
     private void InitializeValidation()
     {
         // Initialize ValidatableObject properties
+        this.OwnerName = new ValidatableObject<string>();
+        this.OwnerUserId = new ValidatableObject<string>();
         this.AvatarName = new ValidatableObject<string>();
         this.TunnelLocalPort = new ValidatableObject<string>();
         this.GraphPersistencePort = new ValidatableObject<string>();
         this.KeysPath = new ValidatableObject<string>();
         this.InProcessPrivateKeyPath = new ValidatableObject<string>();
         this.EncryptedEventsKey = new ValidatableObject<string>();
+        this.CertificatePassword = new ValidatableObject<string>();
 
         // Add validation rules
         this.AddValidationRules();
@@ -147,6 +159,14 @@ public partial class CreateAvatarViewModel : BaseViewModel
 
     private void AddValidationRules()
     {
+        this.OwnerName.Validations.Add(new IsNotNullOrEmptyRule<string>
+        {
+            ValidationMessage = CreateAvatarConstants.OwnerNameRequired
+        });
+        this.OwnerUserId.Validations.Add(new IsNotNullOrEmptyRule<string>
+        {
+            ValidationMessage = CreateAvatarConstants.OwnerUserIdRequired
+        });
         this.AvatarName.Validations.Add(new IsNotNullOrEmptyRule<string>
         {
             ValidationMessage = CreateAvatarConstants.AvatarNameRequired
@@ -193,6 +213,17 @@ public partial class CreateAvatarViewModel : BaseViewModel
                 ValidationMessage = CreateAvatarConstants.PrivateKeyFileExtensionInvalid 
             }
         ));
+        this.InProcessPrivateKeyPath.Validations.Add(new ConditionalRule<string>(
+            () => this.EncryptionEnabled,
+            new FuncValidationRule<string>(_ =>
+            {
+                var resolvedPath = this.ResolveInProcessPrivateKeyPathForValidation();
+                return string.IsNullOrWhiteSpace(resolvedPath) || File.Exists(resolvedPath);
+            })
+            {
+                ValidationMessage = CreateAvatarConstants.InProcessPrivateKeyFileNotFound
+            }
+        ));
 
         this.EncryptedEventsKey.Validations.Add(new ConditionalRule<string>(
             () => this.EncryptionEnabled,
@@ -201,10 +232,54 @@ public partial class CreateAvatarViewModel : BaseViewModel
                 ValidationMessage = CreateAvatarConstants.EncryptedEventsKeyRequired 
             }
         ));
+
+        this.CertificatePassword.Validations.Add(new ConditionalRule<string>(
+            () => this.IsCertificatePathConfigured(),
+            new IsNotNullOrEmptyRule<string>
+            {
+                ValidationMessage = CreateAvatarConstants.CertificatePasswordRequired
+            }
+        ));
     }
+
+    private bool IsCertificatePathConfigured() =>
+        this.avatarServerConfiguration?.Avatars?.Count() > 0 &&
+        !string.IsNullOrWhiteSpace(this.avatarServerConfiguration.Avatars[0].Un8y?.CertificatePath);
+
+    private IEnumerable<(string Label, ValidatableObject<string> Property)> GetValidatableFields() =>
+        new (string Label, ValidatableObject<string> Property)[]
+        {
+            ("Owner Name", this.OwnerName),
+            ("Owner User ID", this.OwnerUserId),
+            ("Avatar IP", this.AvatarName),
+            ("Tunnel Local Port", this.TunnelLocalPort),
+            ("Graph Persistence Port", this.GraphPersistencePort),
+            ("Keys Path", this.KeysPath),
+            ("In Process Private Key Path", this.InProcessPrivateKeyPath),
+            ("Encrypted Events Key", this.EncryptedEventsKey),
+            ("Certificate Password", this.CertificatePassword),
+        };
 
     private void SubscribeToValidationPropertyChanges()
     {
+        this.OwnerName.PropertyChanged += (s, e) =>
+        {
+            if (e.PropertyName == nameof(ValidatableObject<string>.Value))
+            {
+                this.OwnerName.Validate();
+                this.UpdateAvatarIfExists(a => a.OwnerName = this.OwnerName.Value);
+            }
+        };
+
+        this.OwnerUserId.PropertyChanged += (s, e) =>
+        {
+            if (e.PropertyName == nameof(ValidatableObject<string>.Value))
+            {
+                this.OwnerUserId.Validate();
+                this.UpdateAvatarIfExists(a => a.OwnerUserId = this.OwnerUserId.Value);
+            }
+        };
+
         this.AvatarName.PropertyChanged += (s, e) =>
         {
             if (e.PropertyName == nameof(ValidatableObject<string>.Value))
@@ -267,6 +342,15 @@ public partial class CreateAvatarViewModel : BaseViewModel
                 this.UpdateAvatarIfExists(a => a.EventSourcing, e => e.EncryptedEventsKey = this.EncryptedEventsKey.Value);
             }
         };
+
+        this.CertificatePassword.PropertyChanged += (s, e) =>
+        {
+            if (e.PropertyName == nameof(ValidatableObject<string>.Value))
+            {
+                this.CertificatePassword.Validate();
+                this.UpdateAvatarIfExists(a => a.Un8y, u => u.CertificatePassword = this.CertificatePassword.Value);
+            }
+        };
     }
 
     // Helper methods to eliminate code redundancy
@@ -308,24 +392,10 @@ public partial class CreateAvatarViewModel : BaseViewModel
     }
 
     // Property change handlers for automatic configuration updates
-    partial void OnOwnerNameChanged(string value)
-    {
-        this.UpdateAvatarIfExists(a => a.OwnerName = value);
-    }
-
-    partial void OnOwnerUserIdChanged(string value)
-    {
-        this.UpdateAvatarIfExists(a => a.OwnerUserId = value);
-    }
-
     partial void OnDestinationChanged(string value)
     {
         this.avatarServerConfiguration.Destination = value;
-    }
-
-    partial void OnCertificatePasswordChanged(string value)
-    {
-        this.UpdateAvatarIfExists(a => a.Un8y, u => u.CertificatePassword = value);
+        this.InProcessPrivateKeyPath.Validate();
     }
 
     partial void OnBasePathChanged(string value)
@@ -350,6 +420,7 @@ public partial class CreateAvatarViewModel : BaseViewModel
         this.KeysPath.Validate();
         this.InProcessPrivateKeyPath.Validate();
         this.EncryptedEventsKey.Validate();
+        this.CertificatePassword.Validate();
     }
 
     partial void OnPrivateKeyPathChanged(string value)
@@ -357,19 +428,45 @@ public partial class CreateAvatarViewModel : BaseViewModel
         this.UpdateAvatarIfExists(a => a.EventSourcing, e => e.PrivateKeyPath = value);
     }
 
-
-    private bool ValidateAllFields()
+    private string GetAvatarDirectoryForValidation()
     {
-        // Validate all ValidatableObject properties
-        bool isAvatarNameValid = this.AvatarName.Validate();
-        bool isTunnelLocalPortValid = this.TunnelLocalPort.Validate();
-        bool isKeysPathValid = this.KeysPath.Validate();
-        bool isGraphPersistencePortValid = this.GraphPersistencePort.Validate();
-        bool isInProcessPrivateKeyPathValid = this.InProcessPrivateKeyPath.Validate();
-        bool isEncryptedEventsKeyValid = this.EncryptedEventsKey.Validate();
+        var avatarDirectory = string.Empty;
 
-        return isAvatarNameValid && isTunnelLocalPortValid &&
-               isGraphPersistencePortValid && isKeysPathValid && isInProcessPrivateKeyPathValid && isEncryptedEventsKeyValid;
+        if (this.avatarServerConfiguration?.Avatars?.Count() > 0 && !string.IsNullOrWhiteSpace(this.Destination))
+        {
+            var avatarName = this.avatarServerConfiguration.Avatars[0].Orchestration?.AvatarName;
+            if (!string.IsNullOrWhiteSpace(avatarName))
+            {
+                avatarDirectory = Path.Combine(this.Destination, avatarName);
+            }
+        }
+
+        return avatarDirectory;
+    }
+
+    private string ResolveInProcessPrivateKeyPathForValidation() =>
+        PathHelper.ResolveInProcessPrivateKeyPath(
+            this.InProcessPrivateKeyPath.Value,
+            this.GetAvatarDirectoryForValidation()
+        );
+
+
+    private bool ValidateAllFields() =>
+        this.GetValidatableFields().All(field => field.Property.Validate());
+
+    private List<string> GetValidationFailures()
+    {
+        var failures = new List<string>();
+
+        foreach (var (label, property) in this.GetValidatableFields())
+        {
+            if (!property.IsValid)
+            {
+                failures.Add($"{label}: {string.Join("; ", property.Errors)}");
+            }
+        }
+
+        return failures;
     }
 
 
@@ -401,8 +498,8 @@ public partial class CreateAvatarViewModel : BaseViewModel
                         this.Destination = this.avatarServerConfiguration.Destination;
                         
                         var avatar = this.avatarServerConfiguration.Avatars[0];
-                        this.OwnerName = avatar.OwnerName;
-                        this.OwnerUserId = avatar.OwnerUserId;
+                        this.OwnerName.Value = avatar.OwnerName;
+                        this.OwnerUserId.Value = avatar.OwnerUserId;
                         
                         if (avatar.Orchestration != null)
                         {
@@ -414,7 +511,7 @@ public partial class CreateAvatarViewModel : BaseViewModel
                         
                         if (avatar.Un8y != null)
                         {
-                            this.CertificatePassword = avatar.Un8y.CertificatePassword;
+                            this.CertificatePassword.Value = avatar.Un8y.CertificatePassword;
                             this.BasePath = avatar.Un8y.BasePath;
                         }
                         
@@ -424,6 +521,11 @@ public partial class CreateAvatarViewModel : BaseViewModel
                             this.InProcessPrivateKeyPath.Value = avatar.EventSourcing.InProcessPrivateKeyPath;
                             this.PrivateKeyPath = avatar.EventSourcing.PrivateKeyPath;
                             this.EncryptedEventsKey.Value = avatar.EventSourcing.EncryptedEventsKey;
+                        }
+
+                        foreach (var (_, property) in this.GetValidatableFields())
+                        {
+                            property.Validate();
                         }
                     }
                     else
@@ -550,7 +652,20 @@ public partial class CreateAvatarViewModel : BaseViewModel
                     }
                     else
                     {
-                        await Shell.Current.DisplayAlert(Constants.Statuses.Invalid, CreateAvatarConstants.FixValidationErrors, Constants.Prompts.Ok);
+                        var failures = this.GetValidationFailures();
+                        if (failures.Any())
+                        {
+                            this.logger.LogWarning(
+                                "Create avatar validation failed. Missing/invalid fields: {failures}",
+                                string.Join(" | ", failures)
+                            );
+                        }
+
+                        var message = failures.Any()
+                            ? $"{CreateAvatarConstants.FixValidationErrors}{Environment.NewLine}- {string.Join($"{Environment.NewLine}- ", failures)}"
+                            : CreateAvatarConstants.FixValidationErrors;
+
+                        await Shell.Current.DisplayAlert(Constants.Statuses.Invalid, message, Constants.Prompts.Ok);
                     }
                 }
                 else

@@ -26,6 +26,7 @@ using Nancy.TinyIoc;
 using neurUL.Common;
 using neurUL.Common.Domain.Model;
 using System.Reflection;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 
@@ -42,7 +43,76 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
             this.logger = logger;
         }
 
-        private List<string> SerializeEnvironmentVariables<T>(T settings)
+        private void ValidateEncryptionPreflight(AvatarItem avatarItem)
+        {
+            if (avatarItem.Settings.EventSourcing.EncryptionEnabled)
+            {
+                var resolvedPrivateKeyPath = PathHelper.ResolveInProcessPrivateKeyPath(
+                    avatarItem.Settings.EventSourcing.InProcessPrivateKeyPath,
+                    avatarItem.Id
+                );
+                AssertionConcern.AssertStateTrue(
+                    !string.IsNullOrWhiteSpace(resolvedPrivateKeyPath),
+                    "Encryption preflight failed: 'InProcessPrivateKeyPath' is required when encryption is enabled."
+                );
+
+                AssertionConcern.AssertStateTrue(
+                    File.Exists(resolvedPrivateKeyPath),
+                    $"Encryption preflight failed: private key file does not exist at '{resolvedPrivateKeyPath}'."
+                );
+
+                string privateKeyContent;
+                try
+                {
+                    privateKeyContent = File.ReadAllText(resolvedPrivateKeyPath);
+                }
+                catch (Exception ex)
+                {
+                    throw new InvalidOperationException(
+                        $"Encryption preflight failed: unable to read private key file '{resolvedPrivateKeyPath}'.",
+                        ex
+                    );
+                }
+
+                AssertionConcern.AssertStateTrue(
+                    !string.IsNullOrWhiteSpace(privateKeyContent),
+                    $"Encryption preflight failed: private key file '{resolvedPrivateKeyPath}' is empty."
+                );
+
+                var encryptedEventsKey = avatarItem.Settings.EventSourcing.EncryptedEventsKey;
+                AssertionConcern.AssertStateTrue(
+                    !string.IsNullOrWhiteSpace(encryptedEventsKey),
+                    "Encryption preflight failed: 'EncryptedEventsKey' is required when encryption is enabled."
+                );
+
+                try
+                {
+                    _ = Convert.FromBase64String(encryptedEventsKey.Trim());
+                }
+                catch (FormatException ex)
+                {
+                    throw new InvalidOperationException(
+                        "Encryption preflight failed: 'EncryptedEventsKey' is not valid Base64.",
+                        ex
+                    );
+                }
+            }
+        }
+
+        private static void ValidateAvatarIdentityPreflight(AvatarItem avatarItem)
+        {
+            AssertionConcern.AssertStateTrue(
+                !string.IsNullOrWhiteSpace(avatarItem.OwnerName),
+                "Avatar preflight failed: 'OwnerName' is required."
+            );
+
+            AssertionConcern.AssertStateTrue(
+                !string.IsNullOrWhiteSpace(avatarItem.OwnerUserId),
+                "Avatar preflight failed: 'OwnerUserId' is required."
+            );
+        }
+
+        private static List<string> SerializeEnvironmentVariables<T>(T settings)
             where T : class, new()
         {
             if (settings == null)
@@ -73,16 +143,16 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
 
         public async Task SaveAsync(AvatarItem avatarItem)
         {
-            await SaveEnvironmentVariablesAsync(avatarItem);
-            await CreateSqliteDatabasesAsync(avatarItem);
+            await this.SaveEnvironmentVariablesAsync(avatarItem);
+            await this.CreateSqliteDatabasesAsync(avatarItem);
 
-            await SerializeSshSettingsFileAsync(
+            await AvatarItemWriteRepository.SerializeSshSettingsFileAsync(
                 Path.Combine(avatarItem.Id, Common.Constants.Filenames.SshConfig), 
                 avatarItem.Settings.Ssh!,
                 this.logger
             );
 
-            await CreateBatchFilesAsync(avatarItem.Id, this.logger);
+            await AvatarItemWriteRepository.CreateBatchFilesAsync(avatarItem.Id, this.logger);
         }
 
         private static async Task CreateBatchFilesAsync(string path, ILogger<AvatarItemWriteRepository> logger)
@@ -123,22 +193,22 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
         {
             logger.LogInformation("Serializing variables.env");
             var variablesLines = new List<string>();
-            variablesLines.AddRange(SerializeEnvironmentVariables(avatarItem.Settings.EventSourcing));
-            variablesLines.AddRange(SerializeEnvironmentVariables(avatarItem.Settings.CortexGraph));
-            variablesLines.AddRange(SerializeEnvironmentVariables(avatarItem.Settings.AvatarApi));
-            variablesLines.AddRange(SerializeEnvironmentVariables(avatarItem.Settings.IdentityAccess));
-            variablesLines.AddRange(SerializeEnvironmentVariables(avatarItem.Settings.CortexLibrary));
-            variablesLines.AddRange(SerializeEnvironmentVariables(avatarItem.Settings.CortexDiaryNucleus));
-            variablesLines.AddRange(SerializeEnvironmentVariables(avatarItem.Settings.CortexChatNucleus));
-            variablesLines.AddRange(SerializeEnvironmentVariables(avatarItem.Settings.CortexGraphPersistence));
+            variablesLines.AddRange(AvatarItemWriteRepository.SerializeEnvironmentVariables(avatarItem.Settings.EventSourcing));
+            variablesLines.AddRange(AvatarItemWriteRepository.SerializeEnvironmentVariables(avatarItem.Settings.CortexGraph));
+            variablesLines.AddRange(AvatarItemWriteRepository.SerializeEnvironmentVariables(avatarItem.Settings.AvatarApi));
+            variablesLines.AddRange(AvatarItemWriteRepository.SerializeEnvironmentVariables(avatarItem.Settings.IdentityAccess));
+            variablesLines.AddRange(AvatarItemWriteRepository.SerializeEnvironmentVariables(avatarItem.Settings.CortexLibrary));
+            variablesLines.AddRange(AvatarItemWriteRepository.SerializeEnvironmentVariables(avatarItem.Settings.CortexDiaryNucleus));
+            variablesLines.AddRange(AvatarItemWriteRepository.SerializeEnvironmentVariables(avatarItem.Settings.CortexChatNucleus));
+            variablesLines.AddRange(AvatarItemWriteRepository.SerializeEnvironmentVariables(avatarItem.Settings.CortexGraphPersistence));
             await File.WriteAllLinesAsync(Path.Combine(avatarItem.Id, Common.Constants.Filenames.VariablesEnv), variablesLines);
 
             logger.LogInformation("Serializing un8y/variables.env");
-            var un8yLines = SerializeEnvironmentVariables(avatarItem.Un8ySettings);
+            var un8yLines = AvatarItemWriteRepository.SerializeEnvironmentVariables(avatarItem.Un8ySettings);
             await File.WriteAllLinesAsync(Path.Combine(avatarItem.Id, Common.Constants.Directories.Un8y, Common.Constants.Filenames.VariablesEnv), un8yLines);
 
             logger.LogInformation("Serializing .env");
-            var envLines = SerializeEnvironmentVariables(avatarItem.OrchestrationSettings);
+            var envLines = AvatarItemWriteRepository.SerializeEnvironmentVariables(avatarItem.OrchestrationSettings);
             await File.WriteAllLinesAsync(Path.Combine(avatarItem.Id, Common.Constants.Filenames.Env), envLines);
         }
 
@@ -152,6 +222,9 @@ namespace ei8.Avatar.Installer.IO.Process.Services.Avatars
             // Get the directory where the compiled executable (.exe) is located to fix directory issues
             var exeDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             Directory.SetCurrentDirectory(exeDirectory);
+
+            AvatarItemWriteRepository.ValidateAvatarIdentityPreflight(avatarItem);
+            this.ValidateEncryptionPreflight(avatarItem);
 
             var authorNeuronId = Guid.NewGuid();
             var anonymousNeuronId = Guid.NewGuid();
@@ -243,18 +316,33 @@ COMMIT;
 
                     if (ss.EncryptionEnabled)
                     {
+                        var resolvedInProcessPrivateKeyPath = PathHelper.ResolveInProcessPrivateKeyPath(
+                            avatarItem.Settings.EventSourcing.InProcessPrivateKeyPath,
+                            avatarItem.Id
+                        );
+
                         AssertionConcern.AssertStateTrue(
-                            IOHelper.IsPathValidRootedLocal(avatarItem.Settings.EventSourcing.InProcessPrivateKeyPath),
+                            IOHelper.IsPathValidRootedLocal(resolvedInProcessPrivateKeyPath),
                             "A valid 'InProcessPrivateKeyPath' is required if encryption is enabled."
                         );
 
-                        ss.PrivateKeyPath = avatarItem.Settings.EventSourcing.InProcessPrivateKeyPath;
-                        await container.Resolve<IKeyService>().Load(
-                            avatarItem.Settings.EventSourcing.EncryptedEventsKey,
-                            ss.PrivateKeyPath,
-                            ss,
-                            ss.GetKeyPropertyPair()
-                        );
+                        ss.PrivateKeyPath = resolvedInProcessPrivateKeyPath;
+                        try
+                        {
+                            await container.Resolve<IKeyService>().Load(
+                                avatarItem.Settings.EventSourcing.EncryptedEventsKey,
+                                ss.PrivateKeyPath,
+                                ss,
+                                ss.GetKeyPropertyPair()
+                            );
+                        }
+                        catch (CryptographicException ex)
+                        {
+                            throw new InvalidOperationException(
+                                $"Failed to decrypt 'EncryptedEventsKey' using private key '{resolvedInProcessPrivateKeyPath}'. Ensure the encrypted key was produced with the matching public key and has not been altered.",
+                                ex
+                            );
+                        }
                     }
                     container.Register<IMirrorRepository, InProcessMirrorRepository>();
                     container.AddDataAdapters();
